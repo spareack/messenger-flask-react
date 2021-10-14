@@ -29,11 +29,14 @@
     <div class="d-flex gap-5 justify-content-center">
       <div class="list-group mx-0">
 
-            {% for cat, msg in get_flashed_messages(True) %}
-            <div class="alert {{cat}}" style="padding: 5px 20px; margin-bottom: 25px">{{msg}}</div>
-            {% endfor %}
+            
+<form method="post">
+    <input type="text" name="userName" id="userName" class="form-control" placeholder="Введите имя"><br>
+    <input type="text" name="email" id="email" class="form-control" placeholder="Введите email"><br>
+    <input type="text" name="password" id="password" class="form-control" placeholder="Введите пароль"><br>
+    <input type="submit" class="btn btn-success" value="Отправить">
+</form>
 
-            {% block body %} {% endblock %}
 
       </div>
     </div>

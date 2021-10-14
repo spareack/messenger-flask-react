@@ -1,0 +1,10 @@
+{% extends'base.html' %}
+
+{% block body %}
+<form method="post">
+    <input type="text" name="email" id="email" class="form-control" placeholder="Введите email" value="{{email}}"><br>
+    <input type="text" name="password" id="password" class="form-control" placeholder="Введите пароль"><br>
+    <input type="submit" class="btn btn-success" value="Войти">
+    <input type="button" onclick="window.location.href = '/home';" class="btn btn-outline-secondary" value="На главную">
+</form>
+{% endblock %}
