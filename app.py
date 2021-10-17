@@ -1,11 +1,32 @@
 from flask import Flask, render_template, request, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, login_user, login_required, current_user, logout_user
+import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 app.config['SECRET_KEY'] = 'YSAFDB978WH8AYIFHSNUSIJDFK'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+login_manager = LoginManager(app)
+
+
+class UserLogin:
+    def __init__(self, value):
+        self.userID = value
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.userID)
 
 
 class Article(db.Model):
@@ -22,7 +43,10 @@ class Article(db.Model):
 @app.route('/')
 @app.route('/home')
 def index():
-    return render_template("index.html")
+    if current_user.is_authenticated:
+        return render_template("profile.html")
+    else:
+        return render_template("index.html")
 
 
 @app.route('/registration', methods=['POST', 'GET'])
@@ -59,12 +83,24 @@ def login():
         articles = Article.query.all()
         for data in articles:
             if data.email == email and data.password == password:
+                login_user(UserLogin(data.id), duration=datetime.timedelta(hours=24))
                 flash('Успешный вход', category='alert-success')
                 return redirect('/')
         flash('Некорректные данные', category='alert-danger')
         return render_template("login.html", email=email)
     else:
         return render_template("login.html", email="")
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect("/")
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return UserLogin(user_id)
 
 
 if __name__ == "__main__":
