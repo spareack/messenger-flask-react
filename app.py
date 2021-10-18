@@ -1,15 +1,46 @@
-from flask import Flask, render_template, request, flash, redirect
+from flask import Flask, render_template, request, flash, redirect, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 import datetime
+import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../build', static_url_path='/')
+# app = Flask(__name__)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 app.config['SECRET_KEY'] = 'YSAFDB978WH8AYIFHSNUSIJDFK'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
+
+
+@app.route('/')
+@app.route('/home')
+def index():
+    if current_user.is_authenticated:
+        return render_template("profile.html")
+    else:
+        # return render_template("index.html")
+        return render_template('index2.html')
+
+        # return send_from_directory(os.path.join('/build'), 'index2.html')
+
+
+@app.route('/text')
+def text_return():
+    return 'React здесь'
+
+
+@app.route('/static/<path:static_type>/<path:filename>')
+def serve_static(static_type, filename):
+    root_dir = os.path.dirname(os.getcwd())
+    # print(root_dir)
+    # root_dir = root_dir.replace('\\', '/')
+    # print(os.path.join(root_dir, 'flaskTest', 'build', 'static', static_type))
+    return send_from_directory(os.path.join(root_dir, 'flaskTest', 'build', 'static', static_type), filename)
+
+    # return send_from_directory('C:/Users/user/PycharmProjects/flaskTest/build/static/css', filename)
 
 
 class UserLogin:
@@ -38,15 +69,6 @@ class Article(db.Model):
 
     def __repr__(self):
         return 'Article %r' % self.id
-
-
-@app.route('/')
-@app.route('/home')
-def index():
-    if current_user.is_authenticated:
-        return render_template("profile.html")
-    else:
-        return render_template("index.html")
 
 
 @app.route('/registration', methods=['POST', 'GET'])
