@@ -4,6 +4,7 @@ from flask_login import LoginManager, login_user, login_required, current_user, 
 import datetime
 import os
 
+
 app = Flask(__name__, static_folder='../build', static_url_path='/')
 # app = Flask(__name__)
 
@@ -18,6 +19,8 @@ login_manager = LoginManager(app)
 @app.route('/')
 @app.route('/home')
 def index():
+    app.logger.info('asdasddsa')
+
     if current_user.is_authenticated:
         return render_template("profile.html")
     else:
@@ -38,7 +41,7 @@ def serve_static(static_type, filename):
     # print(root_dir)
     # root_dir = root_dir.replace('\\', '/')
     # print(os.path.join(root_dir, 'flaskTest', 'build', 'static', static_type))
-    return send_from_directory(os.path.join(root_dir, 'flaskTest', 'build', 'static', static_type), filename)
+    return send_from_directory(os.path.join('build', 'static', static_type), filename)
 
     # return send_from_directory('C:/Users/user/PycharmProjects/flaskTest/build/static/css', filename)
 
