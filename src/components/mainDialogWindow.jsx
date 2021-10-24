@@ -1,19 +1,35 @@
 import React, {useState} from 'react'
-import '../App.css'
+import classes from './styles/MainWindow.module.css'
+import MessageList from './messageList'
 
 const MainWindow = (props) => {
     const [messageText, setMessageText] = useState('')
 
+    const sendMessage = (e) => {
+        e.preventDefault()
+        console.log(messageText)
+    }
+
+    /* Dev test items */
+    const messages = []
+
+
+    /* Dev test items */
+
     return (
-        <div className="dialog-window"> 
-            <div className='dialog'></div>
-            <form className='txtArea'>
-                <textarea rows="7" cols="45" style={{resize: 'none'}} placeholder='Введите сообщение' value={messageText} onChange={(e) => setMessageText(e.target.value)}></textarea>
-                <button onClick={(e) => {
-                    console.log(messageText);
-                    e.preventDefault()
-                    setMessageText('')
-                }}>Отправить блять!</button>
+        <div className={classes.dialogWindow}> 
+            <div className={classes.companion}> </div>
+            <div className={classes.dialog}>
+                <MessageList />
+            </div>
+            <form className={classes.txtArea}>
+            <div className={classes.wInputContainer}>
+                <div className={classes.wInputTextGroup}>
+                    <div className={classes.wInputText} contentEditable={true} onInput={(e) => setMessageText(e.currentTarget.textContent)}></div>
+                    <div className={classes.wPlaceholder}>Type a message</div>
+                </div>
+            </div>
+            <button onClick={sendMessage}>Send</button>
             </form>
         </div>
     )

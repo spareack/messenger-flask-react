@@ -1,0 +1,42 @@
+.msgListItem p {
+    margin:0;
+    padding:0;
+    text-align: left;
+}
+
+.msgListItem h3 {
+    margin:0;
+    padding:0;
+}
+
+.msgListItem {
+    color: #FFFFF0;
+    background-color: #666;
+    min-width: 6em;
+    max-width: 65%;
+    padding: 5px 15px;
+    margin-bottom: 1em;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    border-radius: 10px;
+}
+
+.right { 
+    margin-left: auto;
+    margin-right: 10px;
+}
+
+.left {
+    width: max-content;
+    margin-left: 10px;
+}
+
+.time {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 11px;
+    position: relative;
+    bottom: 2px;
+    right: 2px;
+    text-transform: uppercase; color: #999
+}

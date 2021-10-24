@@ -1,0 +1,15 @@
+.talkItem {
+    background-color: lightgrey;
+    width: 90%;
+    border: none;
+    outline: none;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    transition: 0.2s all ease-in-out;
+}
+
+.talkItem:hover {
+    background-color: #333;
+    color: #FFFFF0
+}

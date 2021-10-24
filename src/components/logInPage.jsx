@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import './styles/loginpage.css'
 import RegPage from './RegPage'
 import {Link, Redirect} from 'react-router-dom'
@@ -9,6 +9,12 @@ const LogInPage = () => {
         login: '',
         password: ''
     })
+
+    const [currentTime, setTime] = useState(null)
+
+    useEffect( () => {
+        fetch('/time').then(res => res.json()).then(res => setTime(res.time))
+    }, [])
 
     const login = (event) => {
         event.preventDefault()
@@ -35,7 +41,7 @@ const LogInPage = () => {
                 <div className='loginPageAvatar'>
                     <div className='loginLogo'><img src alt='logo'/></div>
                     <div className='loginPageText'>
-                        <p>Talk is a new messenger with an advanced TALK system. Are you not with us yet? Register!</p>
+                        <p> {currentTime}Talk is a new messenger with an advanced TALK system. Are you not with us yet? Register!</p>
                         <a href="/registration" className='LoginPageButton ButtonText'>Register now!</a>
                     </div>
                 </div>

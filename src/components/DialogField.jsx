@@ -1,27 +1,32 @@
 import React, {useState} from 'react'
-import '../App.css'
+import classes from './styles/dialogsField.module.css'
 import DialogItem from './DialogItem'
 
-const DialogsField = (props) => {
+const DialogsField = ({setDialog, dialogs}) => {
+    const [_dialogs, setDialogs] = useState(dialogs)
+    const [searchInput, setSearchInput] = useState('')
 
-
+    const changeDialog = (id) => {
+        setDialog(id)
+        console.log(id)
+    }
+    
     return (
-        <div className='Dialogs'>
-            <div className='searchBox'>
+        <div className={classes.Dialogs}>
+            <div className={classes.searchBox}>
                 <h2>Search</h2>
-                <input placeholder='Write your talk here'></input>
+                <input className={classes.searchInput} placeholder='Write your talk here' value={searchInput} onChange={(e) => (setSearchInput(e.target.value))}></input>
             </div>
-            <div className='DialogList'>
-                <ul>
-                    <li><DialogItem /></li>
-                    <li><DialogItem /></li>
-                    <li><DialogItem /></li>
-                    <li><DialogItem /></li>
-                    <li><DialogItem /></li>
-                    <li><DialogItem /></li>
-                    <li><DialogItem /></li>
-                    <li><DialogItem /></li>
-                </ul>
+            <div className={classes.DialogList}>
+                {_dialogs.map((post, index)=> (
+                    <DialogItem 
+                        key={post.id}
+                        id={post.id}
+                        index={index}
+                        name={post.name}
+                        lastTalk={post.talks[post.talks.length - 1].name}
+                        onclick={changeDialog}/>
+                ))}
             </div>
         </div>
     )

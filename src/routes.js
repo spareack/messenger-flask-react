@@ -2,7 +2,6 @@ import LogInPage from "./components/logInPage";
 import RegPage from "./components/RegPage";
 import Messenger from "./messenger";
 
-
 export const publicRoutes = [
     {
         path : '/login',

@@ -1,14 +1,19 @@
 import React from 'react'
-import '../App.css'
+import './styles/dialog-item.css'
 import unnamed from '../unnamed.jpg'
 
-const DialogItem = (props) => {
+const DialogItem = ({id, index, name, lastTalk, onclick}) => {
+
+    const sendID = () => {
+        onclick(index)
+    }
+
     return (
-        <div className='dialog-item'>
-            <div className='avatar'><img height='45' width='45' style={{borderRadius: '75%'}} src={unnamed} alt='???'/></div>
-            <div>
-                <h3>Имя человека</h3>
-                <p>Название последнего РАЗГОВОРА</p>
+        <div className='dialog-item' onClick={sendID}>
+            <div className='avatar'><img src={unnamed} alt='???'/></div>
+            <div className='dialogItemText'>
+                <h3>{name}</h3>
+                <p>{lastTalk}</p>
             </div>
         </div>
     )

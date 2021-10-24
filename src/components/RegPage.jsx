@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
+import axios from 'axios'
 
 const RegPage = () => {
     const [logPassword, setForm] = useState({
@@ -10,16 +11,15 @@ const RegPage = () => {
     })
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    const validation = (event) => {
+    const send = (event) => {
         event.preventDefault()
-        console.log(logPassword)
-        console.log((logPassword.password !== logPassword.password2 || (logPassword.password === '' && logPassword.password2 === '') && logPassword.name === ''), logPassword.name === '', (logPassword.password !== logPassword.password2 || (logPassword.password === '' && logPassword.password2 === '')))
+        
     }
 
     return (
         <div className='loginPage'>
             <div className='loginForm' style={{height: '600px'}}>
-                <form className="authForm regForm " >
+                <form className="authForm regForm " method='POST'>
                     <h2> Registration </h2>
                     <input class='form-input' placeholder='Your nickname' value={logPassword.name} onChange={(e) => setForm({...logPassword, name: e.target.value })} required></input>
                     <input class="form-input" placeholder='Your age' value={logPassword.age} onChange={(e) => setForm({...logPassword, age: e.target.value})} required></input>
@@ -36,7 +36,7 @@ const RegPage = () => {
                                 width: '100%', 
                                 padding: '15px'}} 
                                 type='submit'
-                                onClick={validation}
+                                onClick={send}
                                 disabled={(logPassword.password !== logPassword.password2 || (logPassword.password === '' && logPassword.password2 === '') || 
                                 (logPassword.name === '') || logPassword.age < 12) || 
                                 !re.test(String(logPassword.login).toLowerCase()) ||

@@ -1,16 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
 import DialogsField from './components/DialogField';
-import WorkSpace from './components/workWindow';
+import WorkSpace from './components/workSpace';
 
-function Messenger() {
+function Messenger({dialogs}) {
   const [currentDialog, setCurrentDialog] = useState(0)
-  const user = true;
-
+  
   return (
     <div className="App">
-      <DialogsField setDialog={setCurrentDialog}/>
-      <WorkSpace id={currentDialog}/>
+      <DialogsField setDialog={setCurrentDialog} dialogs={dialogs}/>
+      <WorkSpace id={currentDialog} talks={dialogs[currentDialog].talks}/>
     </div>
   );
 }

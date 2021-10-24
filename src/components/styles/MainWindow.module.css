@@ -1,0 +1,106 @@
+.dialogWindow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 73%;
+    height: 100%;
+    background-color: #1E1E1E;
+    padding: 0;
+    margin: 0;
+}
+
+.dialog {
+    flex-grow: 1;
+    width: 100%;
+}
+
+.txtArea {
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 62px;
+    max-height: 110px;
+    background-color: #333;
+    width: 100%;
+}
+
+.companion {
+  height: 62px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.messageText {
+    border: none;
+    outline: none;
+    -moz-appearance: none;
+    resize: none;
+    overflow-y: auto;
+}
+
+ /* спизженный скроллбар */
+ ::-webkit-scrollbar {
+    width: 10px;
+    height: 5px;
+    display: block
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #e4eaf5;
+    border-radius: 8px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(196, 201, 211)
+  }
+  
+.wInputContainer {
+    width: 500px;
+    min-height: 20px;
+    box-sizing: border-box;
+    padding: 9px 18px 11px;
+    margin: 5px 10px;
+    background-color: #fff;
+    border: 1px solid #fff;
+    border-radius: 21px;
+}
+
+.wInputTextGroup {
+    position: relative;
+}
+
+.wPlaceholder {
+    color: #a0a0a0;
+    top: 0;
+    pointer-events: none;
+    user-select: none;
+    position: absolute;
+    opacity: 0;
+    transition: 0.2s padding ease-in-out;
+}
+
+.wInputText {
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align: left;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    z-index: 1;
+    max-height: 5em;
+    min-height: 1em;
+    padding: 0 0 0 2px;
+    outline: 0;
+    transition: 0.2s padding ease-in-out;
+}
+
+.wInputText:empty + .wPlaceholder {
+    opacity: 1;
+}
+
+.wInputText:focus + .wPlaceholder {
+    padding: 0 6px 0px;
+}
+
+.wInputText:focus {
+    padding: 0 6px 0px;
+}
