@@ -25,7 +25,7 @@ def index():
         return render_template("profile.html")
     else:
         # return render_template("index.html")
-        return render_template('index2.html')
+        return render_template('index.html')
 
         # return send_from_directory(os.path.join('/build'), 'index2.html')
 
