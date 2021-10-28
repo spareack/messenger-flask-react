@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, flash, redirect, send_from_di
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 import datetime
+import time
 import os
 
 
@@ -32,7 +33,11 @@ def index():
 
 @app.route('/text')
 def text_return():
-    return 'React здесь'
+    return 'rect здеся'
+
+@app.route('/time')
+def timedad():
+	return {'time': time.time()}
 
 
 @app.route('/static/<path:static_type>/<path:filename>')
