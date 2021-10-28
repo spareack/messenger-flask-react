@@ -9,6 +9,7 @@
 }
 
 .loginForm {
+    color: #fffff1;
     background-color: #323233;
     border-radius: 15px;
     width: 80%;
@@ -80,8 +81,9 @@ input[class="form-input"]:focus {
     border: none;
     border-radius: 5px;
     background-color: #202124;
-    
-    color: #5E6472;
+    font-size: 0.8em;
+    font-weight: 700;
+    color: #838896;
 }
 
 .LoginPageButton:hover {
@@ -127,7 +129,7 @@ animation: ani 0.6s ease-in-out infinite alternate;
     justify-content: center;
     align-items: center;
     padding: 5%;
-    color: #5E6472;
+    color: #FFFFF1;
 }
 
 .ButtonText {

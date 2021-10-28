@@ -1,5 +1,6 @@
 .talkItem {
-    background-color: lightgrey;
+    background-color: #333;
+    color: #FFFFF0;
     width: 90%;
     border: none;
     outline: none;
@@ -10,6 +11,14 @@
 }
 
 .talkItem:hover {
-    background-color: #333;
-    color: #FFFFF0
+    background-color: lightgrey;
+    color: #111
+}
+
+.currentTalkItem {
+    background-color: indianred;
+}
+
+.currentTalkItem:hover {
+    background-color: indianred;
 }

@@ -5,7 +5,7 @@
     flex-direction: column;
     width: 73%;
     height: 100%;
-    background-color: #1E1E1E;
+    background-color: #0F0F0F;
     padding: 0;
     margin: 0;
 }
@@ -26,10 +26,29 @@
     width: 100%;
 }
 
+.avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
+    height: 62px;
+}
+
+.avatar img {
+    border-radius: 75%;
+    height: 45px;
+    width: 45px;
+}
+
 .companion {
   height: 62px;
   display: flex;
   justify-content: flex-start;
+  align-items: center;
+  color: #FFFFF0;
+  background-color: #212121;
+  margin-bottom: 10px;
+  width: 100%;
 }
 
 .messageText {

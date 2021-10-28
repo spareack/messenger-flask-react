@@ -1,8 +1,9 @@
 import React, {useState, useEffect, useRef} from 'react'
 import classes from './styles/MainWindow.module.css'
 import MessageList from './messageList'
+import unnamed from './unnamed.jpg'
 
-const MainWindow = (props) => {
+const MainWindow = ({companion}) => {
     const textareaRef = useRef(null);
     const [messageText, setMessageText] = useState('')
 
@@ -25,7 +26,13 @@ const MainWindow = (props) => {
 
     return (
         <div className={classes.dialogWindow}> 
-            <div className={classes.companion}> </div>
+            <div className={classes.companion}>
+                {companion.photoURL === undefined
+                ? <div className={classes.avatar}><img src={unnamed}/></div>
+                : <div className={classes.avatar}><img src={companion.photoURL}/></div>
+                }
+                <h2>{companion.name}</h2>
+            </div>
             <div className={classes.dialog}>
                 <MessageList />
             </div>

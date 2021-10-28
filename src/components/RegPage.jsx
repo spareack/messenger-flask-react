@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
+import {Link} from 'react-router-dom'
 
 const RegPage = () => {
     const [logPassword, setForm] = useState({
@@ -47,7 +48,7 @@ const RegPage = () => {
                     <div className='loginLogo'><img src alt='logo'/></div>
                     <div className='loginPageText'>
                         <p>Talk is a new messenger with an advanced TALK system. Are you not with us yet? Register!</p>
-                        <a href="/registration" className='LoginPageButton ButtonText'>Register now!</a>
+                        <Link to={'/registration'} className='LoginPageButton ButtonText'>Register now!</Link>
                     </div>
                 </div>
             </div>

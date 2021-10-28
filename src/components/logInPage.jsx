@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import './styles/loginpage.css'
-import RegPage from './RegPage'
-import {Link, Redirect} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 
-const LogInPage = () => {
+const LogInPage = ({setLoggedIn}) => {
     const [logPassword, setForm] = useState({
         login: '',
         password: ''
@@ -19,6 +18,7 @@ const LogInPage = () => {
     const login = (event) => {
         event.preventDefault()
         console.log(logPassword.login)
+        setLoggedIn(true)
     }
 
     const passwordRecovery = (event) => {
@@ -42,7 +42,8 @@ const LogInPage = () => {
                     <div className='loginLogo'><img src alt='logo'/></div>
                     <div className='loginPageText'>
                         <p> {currentTime}Talk is a new messenger with an advanced TALK system. Are you not with us yet? Register!</p>
-                        <a href="/registration" className='LoginPageButton ButtonText'>Register now!</a>
+                        <Link to={'/registration'} className='LoginPageButton ButtonText'>Register now!</Link>
+                        {/*<a href="/registration" className='LoginPageButton ButtonText'>Register now!</a>*/}
                     </div>
                 </div>
             </div>

@@ -4,15 +4,13 @@ import classes from './styles/workspace.module.css'
 import MainWindow from './mainDialogWindow'
 import Talks from './talks'
 
-const WorkSpace = ({id, talks}) => {
-    const [currentTalk, setTalk] = useState(null)
-
+const WorkSpace = ({id, companion, talks, currentTalk, setTalk}) => {
     return (
         <div className={classes.workTree}>
-            <MainWindow>
+            <MainWindow companion={companion}>
 
             </MainWindow>
-            <Talks talks={talks}>
+            <Talks talks={talks} current={currentTalk} setTalk={setTalk}>
 
             </Talks>
             <p></p>

@@ -1,5 +1,17 @@
 .talks {
     width: 27%;
     height: 100%;
-    background-color: grey;
+    background-color: #212121;
+    border-left: 2px solid lightgray;
+}
+
+.talksHead {
+    font-size: 2em;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    height: 62px;
+    background-color: #333;
 }
