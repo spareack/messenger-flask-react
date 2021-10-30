@@ -7,7 +7,7 @@ import json
 import os
 
 
-app = Flask(__name__, static_folder='../build', static_url_path='/', template_folder="../flaskStatic/build")
+app = Flask(__name__, static_folder='../build', static_url_path='/', template_folder="build")
 # app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
@@ -209,7 +209,7 @@ class Message(db.Model):
     type = db.Column(db.String(20), nullable=False)
     value = db.Column(db.Text, nullable=False)
     date_create = db.Column(db.String(30), default=datetime.utcnow())
- 
+
     def __repr__(self):
         return 'Message %r' % self.id
 
@@ -288,7 +288,7 @@ class UserLogin:
 
 
 if __name__ == "__main__":
-    from waitress import serve
-    serve(app, host="0.0.0.0", port=8080)
+    # from waitress import serve
+    # serve(app, host="0.0.0.0", port=8080)
 
-    # app.run(debug=True)
+    app.run(debug=True)
