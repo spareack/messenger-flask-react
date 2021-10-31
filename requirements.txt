@@ -3,7 +3,8 @@ colorama==0.4.4
 DateTime==4.3
 Flask==2.0.2
 Flask-Login==0.5.0
-Flask-SQLAlchemy==2.5.1
+Flask-Mail==0.9.1
+Flask-SQLAlchemy==2.5.1pip
 Frozen-Flask==0.18
 greenlet==1.1.2
 gunicorn==20.1.0
