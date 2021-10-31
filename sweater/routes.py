@@ -4,7 +4,7 @@ import os
 
 from flask import render_template, request, redirect, send_from_directory, jsonify, url_for
 from flask_login import login_user, current_user, logout_user
-from flask_mail import Message
+from flask_mail import Message as Mesage
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from sweater import app, db, mail, token_key
@@ -31,7 +31,7 @@ def talk_return():
     return jsonify(d)
 
 
-@app.route('/checkname', methods=['GET'])
+@app.route('/check_name', methods=['GET'])
 def user_exist():
     if request.method == 'GET':
         checking_name = request.args.get("userName")
@@ -48,7 +48,7 @@ def user_exist():
             return jsonify({"status": 2, "info": str(e)})
 
 
-@app.route('/checkmail', methods=['GET'])
+@app.route('/check_mail', methods=['GET'])
 def email_exist():
     if request.method == 'GET':
         checking_email = request.args.get("email")
@@ -64,7 +64,7 @@ def email_exist():
             return jsonify({"status": 2, "info": str(e)})
 
 
-@app.route('/registernewuser', methods=['POST'])
+@app.route('/register_new_user', methods=['POST'])
 def register_new_user():
     if request.method == 'POST':
         response = request.get_json()
@@ -83,14 +83,15 @@ def register_new_user():
             last_id = db.session.query(User.id).order_by(User.id.desc()).first()
 
             token = token_key.dumps(email)
-            msg = Message('Confirm email', sender="spareack2@gmail.com", recipients=[email])
-            link = url_for('confirm_email', token=token, _external=True)
+            msg = Mesage('Confirm email', sender="spareack2@gmail.com", recipients=[email])
+            link = url_for('confirm_token', token=str(token), _external=True)
             msg.body = 'Click this link to verify your account on Talk Messenger: ' + link
             mail.send(msg)
 
             return jsonify({"status": 0, "id": last_id[0]})
 
         except Exception as e:
+            print(str(e))
             return jsonify({"status": 2, "info": str(e)})
 
 
@@ -99,7 +100,7 @@ def confirm_token(token):
     if request.method == 'GET':
         try:
             email = token_key.loads(token, max_age=3600)
-            user = db.session.query(User).filter_by(username=email).first()
+            user = db.session.query(User).filter_by(email=email).first()
             if user is None:
                 return "There is no token like that"
 
@@ -107,9 +108,10 @@ def confirm_token(token):
             db.session.commit()
         except Exception as e:
             return str(e)
+        return redirect("/")
 
 
-@app.route('/createtalk', methods=['POST'])
+@app.route('/create_talk', methods=['POST'])
 def create_talk():
     if request.method == "POST":
 
@@ -134,7 +136,7 @@ def create_talk():
             return jsonify({"status": 2, "info": str(e)})
 
 
-@app.route('/pushmess', methods=['POST'])
+@app.route('/push_mess', methods=['POST'])
 def push_message():
     if request.method == "POST":
 
@@ -161,7 +163,7 @@ def push_message():
             return jsonify({"status": 2, "info": str(e)})
 
 
-@app.route('/authorization', methods=['POST'])
+@app.route('/authorize', methods=['POST'])
 def login():
     if request.method == 'POST':
 
@@ -172,7 +174,8 @@ def login():
         users = User.query.all()
         try:
             for user in users:
-                if (user.name == name_mail or user.email == name_mail) and user.password == check_password_hash(password):
+                if (user.name == name_mail or user.email == name_mail) and \
+                        user.password == check_password_hash(password):
                     login_user(User(user.id), duration=datetime.timedelta(hours=24))
                     return jsonify({"status": 0,
                                     "id": user.id,
@@ -185,7 +188,7 @@ def login():
             return jsonify({"status": 2, "info": str(e)})
 
 
-@app.route('/isauthorized', methods=['GET'])
+@app.route('/is_authorized', methods=['GET'])
 def is_authorized():
     if request.method == 'GET':
         try:
@@ -195,7 +198,7 @@ def is_authorized():
             return jsonify({"status": 2, "info": str(e)})
 
 
-@app.route('/unauthorization', methods=['GET'])
+@app.route('/un_authorize', methods=['GET'])
 def log_out():
     if request.method == 'GET':
         try:
