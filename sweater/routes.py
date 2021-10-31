@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 import json
 import os
 
@@ -176,13 +176,18 @@ def login():
             for user in users:
                 if (user.name == name_mail or user.email == name_mail) and \
                         check_password_hash(user.password, password):
-                    login_user(User(user.id), duration=datetime.timedelta(hours=24))
-                    return jsonify({"status": 0,
-                                    "id": user.id,
-                                    "talks": user.talks,
-                                    "info": "authorization successful"})
 
-            return jsonify({"status": 1, "info": "authorization error"})
+                    if user.is_activated:
+                        cur_user = User.query.filter_by(id=user.id).first()
+                        login_user(cur_user, duration=datetime.timedelta(hours=24))
+                        return jsonify({"status": 0,
+                                        "id": user.id,
+                                        "talks": user.talks,
+                                        "info": "authorization successful"})
+                    else:
+                        return jsonify({"status": 1, "info": "email not activated"})
+
+            return jsonify({"status": 1, "info": "user not found"})
 
         except Exception as e:
             return jsonify({"status": 2, "info": str(e)})
