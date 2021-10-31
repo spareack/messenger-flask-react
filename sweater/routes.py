@@ -175,19 +175,10 @@ def login():
         try:
             for user in users:
                 if (user.name == name_mail or user.email == name_mail) and \
-                        user.password == check_password_hash(password):
+                        check_password_hash(user.password, password):
                     login_user(User(user.id), duration=datetime.timedelta(hours=24))
-<<<<<<< HEAD
                     return jsonify({"status": 0,
                                     "id": user.id,
-=======
-<<<<<<< HEAD
-                    return jsonify({"status": 0,
-                                    "id": user.id,
-=======
-                    return jsonify({"status": 0, "id": user.id,
->>>>>>> 518853840edaaba4a0b64b84ced19e817e73a45a
->>>>>>> 76337d5b66385543f0686e00cb41c6858eb9b42d
                                     "talks": user.talks,
                                     "info": "authorization successful"})
 
