@@ -12,9 +12,9 @@ app.config['SECRET_KEY'] = 'YSAFDB978WH8AYIFHSNUSIJDFK'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.config['MAIL_SERVER'] = "smtp.gmail.com"
-app.config['MAIL_USERNAME'] = "spareack2@gmail.com"
-app.config['MAIL_PASSWORD'] = "onkthnhlmgjbibaj"
-app.config['MAIL_DEFAULT_SENDER'] = ("dumka", "spareack2@gmail.com")
+app.config['MAIL_USERNAME'] = "talk.messenger.app@gmail.com"
+app.config['MAIL_PASSWORD'] = "xfusuyaxpbhncetq"
+app.config['MAIL_DEFAULT_SENDER'] = ("talk", "talk.messenger.app@gmail.com")
 
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_SSL'] = True
@@ -27,4 +27,4 @@ token_key = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 from sweater import models, routes
 
-# app.run(debug=True)
+app.run(debug=True)
