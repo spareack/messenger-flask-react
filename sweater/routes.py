@@ -31,12 +31,12 @@ def talk_return():
     return jsonify(d)
 
 
-@app.before_request
-def before_request():
-    if not request.is_secure:
-        url = request.url.replace('http://', 'https://', 1)
-        code = 301
-        return redirect(url, code=code)
+# @app.before_request
+# def before_request():
+#     if not request.is_secure:
+#         url = request.url.replace('http://', 'https://', 1)
+#         code = 301
+#         return redirect(url, code=code)
 
 
 @app.route('/check_name', methods=['GET'])
@@ -91,7 +91,7 @@ def register_new_user():
             last_id = db.session.query(User.id).order_by(User.id.desc()).first()
 
             token = token_key.dumps(email)
-            msg = Mesage('Confirm email', sender="spareack2@gmail.com", recipients=[email])
+            msg = Mesage('Confirm email', sender="talk", recipients=[email])
             link = url_for('confirm_token', token=str(token), _external=True)
             msg.body = 'Click this link to verify your account on Talk Messenger: ' + link
             mail.send(msg)
@@ -232,6 +232,13 @@ def serve_static(static_type, filename):
 
     return send_from_directory(os.path.join('../', 'build', 'static', static_type), filename)
     # return send_from_directory(os.path.join('C:/Users/user/PycharmProjects/flaskStatic/build/static/', static_type), filename)
+
+
+@app.route('search_user', methods=['GET'])
+def search_user():
+    if request.method == "GET":
+        value = request.args.get("value")
+
 
 
 @app.errorhandler(404)
