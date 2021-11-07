@@ -234,11 +234,11 @@ def serve_static(static_type, filename):
     # return send_from_directory(os.path.join('C:/Users/user/PycharmProjects/flaskStatic/build/static/', static_type), filename)
 
 
-@app.route('search_user', methods=['GET'])
-def search_user():
-    if request.method == "GET":
-        value = request.args.get("value")
-
+# @app.route('search_user', methods=['GET'])
+# def search_user():
+#     if request.method == "GET":
+#         value = request.args.get("value")
+#
 
 
 @app.errorhandler(404)
