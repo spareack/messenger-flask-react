@@ -234,14 +234,14 @@ def serve_static(static_type, filename):
     # return send_from_directory(os.path.join('C:/Users/user/PycharmProjects/flaskStatic/build/static/', static_type), filename)
 
 
-@app.route('search_user', methods=['GET'])
+@app.route('/search_user', methods=['GET'])
 def search_user():
     if request.method == "GET":
         value = request.args.get("value")
         try:
             users = db.session.query(User).filter(User.name.startswith(value)).limit(10).all()
             response = list({"id": user.id, "name": user.name} for user in users)
-            return jsonify({"status": 0, "users": jsonify(response)})
+            return jsonify({"status": 0, "users": response})
         except Exception as e:
             return jsonify({"status": 2, "info": str(e)})
 
