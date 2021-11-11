@@ -13,7 +13,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(40), nullable=False)
     date_create = db.Column(db.String(30), default=datetime.utcnow())
     is_activated = db.Column(db.Boolean, default=False)
-    talks = db.Column(db.Text)
+    dialogs = db.Column(db.Text, default="[]")
 
     def is_active(self):
         return self.is_activated
@@ -24,11 +24,21 @@ def load_user(user_id):
     return User.query.get(user_id)
 
 
+class Dialog(db.Model):
+    # __bind_key__ = 'dialogs'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(40), nullable=True)
+    members = db.Column(db.Text)
+    talks = db.Column(db.Text, default="[]")
+    date_create = db.Column(db.String(30), default=datetime.utcnow())
+    date_update = db.Column(db.String(30), default=datetime.utcnow())
+
+
 class Talk(db.Model):
     # __bind_key__ = 'talks'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(40), nullable=False)
-    messages = db.Column(db.Text)
+    messages = db.Column(db.Text, default="[]")
     date_create = db.Column(db.String(30), default=datetime.utcnow())
     date_update = db.Column(db.String(30), default=datetime.utcnow())
 
@@ -39,4 +49,13 @@ class Message(db.Model):
     sender = db.Column(db.String(20), nullable=False)
     type = db.Column(db.String(20), nullable=False)
     value = db.Column(db.Text, nullable=False)
+    date_create = db.Column(db.String(30), default=datetime.utcnow())
+
+
+class Media(db.Model):
+    # __bind_key__ = 'messages'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), nullable=False)
+    type = db.Column(db.String(20), nullable=False)
+    data = db.Column(db.BLOB, nullable=False)
     date_create = db.Column(db.String(30), default=datetime.utcnow())
