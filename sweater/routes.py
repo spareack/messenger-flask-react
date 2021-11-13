@@ -134,7 +134,7 @@ def login():
                         login_user(cur_user, duration=datetime.timedelta(hours=24))
                         return jsonify({"status": 0,
                                         "id": user.id,
-                                        "talks": user.talks,
+                                        "dialogs": json.loads(user.dialogs),
                                         "info": "authorization successful"})
                     else:
                         return jsonify({"status": 1, "info": "email not activated"})
@@ -149,8 +149,50 @@ def login():
 def is_authorized():
     if request.method == 'GET':
         try:
-            is_auth = current_user.is_authenticated
-            return jsonify({"status": 0, "is_auth": is_auth})
+            if current_user.is_authenticated:
+                user_id = int(current_user.get_id())
+                user = db.session.query(User).filter_by(id=user_id).first_or_404()
+
+                dialogs_ids = json.loads(user.dialogs)
+                dialogs = db.session.query(Dialog).filter_by(
+                    id=Dialog.id.in_(dialogs_ids)).order_by(Dialog.date_update.desc()).all()
+
+                response_list = []
+                for dialog in dialogs:
+                    members_list = []
+                    members = json.loads(dialog.members)
+                    members.remove(user_id)
+                    for member_id in members:
+                        member = db.session.query(User).filter_by(id=member_id).first_or_404()
+                        members_list.append(member.name)
+
+                    talks_ids = json.loads(dialog.talks)
+                    last_message_value = None
+                    if len(talks_ids) > 0:
+
+                        talk = db.session.query(Talk).filter_by(id=Talk.id.in_(talks_ids)).order_by(
+                            Talk.date_update.desc()).first_or_404()
+
+                        messages_ids = json.loads(talk.messages)
+                        if len(messages_ids) > 0:
+                            message = db.session.query(Message).filter_by(id=Message.id.in_(messages_ids)).order_by(
+                                Message.date_create.desc()).first_or_404()
+                            if message.type == "text":
+                                last_message_value = message.value
+                            else:
+                                last_message_value = message.type
+
+                    response_list.append(
+                        {"id": dialog.id, "other_members": members_list, "last_message": last_message_value})
+
+                return jsonify({"status": 0,
+                                "is_auth": True,
+                                "id": user_id,
+                                "name": user.name,
+                                "dialogs": response_list})
+            else:
+                return jsonify({"status": 0, "is_auth": False})
+
         except Exception as e:
             return jsonify({"status": 666, "info": str(e)})
 
