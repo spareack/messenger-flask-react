@@ -289,7 +289,7 @@ def create_talk():
         try:
             data = request.get_json()
             title = data["title"]
-            members = data["members"]
+            # members = data["members"]
             dialog_id = data["dialog_id"]
 
             talk = Talk(title=title)
@@ -301,7 +301,7 @@ def create_talk():
 
             db.session.commit()
 
-            return jsonify({"status": 0, "id": dialog_id})
+            return jsonify({"status": 0, "id": talk.id})
 
         except Exception as e:
             return jsonify({"status": 666, "info": str(e)})
@@ -314,7 +314,7 @@ def send_message():
             data = request.get_json()
             sender_id = data["sender_id"]
             talk_id = data["talk_id"]
-            message_type = data["type"]
+            message_type = data["message_type"]
             value = None
 
             if message_type == "media":
