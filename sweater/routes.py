@@ -269,7 +269,7 @@ def create_dialog():
                 if members_check[0] in own_members:
                     return jsonify({"status": 1, "info": "already have dialog with that user"})
 
-            dialog = Dialog(members=members)
+            dialog = Dialog(members=json.dumps(members))
             db.session.add(dialog)
             db.session.commit()
 
