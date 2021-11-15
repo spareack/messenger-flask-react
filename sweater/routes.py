@@ -225,6 +225,12 @@ def search_user():
             return jsonify({"status": 666, "info": str(e)})
 
 
+def add_to_json(obj, count):
+    lst = json.loads(obj)
+    lst.append(count)
+    return json.dumps(lst)
+
+
 @app.route('/create_dialog', methods=['POST'])
 def create_dialog():
     if request.method == "POST":
@@ -240,7 +246,8 @@ def create_dialog():
 
             for user_id in members:
                 user = db.session.query(User).filter_by(id=user_id).first_or_404()
-                user.dialogs = json.dumps(json.loads(user.dialogs).append(dialog.id))
+                user.dialogs = add_to_json(user.dialogs, dialog.id)
+
             db.session.commit()
 
             return jsonify({"status": 0, "id": dialog.id})
@@ -263,7 +270,8 @@ def create_talk():
             db.session.commit()
 
             dialog = db.session.query(Dialog).filter_by(id=dialog_id).first_or_404()
-            dialog.talks = json.dumps(json.loads(dialog.talks).append(talk.id))
+            dialog.talks = add_to_json(dialog.talks, talk.id)
+
             db.session.commit()
 
             return jsonify({"status": 0, "id": dialog_id})
@@ -301,7 +309,8 @@ def send_message():
             db.session.commit()
 
             talk = db.session.query(Talk).filter_by(id=talk_id).first_or_404()
-            talk.messages = json.dumps(json.loads(talk.messages).append(message.id))
+            talk.messages = add_to_json(talk.messages, message.id)
+
             db.session.commit()
 
             return jsonify({"status": 0, "id": message.id, "date": message.date_create})
