@@ -252,7 +252,24 @@ def create_dialog():
             title = data["title"]
             members = data["members"]
 
-            dialog = Dialog(members=json.dumps(members))
+            cur_id = int(current_user.get_id())
+            cur_user = db.session.query(User).filter_by(id=cur_id).first_or_404()
+            dialogs = db.session.query(Dialog).filter(Dialog.id.in_(json.loads(cur_user.dialogs))).all()
+
+            own_members = set()
+            for dialog in dialogs:
+                members_list = json.loads(dialog.members)
+                if len(members_list) < 3:
+                    for member in members_list:
+                        own_members.add(member)
+
+            members_check = members
+            if len(members_check) < 3:
+                members_check.remove(cur_id)
+                if members_check[0] in own_members:
+                    return jsonify({"status": 1, "info": "already have dialog with that user"})
+
+            dialog = Dialog(members=members)
             db.session.add(dialog)
             db.session.commit()
 
@@ -261,7 +278,6 @@ def create_dialog():
                 user.dialogs = add_to_json(user.dialogs, dialog.id)
 
             db.session.commit()
-
 
             return jsonify({"status": 0, "id": dialog.id})
 
