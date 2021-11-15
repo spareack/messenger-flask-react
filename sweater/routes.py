@@ -154,8 +154,8 @@ def is_authorized():
                 user = db.session.query(User).filter_by(id=user_id).first_or_404()
 
                 dialogs_ids = json.loads(user.dialogs)
-                dialogs = db.session.query(Dialog).filter_by(
-                    id=Dialog.id.in_(dialogs_ids)).order_by(Dialog.date_update.desc()).all()
+                dialogs = db.session.query(Dialog).filter(
+                    Dialog.id.in_(dialogs_ids)).order_by(Dialog.date_update.desc()).all()
 
                 response_list = []
                 for dialog in dialogs:
@@ -170,12 +170,12 @@ def is_authorized():
                     last_message_value = None
                     if len(talks_ids) > 0:
 
-                        talk = db.session.query(Talk).filter_by(id=Talk.id.in_(talks_ids)).order_by(
+                        talk = db.session.query(Talk).filter(Talk.id.in_(talks_ids)).order_by(
                             Talk.date_update.desc()).first_or_404()
 
                         messages_ids = json.loads(talk.messages)
                         if len(messages_ids) > 0:
-                            message = db.session.query(Message).filter_by(id=Message.id.in_(messages_ids)).order_by(
+                            message = db.session.query(Message).filter(Message.id.in_(messages_ids)).order_by(
                                 Message.date_create.desc()).first_or_404()
                             if message.type == "text":
                                 last_message_value = message.value
@@ -319,8 +319,8 @@ def get_dialog():
 
             user = User.query.filter_by(id=user_id).first_or_404()
             dialogs_ids = json.loads(user.dialogs)
-            dialogs = db.session.query(Dialog).filter_by(
-                id=Dialog.id.in_(dialogs_ids)).order_by(Dialog.date_update.desc()).all()
+            dialogs = db.session.query(Dialog).filter(
+                Dialog.id.in_(dialogs_ids)).order_by(Dialog.date_update.desc()).all()
 
             response_list = []
 
@@ -336,12 +336,12 @@ def get_dialog():
                 last_message_value = None
                 if len(talks_ids) > 0:
 
-                    talk = db.session.query(Talk).filter_by(id=Talk.id.in_(talks_ids)).order_by(
+                    talk = db.session.query(Talk).filter(Talk.id.in_(talks_ids)).order_by(
                         Talk.date_update.desc()).first_or_404()
 
                     messages_ids = json.loads(talk.messages)
                     if len(messages_ids) > 0:
-                        message = db.session.query(Message).filter_by(id=Message.id.in_(messages_ids)).order_by(
+                        message = db.session.query(Message).filter(Message.id.in_(messages_ids)).order_by(
                             Message.date_create.desc()).first_or_404()
                         if message.type == "text":
                             last_message_value = message.value
@@ -364,7 +364,7 @@ def get_talks():
             dialog = db.session.query(Dialog).filter_by(id=dialog_id).first_or_404()
             talks_ids = json.loads(dialog.talks)
 
-            talks = db.session.query(Talk).filter_by(id=Talk.id.in_(talks_ids)).order_by(
+            talks = db.session.query(Talk).filter(Talk.id.in_(talks_ids)).order_by(
                 Talk.date_update.desc()).all()
 
             response_list = list({"id": talk.id, "title": talk.title} for talk in talks)
@@ -405,7 +405,7 @@ def get_messages():
             talk = db.session.query(Talk).filter_by(id=talk_id).first_or_404()
             messages_ids = json.loads(talk.messages)
 
-            messages = db.session.query(Message).filter_by(id=Message.id.in_(messages_ids)).order_by(
+            messages = db.session.query(Message).filter(Message.id.in_(messages_ids)).order_by(
                 Message.date_create.desc()).all()
 
             response_list = []
@@ -439,7 +439,7 @@ def get_last_messages():
 
                 messages_ids = json.loads(talk.messages)
 
-                messages = db.session.query(Message).filter_by(id=Message.id.in_(messages_ids)).order_by(
+                messages = db.session.query(Message).filter(Message.id.in_(messages_ids)).order_by(
                     Message.date_create.desc()).all()
 
                 response_list = list({"id": message.id,
