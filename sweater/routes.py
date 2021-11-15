@@ -218,7 +218,19 @@ def search_user():
     if request.method == "GET":
         value = request.args.get("value")
         try:
-            users = db.session.query(User).filter(User.name.startswith(value)).limit(10).all()
+            cur_user = db.session.query(User).filter_by(id=int(current_user.get_id())).first_or_404()
+            dialogs = db.session.query(Dialog).filter(Dialog.id.in_(json.loads(cur_user.dialogs))).all()
+
+            own_members = set()
+            for dialog in dialogs:
+                members_list = json.loads(dialog.members)
+                if len(members_list) < 3:
+                    for member in members_list:
+                        own_members.add(member)
+
+            users = db.session.query(User).filter(User.name.startswith(value)).filter(
+                User.id.not_in(own_members)).limit(10).all()
+
             response = list({"id": user.id, "name": user.name} for user in users)
             return jsonify({"status": 0, "users": response})
         except Exception as e:
@@ -249,6 +261,7 @@ def create_dialog():
                 user.dialogs = add_to_json(user.dialogs, dialog.id)
 
             db.session.commit()
+
 
             return jsonify({"status": 0, "id": dialog.id})
 
