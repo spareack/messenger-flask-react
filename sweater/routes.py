@@ -19,15 +19,6 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/talk1')
-def talk_return():
-    d = [{"from": True, "text": "privet", "time": "10:50"},
-        {"from": False, "text": "zdarova bratela", "time": "10:51"},
-        {"from": True, "text": "hochu kushat'", "time": "10:50"},
-        {"from": False, "text": "pizzu idem kushat'?", "time": "10:50"}]
-    return jsonify(d)
-
-
 # @app.before_request
 # def before_request():
 #     if not request.is_secure:
@@ -442,7 +433,7 @@ def get_messages():
             messages_ids = json.loads(talk.messages)
 
             messages = db.session.query(Message).filter(Message.id.in_(messages_ids)).order_by(
-                Message.date_create.desc()).all()
+                Message.id).all()
 
             response_list = []
             for message in messages:
