@@ -263,10 +263,8 @@ def create_dialog():
                     for member in members_list:
                         own_members.add(member)
 
-            members_check = members
-            if len(members_check) < 3:
-                members_check.remove(cur_id)
-                if members_check[0] in own_members:
+            if len(members) < 3:
+                if all(member_id in own_members for member_id in members):
                     return jsonify({"status": 1, "info": "already have dialog with that user"})
 
             dialog = Dialog(members=json.dumps(members))
