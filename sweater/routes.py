@@ -138,6 +138,7 @@ def login():
                         login_user(cur_user, duration=datetime.timedelta(hours=24))
                         return jsonify({"status": 0,
                                         "id": user.id,
+                                        "name": user.name,
                                         "dialogs": json.loads(user.dialogs),
                                         "info": "authorization successful"})
                     else:
