@@ -3,9 +3,14 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from itsdangerous import URLSafeTimedSerializer
+from flask_cors import CORS
+from flask_socketio import SocketIO
 
 
 app = Flask(__name__, static_folder='../build', static_url_path='/', template_folder="../build")
+app.config['CORS_HEADERS'] = 'Content-Type'
+socketio = SocketIO(app, cors_allowed_origins="*")
+CORS(app)
 
 # DB CONFIG
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
@@ -33,4 +38,5 @@ token_key = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 from sweater import models, routes
 
-app.run(debug=True)
+# app.run(debug=True)
+socketio.run(app)

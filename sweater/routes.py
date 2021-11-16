@@ -8,8 +8,10 @@ from flask_login import login_user, current_user, logout_user
 from flask_mail import Message as Mesage
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+from flask_cors import cross_origin
+from flask_socketio import emit
 
-from sweater import app, db, mail, token_key
+from sweater import app, db, mail, token_key, socketio
 from sweater.models import User, Talk, Message, Dialog, Media
 
 
@@ -17,6 +19,17 @@ from sweater.models import User, Talk, Message, Dialog, Media
 @app.route('/home')
 def index():
     return render_template('index.html')
+
+@socketio.on('connect')
+# @cross_origin()
+def handle_connection():
+  emit('server-client', 'Test message')
+
+
+@socketio.on('client-server')
+# @cross_origin()
+def handle_client_msg(msg):
+  print("\n" + str(msg))
 
 
 # @app.before_request
