@@ -1,0 +1,185 @@
+.loginPage {
+    font-style: italic;
+    font-size: 16px;
+    background-color: #111;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    opacity: 1;
+}
+
+.particlesDiv {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    z-index: 0;
+}
+
+/* .loginForm {
+    color: #fffff1;
+    background-color: #323233;
+    border-radius: 15px;
+    width: 80%;
+    height: 550px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index:1;
+} */
+
+.loginPageAvatar {
+    width: 400px;
+    height: 450px;
+    /* background-color: #202124; */
+    z-index: 1;
+}
+
+.authForm {
+    background-color: inherit;
+    width: 400px;
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 3%;
+    align-items: center;
+    outline: none;
+    box-shadow: 0 9px 50px hsla(20, 67%, 75%, 0.15);
+    border-radius: 15px;
+    z-index: 1;
+}
+
+.authFormDiv {
+    z-index: 2;
+    background-color: #2a2a2a;
+    border-radius: 10px;
+}
+
+.authForm h2 {
+    letter-spacing: 0.05em;
+    color: #FFFFF1;
+}
+
+.regForm {
+    padding-top: 2%;
+    padding-bottom: 2%;
+    height: min-content;
+    background-color: #2a2a2a;
+}
+
+input[class="form-input"]{
+    width: 240px;
+    height: 50px;
+    margin-top: 2%;
+    padding: 15px;
+    font-size: 16px;
+    font-family: 'Abel', sans-serif;
+    color: #5E6472;
+    background-color: #202124;
+    outline: none;
+    border: none;
+    border-radius: 0px 5px 5px 0px;
+    transition: 0.2s linear;
+}
+
+input[class="form-input"]:focus {
+    transform: translateX(-2px);
+    border-radius: 5px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    padding: 3%;
+    width: 60%;
+}
+
+.LoginPageButton {
+    text-decoration: none;
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    width: max-content;
+    background-color: #202124;
+    font-size: 0.8em;
+    font-weight: 700;
+    color: #838896;
+    transition: 0.2s all ease-in-out;
+}
+
+.LoginPageButton:hover {
+    transform: translatey(3px);
+    box-shadow: 0 3px 30px hsla(20, 67%, 75%, 0.15);
+}
+
+.regButton:hover {
+    background: none;
+}
+
+.flashMessage {
+    margin: 20px 0 0 0;
+    padding: 0;
+    content: '';
+    color: red;
+}
+
+.LoginPageButton:disabled {
+    animation: none;
+    background-color: inherit;
+    border: 1px solid gray;
+}
+
+.LoginPageButton:hover:disabled {
+    animation: none;
+    transform: none;
+}
+
+.loginPageAvatar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background-color: #2a2a2a; */
+    border-radius: 10px;
+    /* box-shadow:  0 9px 50px hsla(20, 67%, 75%, 0.15); */
+}
+
+.loginPageText {
+    font-size: 18px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5%;
+    color: #6a6a6a;
+}
+
+.loginPageText p {
+    /* text-shadow: 1px 1px 2px rgba(255,255,255, 100%); */
+    letter-spacing: .2rem;
+}
+
+
+
+.ButtonText {
+    background-color: #323233;
+    font-weight: 700;
+    padding: 15px;
+    text-decoration: none;
+}
+
+.loginLogo {
+    padding: 0;
+    margin: 0;
+}
+
+.loginLogo img {
+    box-shadow:   0 9px 50px hsla(20, 67%, 75%, 0.15);
+    background-color: rgba(0,0,0, 15%);
+    padding-right: 10px;
+    border-radius: 15px;
+}
