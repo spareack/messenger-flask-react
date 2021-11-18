@@ -378,6 +378,7 @@ def create_talk():
 def send_message():
     if request.method == "POST":
         try:
+            global rooms_list
             # print(type(func.utcnow()))
             data = request.get_json()
             sender_id = data["sender_id"]
