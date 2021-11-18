@@ -416,7 +416,7 @@ def send_message():
                 dialogs_ids = json.loads(user.dialogs)
                 if dialog.id in dialogs_ids:
                     if user.id in rooms_list:
-                        emit('info', jsonify({'info': 'new Messages in dialog', 'dialog_id': dialog.id}), to=str(user.id), namespace='/')
+                        emit('socket_info', jsonify({'info': 'new Messages in dialog', 'dialog_id': dialog.id}), to=str(user.id), namespace='/')
 
             return jsonify({"status": 0, "id": message.id, "date": message.date_create})
 
