@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 import io
+import time
 
 from flask import render_template, request, redirect, send_from_directory, jsonify, url_for, send_file
 from flask_login import login_user, current_user, logout_user
@@ -9,7 +10,7 @@ from flask_mail import Message as Mesage
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_cors import cross_origin
-from flask_socketio import emit
+from flask_socketio import emit, send, join_room, leave_room
 
 from sweater import app, db, mail, token_key, socketio
 from sweater.models import User, Talk, Message, Dialog, Media
@@ -20,16 +21,36 @@ from sweater.models import User, Talk, Message, Dialog, Media
 def index():
     return render_template('index.html')
 
+
+@socketio.on('authorize')
+# @cross_origin()
+def handle_connection(data):
+    user_id = data['id']
+    # join_room(user_id)
+    print(user_id)
+    # emit('server-client', 'Test message')
+
+
 @socketio.on('connect')
 # @cross_origin()
-def handle_connection():
-  emit('server-client', 'Test message')
+def connect_socket():
+    # user_id = current_user.is_authenticated
+    join_room("all")
+    print("connect!")
+
+
+@socketio.on('disconnect')
+# @cross_origin()
+def disconnect_socket():
+    # user_id = current_user.is_authenticated
+    leave_room("all")
+    print("disconnect(")
 
 
 @socketio.on('client-server')
 # @cross_origin()
 def handle_client_msg(msg):
-  print("\n" + str(msg))
+    print("\n" + str(msg))
 
 
 # @app.before_request
@@ -221,6 +242,9 @@ def serve_static(static_type, filename):
 @app.route('/search_user', methods=['GET'])
 def search_user():
     if request.method == "GET":
+
+        emit('info', current_user.get_id(), to="all", namespace='/')
+
         value = request.args.get("value")
         try:
             cur_user = db.session.query(User).filter_by(id=int(current_user.get_id())).first_or_404()

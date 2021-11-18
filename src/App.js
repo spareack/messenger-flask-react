@@ -17,14 +17,24 @@ function App() {
     dialogs: []
   })
 
-  // useEffect(() => {
-  //   const socket = io('http://localhost:5000');
-  
-  //   socket.on('server-client', msg => {
-  //     alert(msg);
-  //     socket.emit('client-server', 'Client: Message received!');
-  //   });
-  // }, []);
+
+   useEffect(() => {
+     const socket = io('http://localhost:5000');
+
+//    socket.emit('test', 'xxx');
+
+     socket.on('info', msg => {
+       alert(msg);
+     });
+
+//     socket.on('alert', msg => {
+//       alert(msg);
+////       socket.emit('test', 'xxx');
+//     });
+//      socket.emit('authorize', {'id': 2});
+
+   }, []);
+
 
     useEffect(() => {
       axios({
