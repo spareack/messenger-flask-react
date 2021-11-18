@@ -1,7 +1,8 @@
 .talks {
-    width: 27%;
+    width: 40%;
     height: 100%;
     background-color: #212121;
+    transition: width 0.5s ease-in-out;
 }
 
 .talksItems {

@@ -8,7 +8,7 @@ import WelcomePage from './components/WelcomePage';
 import { io } from 'socket.io-client'
 
 function App() {
-  // const [currentDialog, setCurrentDialog] = useState(0)
+
   const [userIsLoggedIn, setUserLoggedIn] = useState('loading')
   const [user, setUser] = useState({
     id: -1,
@@ -37,7 +37,7 @@ function App() {
 
     if (userIsLoggedIn === true) {
       socket.emit('authorize', {id: user.id});
-
+      alert('aaa')
     }
 
     socket.on('info', msg => {

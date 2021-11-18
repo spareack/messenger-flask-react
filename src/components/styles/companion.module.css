@@ -1,0 +1,39 @@
+.avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
+    height: 62px;
+}
+
+.avatar img {
+    border-radius: 75%;
+    height: 45px;
+    width: 45px;
+}
+
+.companion {
+  height: 9%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #FFFFF0;
+  background-color: #212121;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.companionInfo {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.companion p, .companion h2 {
+    text-align: start;
+    margin: 0;
+    padding: 0;
+}
+
+.companion p {
+    color: gray;
+}

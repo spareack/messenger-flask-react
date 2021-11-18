@@ -1,9 +1,9 @@
 import React, {useState, useEffect, useRef} from 'react'
 import classes from './styles/MainWindow.module.css'
 import MessageList from './messageList'
-import unnamed from './unnamed.jpg'
+import Companion from './Companion'
 
-const MainWindow = ({companion, messages, user, sendMessage}) => {
+const MainWindow = ({companion, messages, user, sendMessage,active , setActiveTalkMenu}) => {
     const textareaRef = useRef(null);
     const [messageText, setMessageText] = useState('')
 
@@ -21,15 +21,19 @@ const MainWindow = ({companion, messages, user, sendMessage}) => {
     }, [messageText])
 
     return (
-        <div className={classes.dialogWindow}> 
-            <div className={classes.companion}>
+        <div className={classes.dialogWindow}>
+
+            <Companion companion={companion} setActive={setActiveTalkMenu}/>
+            
+            {/* <div className={classes.companion}>
                 {companion?.photoURL === undefined
                 ? <div className={classes.avatar}><img alt='' src={unnamed}/></div>
                 : <div className={classes.avatar}><img alt='' src={companion.photoURL}/></div>
                 }
                 <div><h2>{companion?.other_members?.length === 1? companion?.other_members: 'Название группового разговора'}</h2>
                 <p>last seen recently</p></div>
-            </div>
+            </div> */}
+            
             <MessageList messages={messages} user={user}/>
             <form className={classes.txtArea}>
             <div className={classes.wInputContainer}>
