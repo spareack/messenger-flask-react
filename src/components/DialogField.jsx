@@ -24,7 +24,7 @@ const DialogsField = ({
     setActiveMenu
     }) => {
 
-    // const [_dialogs, setDialogs] = useState(dialogs)
+    
 
 
     /* UI */
@@ -58,9 +58,8 @@ const DialogsField = ({
           document.onmouseup = null;
           document.onmousemove = null;
         }
-        console.log(dialogs)
+        
       }, [])
-
     const toggleDownMenu = (e) => {
         setActiveMenu((active) => (!active))
     }  

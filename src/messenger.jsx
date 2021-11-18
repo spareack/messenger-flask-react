@@ -1,9 +1,9 @@
-import React, {useState, /* useEffect */} from 'react';
+import React, {useState,  useEffect } from 'react';
 import './App.css';
 import DialogsField from './components/DialogField';
 import WorkSpace from './components/workSpace';
 import axios from 'axios'
-// import { io } from 'socket.io-client'
+import { io } from 'socket.io-client'
 
 function Messenger({dialogs, setLoggedOut, user}) {
   
@@ -16,7 +16,7 @@ function Messenger({dialogs, setLoggedOut, user}) {
     setActiveMenu(false)
   }
   const [active, setActiveMenu] = useState(false)
-  
+
   /* UI */
   const [_dialogs, setDialogs] = useState(dialogs)
   const [talks, setTalks] = useState([])
@@ -24,14 +24,12 @@ function Messenger({dialogs, setLoggedOut, user}) {
   const [currentTalk, setCurrentTalk] = useState(0)
   const [messages, setMessages] = useState([])
 
-  // useEffect(() => {
-  //   const socket = io('http://localhost:5000');
-  //   if(dialogs.length !== 0)socket.on('server-client', msg => {
-  //     console.log(_dialogs)
-  //     alert(msg);
-  //     socket.emit('client-server', 'Client: Message received!');
-  //   });
-  // }, []);
+  useEffect(() => {
+    const socket = io('http://localhost:5000');
+    if(user.id !== -1){
+      socket.emit('authorize', {id: user.id});      
+    }
+  }, []);
 
   const getTalks = (id) => {
     axios({
@@ -94,6 +92,7 @@ function Messenger({dialogs, setLoggedOut, user}) {
       }
     }).then(res => {
       if(!res.data.status){
+        console.log(res.data)
         setMessages([ {sender: user.id, value: messageText, date: res.data.date, id: res.data.id} ,...messages])
       }
     })

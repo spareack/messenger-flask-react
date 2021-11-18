@@ -16,6 +16,7 @@ const MainWindow = ({companion, messages, user, sendMessage,active , setActiveTa
 
     const onEnterPress = (e) => {
         if(e.code === 'Enter'){
+            console.log(e.target.value)
             sendMessageLocal(e)
         }
     }

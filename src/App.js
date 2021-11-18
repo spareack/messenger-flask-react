@@ -31,26 +31,9 @@ function App() {
               name: res.data.name,
               dialogs: res.data.dialogs ? res.data.dialogs : []
             })
-            console.log(res.data)
         }
     }).catch(error => console.log(error))
-
-    if (userIsLoggedIn === true) {
-      socket.emit('authorize', {id: user.id});
-      alert('aaa')
-    }
-
-    socket.on('info', msg => {
-      alert(msg);
-    });
-
-//     socket.on('alert', msg => {
-//       alert(msg);
-////       socket.emit('test', 'xxx');
-//     });
-//      socket.emit('authorize', {'id': 2});
-
-   }, []);
+   }, [userIsLoggedIn]);
 
 
     
