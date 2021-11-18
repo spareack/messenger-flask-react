@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 import io
+import traceback
 
 from flask import render_template, request, redirect, send_from_directory, jsonify, url_for, send_file
 from flask_login import login_user, current_user, logout_user
@@ -10,6 +11,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_cors import cross_origin
 from flask_socketio import emit, send, join_room, leave_room
+from sqlalchemy.sql import func
 
 from sweater import app, db, mail, token_key, socketio
 from sweater.models import User, Talk, Message, Dialog, Media
@@ -144,19 +146,54 @@ def login():
         name_mail = response['email']
         password = response['password']
 
+
         users = User.query.all()
         try:
             for user in users:
                 if (user.name == name_mail or user.email == name_mail) and \
                         check_password_hash(user.password, password):
-
                     if user.is_activated:
-                        cur_user = User.query.filter_by(id=user.id).first_or_404()
-                        login_user(cur_user, duration=datetime.timedelta(hours=24))
+                        login_user(user, duration=datetime.timedelta(hours=24))
+
+                        user_id = user.id
+
+                        dialogs_ids = json.loads(user.dialogs)
+                        dialogs = db.session.query(Dialog).filter(
+                            Dialog.id.in_(dialogs_ids)).order_by(Dialog.date_update.desc()).all()
+
+                        response_list = []
+                        for dialog in dialogs:
+                            members_list = []
+                            members = json.loads(dialog.members)
+                            members.remove(user_id)
+                            for member_id in members:
+                                member = db.session.query(User).filter_by(id=member_id).first_or_404()
+                                members_list.append(member.name)
+
+                            talks_ids = json.loads(dialog.talks)
+                            last_message_value = None
+                            if len(talks_ids) > 0:
+
+                                talk = db.session.query(Talk).filter(Talk.id.in_(talks_ids)).order_by(
+                                    Talk.date_update.desc()).first_or_404()
+
+                                messages_ids = json.loads(talk.messages)
+                                if len(messages_ids) > 0:
+                                    message = db.session.query(Message).filter(Message.id.in_(messages_ids)).order_by(
+                                        Message.date_create.desc()).first_or_404()
+                                    if message.type == "text":
+                                        last_message_value = message.value
+                                    else:
+                                        last_message_value = message.type
+
+                            response_list.append({"id": dialog.id,
+                                                  "other_members": members_list,
+                                                  "last_message": last_message_value})
+
                         return jsonify({"status": 0,
                                         "id": user.id,
                                         "name": user.name,
-                                        "dialogs": json.loads(user.dialogs),
+                                        "dialogs": response_list,
                                         "info": "authorization successful"})
                     else:
                         return jsonify({"status": 1, "info": "email not activated"})
@@ -334,6 +371,7 @@ def create_talk():
 def send_message():
     if request.method == "POST":
         try:
+            # print(type(func.utcnow()))
             data = request.get_json()
             sender_id = data["sender_id"]
             talk_id = data["talk_id"]
@@ -361,10 +399,9 @@ def send_message():
 
             talk = db.session.query(Talk).filter_by(id=talk_id).first_or_404()
             talk.messages = add_to_json(talk.messages, message.id)
-            talk.date_update = str(datetime.datetime.now().time())
 
             dialog = db.session.query(Dialog).filter_by(id=dialog_id).first_or_404()
-            dialog.date_update = str(datetime.datetime.now().time())
+            dialog.date_update = func.now()
 
             db.session.commit()
 
@@ -373,13 +410,12 @@ def send_message():
                 dialogs_ids = json.loads(user.dialogs)
                 if dialog.id in dialogs_ids:
                     if user.id in rooms_list:
-                        emit('info', jsonify({'info': 'new Messages in dialog',
-                                              'dialog_id': dialog.id}), to=str(user.id), namespace='/')
+                        emit('info', jsonify({'info': 'new Messages in dialog', 'dialog_id': dialog.id}), to=str(user.id), namespace='/')
 
             return jsonify({"status": 0, "id": message.id, "date": message.date_create})
 
         except Exception as e:
-            return jsonify({"status": 666, "info": str(e)})
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
 @app.route('/get_dialogs', methods=['GET'])
