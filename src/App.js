@@ -5,7 +5,6 @@ import {Route, Switch, Redirect, BrowserRouter} from 'react-router-dom'
 import Messenger from './messenger';
 import Loader from './components/Loader';
 import WelcomePage from './components/WelcomePage';
-import { io } from 'socket.io-client'
 
 function App() {
   const [dialogs, setDialogs] = useState([])
@@ -17,9 +16,7 @@ function App() {
     dialogs: dialogs
   })
 
-   useEffect(() => {
-//    const socket = io('http://localhost:5000');
-    
+   useEffect(() => {    
     axios({
       method: 'get',
       url: '/is_authorized',

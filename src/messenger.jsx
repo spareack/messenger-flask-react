@@ -25,14 +25,14 @@ function Messenger({dialogs, setLoggedOut, user, setDialogs}) {
   const [currentTalk, setCurrentTalk] = useState(0)
   const [messages, setMessages] = useState([])
 
-
-
   useEffect(() => {
     if(user.id !== -1){
-      
       socket.emit('authorize', {id: user.id});
+      socket.on('socket_info', msg => {
+        console.log(msg)
+      })
     }
-  });
+  }, [messages]);
 
   const getTalks = (id) => {
     axios({
@@ -100,12 +100,12 @@ function Messenger({dialogs, setLoggedOut, user, setDialogs}) {
       }
     })
     .catch(error => console.log(error))
-    console.log({
-      sender_id: user.id,
-      talk_id: currentTalk,
-      message_type: 'text',
-      value: messageText
-    }, messages)
+    // console.log({
+    //   sender_id: user.id,
+    //   talk_id: currentTalk,
+    //   message_type: 'text',
+    //   value: messageText
+    // }, messages)
     // setMessages([ {sender: user.id, value: messageText, date: '00:00'},...messages])
   }
 
