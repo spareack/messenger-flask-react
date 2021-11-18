@@ -5,7 +5,7 @@ import MainWindow from './mainDialogWindow'
 import Talks from './talks'
 
 const WorkSpace = ({id, companion, talks, currentTalk, setTalk, getMsg, messages, user, sendMessage, createTalk}) => {
-    const [activeMenu, setActiveRightMenu] = useState(false)
+    const [activeMenu, setActiveRightMenu] = useState(true)
     
     const getMessages = (id) => {
         setTalk(id)

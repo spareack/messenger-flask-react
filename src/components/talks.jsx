@@ -3,7 +3,6 @@ import classes from './styles/talks.module.css'
 import TalkItem from './talksItem' 
 
 const Talks = ({talks, current, setTalk, createTalk, currentDialog, active}) => {
-    console.log(active)
 
     return (
         <div className={active ? classes.talks : classes.talks} style={active ? {width: '40%'} : {width: '0%'}}>
