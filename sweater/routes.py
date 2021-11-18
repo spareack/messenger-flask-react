@@ -29,6 +29,7 @@ def index():
 @socketio.on('authorize')
 # @cross_origin()
 def handle_connection(data):
+    global rooms_list
     user_id = data['id']
     join_room(user_id)
     rooms_list.append(user_id)
