@@ -17,15 +17,32 @@ function App() {
     dialogs: []
   })
 
-
    useEffect(() => {
-     const socket = io('http://localhost:5000');
+    const socket = io('http://localhost:5000');
+    
+    axios({
+      method: 'get',
+      url: '/is_authorized',
+    }).then(res => {
+        if(res.data.status === 0){
+            setUserLoggedIn(res.data.is_auth)
+            setUser({
+              id: res.data.id,
+              name: res.data.name,
+              dialogs: res.data.dialogs ? res.data.dialogs : []
+            })
+            console.log(res.data)
+        }
+    }).catch(error => console.log(error))
 
-//    socket.emit('test', 'xxx');
+    if (userIsLoggedIn === true) {
+      socket.emit('authorize', {id: user.id});
 
-     socket.on('info', msg => {
-       alert(msg);
-     });
+    }
+
+    socket.on('info', msg => {
+      alert(msg);
+    });
 
 //     socket.on('alert', msg => {
 //       alert(msg);
@@ -36,21 +53,7 @@ function App() {
    }, []);
 
 
-    useEffect(() => {
-      axios({
-        method: 'get',
-        url: '/is_authorized',
-      }).then(res => {
-          if(res.data.status == 0){
-              setUserLoggedIn(res.data.is_auth)
-              setUser({
-                id: res.data.id,
-                name: res.data.name,
-                dialogs: res.data.dialogs ? res.data.dialogs : []
-              })
-          }
-      }).catch(error => console.log(error))
-    }, [])
+    
     
   if(userIsLoggedIn === 'loading'){
     return (<div style={{height: '100vh',

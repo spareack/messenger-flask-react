@@ -78,12 +78,12 @@ const DialogsField = ({
 
             <div className={classes.searchBox}>
                 <div className={classes.dialogFieldSBox}>
-                    <div onClick={(e) => {e.stopPropagation()}}><button onClick={toggleDownMenu} className={classes.dropDownMenuButton}><img src={menu}/></button></div>
+                    <div onClick={(e) => {e.stopPropagation()}}><button onClick={toggleDownMenu} className={classes.dropDownMenuButton}><img src={menu} alt=''/></button></div>
                     <div className={classes.dropDownMenu} style={{display: active? 'flex' : 'none'}} onClick={(e) => {e.stopPropagation()}}>
-                        <a className={classes.logOutBtn + ' ' + classes.menuButton} onClick={() => {setSettingsWindow(!settings); setActiveMenu(false)}}>Settings</a>
+                        <button className={classes.logOutBtn + ' ' + classes.menuButton} onClick={() => {setSettingsWindow(!settings); setActiveMenu(false)}}>Settings</button>
                         <a href="/un_authorize" className={classes.logOutBtn + ' ' + classes.menuButton} onClick={() => setLoggedOut(false)}>Log Out</a>
                     </div>
-                    <div className={classes.userInfo} onClick={() => (setActiveMenu(false))}><img src={unnamed} className={classes.userAvatar}/><h2>{user.name}</h2></div>
+                    <div className={classes.userInfo} onClick={() => (setActiveMenu(false))}><img src={unnamed} alt='' className={classes.userAvatar}/><h2>{user.name}</h2></div>
                 </div>
                 {/* <a href="/un_authorize" className={classes.logOutBtn} onClick={() => setLoggedOut(false)}>Log Out</a> */}
                 <Search user={user} createDialog={createDialog} setInputActive={setInputActive} activeInput={activeInput} searchInput={searchInput} setSearchInput={setSearchInput}/>
@@ -97,7 +97,7 @@ const DialogsField = ({
                         key={post.id}
                         id={post.id}
                         index={index}
-                        name={post.other_members.length === 1 ? post.other_members : 'Групповой диалог'}
+                        name={post.other_members?.length === 1 ? post.other_members : 'Групповой диалог'}
                         lastTalk={post.last_message ? post.last_message : 'There is no messages'}
                         onclick={changeDialog}
                         current={currentDialog === post.id? true : false}/>

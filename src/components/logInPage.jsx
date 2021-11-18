@@ -27,7 +27,7 @@ const LogIn = ({setLoggedIn, setUser}) => {
         }).then(res => {
             if(!res.data.status){
                 setLoggedIn(true)
-                console.log(res.data)
+                // console.log(res.data)
                 setUser({
                     id: res.data.id,
                     name: res.data.name,
@@ -36,7 +36,7 @@ const LogIn = ({setLoggedIn, setUser}) => {
                   })
             }
             if(res.data.status === 1){
-                if(res.data.info == 'user not found'){
+                if(res.data.info === 'user not found'){
                     setForgotsmth('Incorrect login or password')
                 }
                 else setForgotsmth(res.data.info)

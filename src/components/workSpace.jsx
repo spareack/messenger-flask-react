@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import '../App.css'
 import classes from './styles/workspace.module.css'
 import MainWindow from './mainDialogWindow'

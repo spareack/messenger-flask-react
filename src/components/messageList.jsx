@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import MessageListItem from './MessageListItem'
 import classes from './styles/MessageList.module.css'
 

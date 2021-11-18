@@ -7,15 +7,6 @@ const Search = ({user, createDialog, setInputActive, activeInput, searchInput, s
     const [names, setNames] = useState([])
     // const [activeInput, setInputActive] = useState(false)
 
-    /* UI */
-    const blurExeption = (e) => {
-        console.log(document.getElementById('searchList'), e.target.contains(document.getElementById('searchList')), e.type, e.target)
-        if(e.target.contains(document.getElementById('searchList'))){
-            return
-        } else setInputActive(false)
-    }
-    /* UI */
-
     const search = (e) => {
         if(e.target.value.length !== 0)axios({
             method: 'get',
@@ -26,7 +17,6 @@ const Search = ({user, createDialog, setInputActive, activeInput, searchInput, s
         })
         .then(res => {
             setNames(res.data.users)
-            console.log(res.data.users)
         })
         .catch(error => console.log(error))
         else setNames([])
@@ -70,7 +60,7 @@ export default Search
 const SearchItem = ({srcPath, name, id, searchUser}) => {
     return (
     <li className={classes.searchItem} onClick={() => {searchUser(name, id)}}>
-        <img height='30' width='30' style={{borderRadius: '75%'}} src={srcPath}/> <p>{name}</p>
+        <img height='30' width='30' style={{borderRadius: '75%'}} src={srcPath} alt=''/> <p>{name}</p>
     </li>
     )
 }

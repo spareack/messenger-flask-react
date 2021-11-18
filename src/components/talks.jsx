@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import classes from './styles/talks.module.css'
 import TalkItem from './talksItem' 
 

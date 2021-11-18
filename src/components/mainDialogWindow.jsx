@@ -13,12 +13,6 @@ const MainWindow = ({companion, messages, user, sendMessage}) => {
         sendMessage(messageText)
     }
 
-    const timeNow = () => {
-        let time = new Date()
-        return time.toTimeString()
-    }
-    
-
     useEffect(()=> {
         textareaRef.current.style.height = "0px";
         const scrollHeight = textareaRef.current.scrollHeight;
@@ -30,10 +24,10 @@ const MainWindow = ({companion, messages, user, sendMessage}) => {
         <div className={classes.dialogWindow}> 
             <div className={classes.companion}>
                 {companion?.photoURL === undefined
-                ? <div className={classes.avatar}><img src={unnamed}/></div>
-                : <div className={classes.avatar}><img src={companion.photoURL}/></div>
+                ? <div className={classes.avatar}><img alt='' src={unnamed}/></div>
+                : <div className={classes.avatar}><img alt='' src={companion.photoURL}/></div>
                 }
-                <div><h2>{companion?.other_members.length === 1? companion?.other_members: 'Название группового разговора'}</h2>
+                <div><h2>{companion?.other_members?.length === 1? companion?.other_members: 'Название группового разговора'}</h2>
                 <p>last seen recently</p></div>
             </div>
             <MessageList messages={messages} user={user}/>

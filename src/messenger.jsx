@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, /* useEffect */} from 'react';
 import './App.css';
 import DialogsField from './components/DialogField';
 import WorkSpace from './components/workSpace';
 import axios from 'axios'
-import { io } from 'socket.io-client'
+// import { io } from 'socket.io-client'
 
 function Messenger({dialogs, setLoggedOut, user}) {
   
@@ -87,6 +87,7 @@ function Messenger({dialogs, setLoggedOut, user}) {
       data: {
         sender_id: user.id,
         talk_id: currentTalk,
+        dialog_id: currentDialog,
         message_type: 'text',
         value: messageText
       }
