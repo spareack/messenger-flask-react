@@ -7,7 +7,7 @@ import { io } from 'socket.io-client'
 
 const socket = io('http://localhost:5000');
 
-function Messenger({dialogs, setLoggedOut, user}) {
+function Messenger({dialogs, setLoggedOut, user, setDialogs}) {
   
   /* UI */
   const [activeInput, setInputActive] = useState(false)
@@ -20,7 +20,6 @@ function Messenger({dialogs, setLoggedOut, user}) {
   const [active, setActiveMenu] = useState(false)
 
   /* UI */
-  const [_dialogs, setDialogs] = useState(dialogs)
   const [talks, setTalks] = useState([])
   const [currentDialog, setCurrentDialog] = useState(0)
   const [currentTalk, setCurrentTalk] = useState(0)
@@ -30,6 +29,7 @@ function Messenger({dialogs, setLoggedOut, user}) {
 
   useEffect(() => {
     if(user.id !== -1){
+      
       socket.emit('authorize', {id: user.id});
     }
   });
@@ -79,7 +79,7 @@ function Messenger({dialogs, setLoggedOut, user}) {
   }
 
   const createDialog = (name, dialogID) => {
-    setDialogs([..._dialogs, {id: dialogID, last_message: null, other_members: [name]}])
+    setDialogs([...dialogs, {id: dialogID, last_message: null, other_members: [name]}])
   } 
 
   const pushMessage = (messageText) => {
@@ -112,7 +112,7 @@ function Messenger({dialogs, setLoggedOut, user}) {
   return (
     <div className="App" onClick={() => (blurInput())}>
       <DialogsField setDialog={setCurrentDialog} 
-                    dialogs={_dialogs} 
+                    dialogs={dialogs} 
                     currentDialog={currentDialog} 
                     setTalk={setCurrentTalk} 
                     setLoggedOut={setLoggedOut} 
@@ -128,7 +128,7 @@ function Messenger({dialogs, setLoggedOut, user}) {
                     setActiveMenu={setActiveMenu}/>
 
       <WorkSpace  id={currentDialog} 
-                  companion={_dialogs.find(Dialog => (Dialog.id === currentDialog))} 
+                  companion={dialogs.find(Dialog => (Dialog.id === currentDialog))} 
                   talks={talks} 
                   currentTalk={currentTalk} 
                   setTalk={setCurrentTalk} 

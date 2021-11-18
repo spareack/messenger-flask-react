@@ -8,13 +8,13 @@ import WelcomePage from './components/WelcomePage';
 import { io } from 'socket.io-client'
 
 function App() {
-
+  const [dialogs, setDialogs] = useState([])
   const [userIsLoggedIn, setUserLoggedIn] = useState('loading')
   const [user, setUser] = useState({
     id: -1,
     name: 'none',
     photoURL: 0,
-    dialogs: []
+    dialogs: dialogs
   })
 
    useEffect(() => {
@@ -33,7 +33,7 @@ function App() {
             })
         }
     }).catch(error => console.log(error))
-   }, [userIsLoggedIn]);
+   }, []);
 
 
     
@@ -45,7 +45,7 @@ function App() {
       {userIsLoggedIn ? 
       (
         <Switch>
-          <Route key={'/talk'} exact={true} path={'/talk'} component={() =>( <Messenger dialogs={user.dialogs} setLoggedOut={setUserLoggedIn} user={user}/>)} />
+          <Route key={'/talk'} exact={true} path={'/talk'} component={() =>( <Messenger dialogs={user.dialogs} setLoggedOut={setUserLoggedIn} user={user} setDialogs={setDialogs}/>)} />
            <Redirect to={'/talk'} />
         </Switch>
       )
