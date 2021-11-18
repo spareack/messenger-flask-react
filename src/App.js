@@ -56,8 +56,7 @@ function App() {
     
     
   if(userIsLoggedIn === 'loading'){
-    return (<div style={{height: '100vh',
-                        backgroundColor: 'black'}}><Loader/></div>)
+    return (<div style={{height: '100vh', backgroundColor: 'black'}}><Loader/></div>)
   } else return (
     <BrowserRouter>
       {userIsLoggedIn ? 
@@ -77,4 +76,4 @@ function App() {
   );
 }
 
-export default App;
+export default App

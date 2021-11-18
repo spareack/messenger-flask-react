@@ -11,9 +11,9 @@
     position: absolute;
     height: 100%;
     top: 0;
-    right: 0;
+    right: -3px;
     cursor: ew-resize;
-    width: 4px;
+    width: 5px;
     background-color: #83889600;
 }
 
@@ -40,7 +40,7 @@
 }
   
 .DialogList::-webkit-scrollbar{
-    width: 5px;
+    width: 10px;
 }
 
 .dialogFieldSBox {

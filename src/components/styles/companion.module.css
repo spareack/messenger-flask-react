@@ -37,3 +37,18 @@
 .companion p {
     color: gray;
 }
+
+.talkButton {
+    font-size: 1.2em;
+    background-color: #212121;
+    color: #FFFFF1; 
+    padding: 7px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+}
+
+.talkButton:hover {
+    background-color: #333;
+}

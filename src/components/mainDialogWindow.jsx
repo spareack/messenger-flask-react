@@ -9,28 +9,32 @@ const MainWindow = ({companion, messages, user, sendMessage,active , setActiveTa
 
     const sendMessageLocal = (e) => {
         e.preventDefault()
+        console.log(e)
         setMessageText('');
-        sendMessage(messageText)
+        if(messageText !== '')sendMessage(messageText)
     }
 
-    useEffect(()=> {
+    const onEnterPress = (e) => {
+        if(e.code === 'Enter'){
+            sendMessageLocal(e)
+        }
+    }
+
+    useEffect( () => {
         textareaRef.current.style.height = "0px";
         const scrollHeight = textareaRef.current.scrollHeight;
         textareaRef.current.style.height = scrollHeight + "px";
-        
     }, [messageText])
 
     return (
         <div className={classes.dialogWindow}>
-
             <Companion companion={companion} setActive={setActiveTalkMenu}/>
-            
             <MessageList messages={messages} user={user}/>
             <form className={classes.txtArea}>
             <div className={classes.wInputContainer}>
-                <textarea ref={textareaRef} className={classes.wrapper} placeholder="Type a message" value={messageText} onChange={(e) => (setMessageText(e.target.value))}></textarea>
+                <textarea id='input' ref={textareaRef} className={classes.wrapper} placeholder="Type a message" value={messageText} onKeyDown={onEnterPress} onChange={(e) => (setMessageText(e.target.value))}></textarea>
             </div>
-            <button onClick={sendMessageLocal}>Send</button>
+            <button className={classes.sendButton} onClick={(e) => (sendMessageLocal(e))}>Send</button>
             </form>
         </div>
     )

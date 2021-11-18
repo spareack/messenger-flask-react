@@ -16,6 +16,7 @@ function Messenger({dialogs, setLoggedOut, user}) {
     setActiveMenu(false)
   }
   const [active, setActiveMenu] = useState(false)
+  
   /* UI */
   const [_dialogs, setDialogs] = useState(dialogs)
   const [talks, setTalks] = useState([])

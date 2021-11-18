@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import classes from './styles/companion.module.css'
 import unnamed from './unnamed.jpg'
 
@@ -14,7 +14,7 @@ const Companion = ({companion, setActive}) => {
                 <div><h2>{companion?.other_members?.length === 1? companion?.other_members: 'Название группового разговора'}</h2>
                 <p>last seen recently</p></div>
             </div>
-            <button className={classes.talkButton} onClick={() => {setActive(active => {console.log(active); return !active})}}>→</button>
+            <button className={classes.talkButton} onClick={() => {setActive(active => {console.log(active); return !active})}}>Talks →</button>
         </div>
             
     )
