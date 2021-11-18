@@ -18,7 +18,7 @@ function App() {
   })
 
    useEffect(() => {
-    const socket = io('http://localhost:5000');
+//    const socket = io('http://localhost:5000');
     
     axios({
       method: 'get',

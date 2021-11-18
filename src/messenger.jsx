@@ -5,6 +5,8 @@ import WorkSpace from './components/workSpace';
 import axios from 'axios'
 import { io } from 'socket.io-client'
 
+const socket = io('http://localhost:5000');
+
 function Messenger({dialogs, setLoggedOut, user}) {
   
   /* UI */
@@ -24,12 +26,13 @@ function Messenger({dialogs, setLoggedOut, user}) {
   const [currentTalk, setCurrentTalk] = useState(0)
   const [messages, setMessages] = useState([])
 
+
+
   useEffect(() => {
-    const socket = io('http://localhost:5000');
     if(user.id !== -1){
-      socket.emit('authorize', {id: user.id});      
+      socket.emit('authorize', {id: user.id});
     }
-  }, []);
+  });
 
   const getTalks = (id) => {
     axios({

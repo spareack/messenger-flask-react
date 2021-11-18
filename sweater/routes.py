@@ -37,6 +37,12 @@ def handle_connection(data):
     # emit('server-client', 'Test message')
 
 
+@socketio.on('connect')
+# @cross_origin()
+def disconnect_socket():
+    print("first-connect!")
+
+
 @socketio.on('disconnect')
 # @cross_origin()
 def disconnect_socket():
