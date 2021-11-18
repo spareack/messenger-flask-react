@@ -2,7 +2,6 @@ import datetime
 import json
 import os
 import io
-import time
 
 from flask import render_template, request, redirect, send_from_directory, jsonify, url_for, send_file
 from flask_login import login_user, current_user, logout_user
@@ -16,6 +15,9 @@ from sweater import app, db, mail, token_key, socketio
 from sweater.models import User, Talk, Message, Dialog, Media
 
 
+rooms_list = []
+
+
 @app.route('/')
 @app.route('/home')
 def index():
@@ -26,25 +28,19 @@ def index():
 # @cross_origin()
 def handle_connection(data):
     user_id = data['id']
-    # join_room(user_id)
-    print(user_id)
+    join_room(user_id)
+    rooms_list.append(user_id)
+    print("connect!", user_id)
+
     # emit('server-client', 'Test message')
-
-
-@socketio.on('connect')
-# @cross_origin()
-def connect_socket():
-    # user_id = current_user.is_authenticated
-    join_room("all")
-    print("connect!")
 
 
 @socketio.on('disconnect')
 # @cross_origin()
 def disconnect_socket():
-    # user_id = current_user.is_authenticated
-    leave_room("all")
-    print("disconnect(")
+    user_id = current_user.get_id()
+    leave_room(user_id)
+    print("disconnect(", user_id)
 
 
 @socketio.on('client-server')
@@ -243,8 +239,6 @@ def serve_static(static_type, filename):
 def search_user():
     if request.method == "GET":
 
-        emit('info', current_user.get_id(), to="all", namespace='/')
-
         value = request.args.get("value")
         try:
             cur_user = db.session.query(User).filter_by(id=int(current_user.get_id())).first_or_404()
@@ -343,6 +337,7 @@ def send_message():
             data = request.get_json()
             sender_id = data["sender_id"]
             talk_id = data["talk_id"]
+            dialog_id = data["dialog_id"]
             message_type = data["message_type"]
             value = None
 
@@ -366,8 +361,20 @@ def send_message():
 
             talk = db.session.query(Talk).filter_by(id=talk_id).first_or_404()
             talk.messages = add_to_json(talk.messages, message.id)
+            talk.date_update = str(datetime.datetime.now().time())
+
+            dialog = db.session.query(Dialog).filter_by(id=dialog_id).first_or_404()
+            dialog.date_update = str(datetime.datetime.now().time())
 
             db.session.commit()
+
+            users = db.session.query(User).all()
+            for user in users:
+                dialogs_ids = json.loads(user.dialogs)
+                if dialog.id in dialogs_ids:
+                    if user.id in rooms_list:
+                        emit('info', jsonify({'info': 'new Messages in dialog',
+                                              'dialog_id': dialog.id}), to=str(user.id), namespace='/')
 
             return jsonify({"status": 0, "id": message.id, "date": message.date_create})
 

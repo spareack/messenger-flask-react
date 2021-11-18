@@ -11,7 +11,7 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(40), nullable=False)
     password = db.Column(db.String(40), nullable=False)
-    date_create = db.Column(db.String(30), default=datetime.utcnow())
+    date_create = db.Column(db.String(30), default=str(datetime.now().time()))
     is_activated = db.Column(db.Boolean, default=False)
     dialogs = db.Column(db.Text, default="[]")
 
