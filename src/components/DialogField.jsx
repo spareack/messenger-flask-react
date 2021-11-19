@@ -15,6 +15,7 @@ const DialogsField = ({
     user, 
     getTalks, 
     createDialog,
+    unread,
 
     activeInput,
     setInputActive, 
@@ -100,7 +101,8 @@ const DialogsField = ({
                         name={post?.other_members?.length === 1 ? post?.other_members : 'Групповой диалог'}
                         lastTalk={post?.last_message ? post?.last_message : 'There is no messages'}
                         onclick={changeDialog}
-                        current={currentDialog === post.id? true : false}/>
+                        current={currentDialog === post.id? true : false}
+                        unread={unread}/>
                 ))
                 : <Setting user={user} setSettingsWindow={setSettingsWindow}/>
                 }

@@ -9,7 +9,7 @@
     padding: 0;
     margin: 0;
     border-left: 1px solid  #555;
-    border-right: 1px solid #555;
+    
 }
 
 .txtArea {
@@ -131,4 +131,10 @@
 
 .sendButton:hover {
     background-color: #212121;
+}
+
+.wtf {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
 }

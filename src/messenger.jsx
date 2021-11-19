@@ -12,6 +12,7 @@ function Messenger({dialogs, setLoggedOut, user, setDialogs}) {
   /* UI */
   const [activeInput, setInputActive] = useState(false)
   const [searchInput, setSearchInput] = useState('')
+  const [unread, setUnread] = useState(true)
   const blurInput = () => {
     setInputActive(false)
     setSearchInput('')
@@ -26,13 +27,14 @@ function Messenger({dialogs, setLoggedOut, user, setDialogs}) {
   const [messages, setMessages] = useState([])
 
   useEffect(() => {
+    console.log(talks, dialogs, messages)
     if(user.id !== -1){
       socket.emit('authorize', {id: user.id});
       socket.on('socket_info', msg => {
         console.log(msg)
       })
     }
-  }, [messages]);
+  }, [/*messages*/]);
 
   const getTalks = (id) => {
     axios({
@@ -119,6 +121,7 @@ function Messenger({dialogs, setLoggedOut, user, setDialogs}) {
                     user={user} 
                     getTalks={getTalks}
                     createDialog={createDialog}
+                    unread={unread}
 
                     activeInput={activeInput}
                     setInputActive={setInputActive}

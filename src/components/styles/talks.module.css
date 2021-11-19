@@ -3,7 +3,8 @@
     height: 100%;
     background-color: #212121;
     overflow: hidden;
-    transition: width 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    border-left: 1px solid #555;
 }
 
 .talksItems {

@@ -2,11 +2,10 @@ import React from 'react'
 import classes from './styles/dialog-item.module.css'
 import unnamed from '../unnamed.jpg'
 
-const DialogItem = ({id, index, name, lastTalk, onclick, current}) => {
+const DialogItem = ({id, index, name, lastTalk, onclick, current, unread}) => {
     const sendID = () => {
         onclick(id)
     }
-    const pohui = true
 
     return (
         <div className={current ? classes.dialogItem + ' ' + classes.currentItem : classes.dialogItem} onClick={sendID}>
@@ -17,7 +16,7 @@ const DialogItem = ({id, index, name, lastTalk, onclick, current}) => {
                     <p>{lastTalk}</p>
                 </div>
             </div>
-            <div className={classes.dot} style={{opacity: !pohui? '0' : '1'}}>
+            <div className={classes.dot} style={{opacity: unread ? '1' : '0'}}>
                 •
             </div>
         </div>

@@ -5,7 +5,7 @@ import TalkItem from './talksItem'
 const Talks = ({talks, current, setTalk, createTalk, currentDialog, active}) => {
 
     return (
-        <div className={active ? classes.talks : classes.talks} style={active ? {width: '35%'} : {width: '0%'}}>
+        <div className={active ? classes.talks : classes.talks} style={active ? {width: '35%'} : {width: '0%', border: 'none'}}>
             <button onClick={() => (createTalk('123', currentDialog))} className={classes.talksHead}>Search</button>
             <div className={classes.talksItems}>{talks ? talks.map((talk, index) => <TalkItem   
                                                     key={talk.id}

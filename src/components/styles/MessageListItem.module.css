@@ -12,7 +12,7 @@
 .msgListItem {
     color: #FFFFF0;
     background-color: #333;
-    max-width: 65%;
+    max-width: 540px;
     padding: 5px 15px;
     margin-bottom: 1em;
     white-space: pre-wrap;
