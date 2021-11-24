@@ -1,7 +1,7 @@
 import React, {useState,  useEffect } from 'react';
 import './App.css';
-import DialogsField from './components/DialogField';
-import WorkSpace from './components/workSpace';
+import DialogsField from './components/messenger/dialogs/dialogField/DialogField';
+import WorkSpace from './components/messenger/chatField/chat/workSpace/workSpace';
 import axios from 'axios'
 import { io } from 'socket.io-client'
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,12 +18,11 @@ function Messenger({setLoggedOut}) {
   const dispatch = useDispatch() 
   
   /* UI */
-  const [activeInput, setInputActive] = useState(false)
-  const [searchInput, setSearchInput] = useState('')
+  // const [unread, setUnread] = useState(true)
   const blurInput = () => {
-    setInputActive(false)
-    setSearchInput('')
-    setActiveMenu(false)
+    dispatch({type: 'searchInputChange', payload: ''})
+    dispatch({type: 'DISABLE_NAMES'})
+    dispatch({type: 'DISABLE_MENU'})
   }
   /* UI ends */
   // useEffect(() => afkManager(alert, 4, 2500, 'Не стой афк!'), [])
@@ -31,7 +30,6 @@ function Messenger({setLoggedOut}) {
   
   const [currentDialog, setCurrentDialog] = useState(0)
   const [currentTalk, setCurrentTalk] = useState(0)
-  const [messages, setMessages] = useState([])
 
   const user = useSelector(state => state.user)
   const messages = useSelector(state => state.messages.messages)
@@ -66,7 +64,6 @@ function Messenger({setLoggedOut}) {
       console.log(res.data.talks)
     })
     .catch(error => console.log(error))
-    getMessages(talks[talks.length-1].id)
   }
 
   const createTalk = (name, dialogID) => {
@@ -85,7 +82,7 @@ function Messenger({setLoggedOut}) {
   }
 
   const createDialog = (name, dialogID) => {
-    setDialogs([...dialogs, {id: dialogID, last_message: null, other_members: [name]}])
+    dispatch({type: 'setUserDialogs', payload: [...dialogs, {id: dialogID, last_message: null, other_members: [name]}]})
   } 
 
   const pushMessage = (messageText) => {
@@ -101,18 +98,10 @@ function Messenger({setLoggedOut}) {
       }
     }).then(res => {
       if(!res.data.status){
-        console.log(res.data)
-        setMessages([ {sender: user.id, value: messageText, date: res.data.date, id: res.data.id} ,...messages])
+        dispatch({type: 'setMessages', payload: [ {sender: user.id, value: messageText, date: res.data.date, id: res.data.id} ,...messages]})
       }
     })
     .catch(error => console.log(error))
-    // console.log({
-    //   sender_id: user.id,
-    //   talk_id: currentTalk,
-    //   message_type: 'text',
-    //   value: messageText
-    // }, messages)
-    // setMessages([ {sender: user.id, value: messageText, date: '00:00'},...messages])
   }
 
   return (
@@ -122,26 +111,18 @@ function Messenger({setLoggedOut}) {
                     currentDialog={currentDialog} 
                     setTalk={setCurrentTalk} 
                     setLoggedOut={setLoggedOut} 
-                    user={user} 
                     getTalks={getTalks}
                     getMessages={getMessages}
                     createDialog={createDialog}
-
-                    activeInput={activeInput}
-                    setInputActive={setInputActive}
-                    searchInput={searchInput}
-                    setSearchInput={setSearchInput}
-                    active={active}
-                    setActiveMenu={setActiveMenu}/>
+                    unread={true}
+                    />
 
       <WorkSpace  id={currentDialog} 
                   companion={dialogs.find(Dialog => (Dialog.id === currentDialog))} 
                   currentTalk={currentTalk} 
                   setTalk={setCurrentTalk} 
                   getMsg={getMessages}
-                  messages={messages}
                   sendMessage={pushMessage}
-                  user={user}
                   createTalk={createTalk}/>
     </div>
   );
