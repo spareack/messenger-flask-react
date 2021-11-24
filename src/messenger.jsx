@@ -32,7 +32,7 @@ function Messenger({dialogs, setLoggedOut, user, setDialogs}) {
         console.log(msg)
       })
     }
-  }, []);
+  }, [messages]);
 
   const getTalks = (id) => {
     axios({
