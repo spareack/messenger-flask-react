@@ -17,7 +17,7 @@ const MessageList = ({active}) => {
     }
 
     return (
-        <div style={{paddingInline: active? '15px' : '15%'}} ref={list} className={!scrollIsActive ? classes.MessageList + ' ' + classes.MessageListNoScroll : classes.MessageList} /*onScroll={console.log(list.current)}*/ onMouseOver={scrollToggler} onMouseOut={scrollToggler}>
+        <div style={{paddingInline: active? '15px' : '15%'}} ref={list} className={!scrollIsActive ? classes.MessageList + ' ' + classes.MessageListNoScroll : classes.MessageList} onScroll={() => console.log(list.current.scrollHeight, list.current.scrollTop, list.current.clientHeight, list.current.scrollHeight + list.current.scrollTop)} onMouseOver={scrollToggler} onMouseOut={scrollToggler}>
             {messages ?
             messages.map((msgItem, index) => 
                 <MessageListItem from={user.id === msgItem.sender} text={msgItem.value} time={msgItem.date} key={index}/>

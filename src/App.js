@@ -5,7 +5,7 @@ import {Route, Switch, Redirect, BrowserRouter} from 'react-router-dom'
 import Messenger from './messenger';
 import Loader from './components/Loader';
 import WelcomePage from './components/welcomepage/WelcomePage';
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 function App() {
   const dispatch = useDispatch()
@@ -35,8 +35,8 @@ function App() {
       {userIsLoggedIn ? 
       (
         <Switch>
-          <Route key={'/talk'} exact={true} path={'/talk'} component={() =>( <Messenger setLoggedOut={setUserLoggedIn}/>)} />
-           <Redirect to={'/talk'} />
+          <Route key={'/talk'} exact={true} path={'/talk'} component={() =>( <Messenger setLoggedOut={setUserLoggedIn} active={!(userIsLoggedIn === 'loading')}/>)} />
+          <Redirect to={'/talk'} />
         </Switch>
       )
       :

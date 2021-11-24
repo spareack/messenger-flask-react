@@ -5,7 +5,7 @@ import unnamed from './unnamed.jpg'
 const Companion = ({companion, setActive}) => {
 
     return (
-        <div className={classes.companion}>
+        <div className={classes.companion} style={companion?.other_members.length ? {display: 'flex'} : {display: 'none'} }>
             <div className={classes.companionInfo}>
                 {companion?.other_members?.length && (companion?.photoURL === undefined
                 ? <div className={classes.avatar}><img alt='' src={unnamed}/></div>

@@ -3,7 +3,8 @@ import classes from './talks.module.css'
 import TalkItem from './talksItem' 
 import {useDispatch, useSelector} from 'react-redux'
 
-const Talks = ({talks, current, setTalk, createTalk, currentDialog, active}) => {
+const Talks = ({ current, setTalk, createTalk, currentDialog, active}) => {
+    const talks = useSelector(state => state.talks.talks)
 
     return (
         <div className={active ? classes.talks : classes.talks} style={active ? {width: '35%'} : {width: '0%', border: 'none'}}>

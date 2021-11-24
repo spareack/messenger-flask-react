@@ -7,11 +7,12 @@ import unnamed from './unnamed.jpg'
 import Setting from '../Settings/Setting'
 import { useDispatch, useSelector } from 'react-redux';
 
-const DialogsField = ({setDialog, dialogs, currentDialog, setTalk, setLoggedOut, getTalks, createDialog,unread}) => {
+const DialogsField = ({setDialog, dialogs, currentDialog, setTalk, setLoggedOut, getTalks,getMessages, createDialog,unread}) => {
     /* UI */
     const dispatch = useDispatch()
     const act1ve = useSelector(state => state.settings.active)
     const user = useSelector(state => state.user)
+    const talks = useSelector(state => state.talks.talks)
     const [settings, setSettingsWindow] = useState(false)
     
     useEffect( () => {
@@ -49,6 +50,7 @@ const DialogsField = ({setDialog, dialogs, currentDialog, setTalk, setLoggedOut,
     /* UI */
 
     const changeDialog = (id) => {
+        // console.log(talks[0].id)
         setDialog(id)
         setTalk(null)
         getTalks(id)

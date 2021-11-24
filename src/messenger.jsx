@@ -5,11 +5,16 @@ import WorkSpace from './components/messenger/chatField/chat/workSpace/workSpace
 import axios from 'axios'
 import { io } from 'socket.io-client'
 import { useDispatch, useSelector } from 'react-redux';
+import {afkManager} from './afkManager';
 
 const socket = io('http://localhost:5000');
 
-function Messenger({setLoggedOut}) {
+function byField(field) {
+  return (a, b) => +a[field] > +b[field] ? -1 : 1;
+}
 
+function Messenger({setLoggedOut}) {
+  
   const dispatch = useDispatch() 
   
   /* UI */
@@ -20,14 +25,31 @@ function Messenger({setLoggedOut}) {
     dispatch({type: 'DISABLE_MENU'})
   }
   /* UI ends */
+  // useEffect(() => afkManager(alert, 4, 2500, 'Не стой афк!'), [])
+  // useEffect(()=> {console.log('Messenger mounted!')}, [])
   
-  const [talks, setTalks] = useState([])
   const [currentDialog, setCurrentDialog] = useState(0)
   const [currentTalk, setCurrentTalk] = useState(0)
 
   const user = useSelector(state => state.user)
   const messages = useSelector(state => state.messages.messages)
   const dialogs = useSelector(state => state.user.dialogs)
+  const talks = useSelector(state => state.talks.talks)
+
+  const getMessages = (talkId) => {
+    console.log(messages)
+    axios({
+      method: 'get',
+      url: "/get_messages",
+      params: {
+        talk_id: talkId
+      }
+    })
+    .then(res => {
+      dispatch({type: 'setMessages', payload: res.data.messages.reverse()})
+    })
+    .catch(error => console.log(error))
+  }
 
   const getTalks = (id) => {
     axios({
@@ -38,10 +60,11 @@ function Messenger({setLoggedOut}) {
       }
     })
     .then(res => {
-      setTalks(res.data.talks)
+      dispatch({type: 'setTalks', payload: res.data.talks.sort(byField("id")).reverse()})
       console.log(res.data.talks)
     })
     .catch(error => console.log(error))
+    getMessages(talks[talks.length-1].id)
   }
 
   const createTalk = (name, dialogID) => {
@@ -50,26 +73,11 @@ function Messenger({setLoggedOut}) {
       url: '/create_talk',
       data: {
         title: name,
-        // members: user.id, id,
         dialog_id: dialogID
       }
     })
     .then(res => {
-      setTalks([...talks, {id: res.data.id, title: name, messages: []}])
-    })
-    .catch(error => console.log(error))
-  }
-
-  const getMessages = (talkId) => {
-    axios({
-      method: 'get',
-      url: "/get_messages",
-      params: {
-        talk_id: talkId
-      }
-    })
-    .then(res => {
-      dispatch({type: 'setMessages', payload: res.data.messages.reverse()})
+      dispatch({type: 'setTalks', payload: [...talks, {id: res.data.id, title: name, messages: []}]})
     })
     .catch(error => console.log(error))
   }
@@ -105,13 +113,13 @@ function Messenger({setLoggedOut}) {
                     setTalk={setCurrentTalk} 
                     setLoggedOut={setLoggedOut} 
                     getTalks={getTalks}
+                    getMessages={getMessages}
                     createDialog={createDialog}
                     unread={true}
                     />
 
       <WorkSpace  id={currentDialog} 
                   companion={dialogs.find(Dialog => (Dialog.id === currentDialog))} 
-                  talks={talks} 
                   currentTalk={currentTalk} 
                   setTalk={setCurrentTalk} 
                   getMsg={getMessages}

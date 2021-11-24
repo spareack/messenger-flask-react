@@ -13,8 +13,7 @@ const WorkSpace = ({id, companion, talks, currentTalk, setTalk, getMsg, sendMess
     return (
         <div className={classes.workTree} id='rightColumn'>
             <MainWindow companion={companion} sendMessage={sendMessage} active={activeMenu} setActiveTalkMenu={setActiveRightMenu}/>
-            <Talks  talks={talks} 
-                    current={currentTalk} 
+            <Talks  current={currentTalk} 
                     setTalk={getMessages} 
                     createTalk={createTalk} 
                     currentDialog={id}
