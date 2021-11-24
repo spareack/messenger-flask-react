@@ -1,35 +1,17 @@
 import React, {useState, useEffect} from 'react'
-import classes from './styles/dialogsField.module.css'
-import DialogItem from './DialogItem'
-import menu from '../menu.svg'
-import Search from './Search'
+import classes from './dialogsField.module.css'
+import DialogItem from '../dialogItem/DialogItem'
+import menu from './menu.svg'
+import Search from '../Search/Search'
 import unnamed from './unnamed.jpg'
-import Setting from './Setting'
+import Setting from '../Settings/Setting'
+import { useDispatch, useSelector } from 'react-redux';
 
-const DialogsField = ({
-    setDialog, 
-    dialogs, 
-    currentDialog, 
-    setTalk, 
-    setLoggedOut, 
-    user, 
-    getTalks, 
-    createDialog,
-    unread,
-
-    activeInput,
-    setInputActive, 
-    searchInput,
-    setSearchInput,
-    active,
-    setActiveMenu
-    }) => {
-
-    
-
-
+const DialogsField = ({setDialog, dialogs, currentDialog, setTalk, setLoggedOut, getTalks, createDialog,unread}) => {
     /* UI */
-    
+    const dispatch = useDispatch()
+    const act1ve = useSelector(state => state.settings.active)
+    const user = useSelector(state => state.user)
     const [settings, setSettingsWindow] = useState(false)
     
     useEffect( () => {
@@ -61,8 +43,8 @@ const DialogsField = ({
         }
         
       }, [])
-    const toggleDownMenu = (e) => {
-        setActiveMenu((active) => (!active))
+    const toggleDownMenu = () => {
+        act1ve ? dispatch({type: 'DISABLE_MENU'}) : dispatch({type: 'ABLE_MENU'})
     }  
     /* UI */
 
@@ -80,14 +62,13 @@ const DialogsField = ({
             <div className={classes.searchBox}>
                 <div className={classes.dialogFieldSBox}>
                     <div onClick={(e) => {e.stopPropagation()}}><button onClick={toggleDownMenu} className={classes.dropDownMenuButton}><img src={menu} alt=''/></button></div>
-                    <div className={classes.dropDownMenu} style={{display: active? 'flex' : 'none'}} onClick={(e) => {e.stopPropagation()}}>
-                        <button className={classes.logOutBtn + ' ' + classes.menuButton} onClick={() => {setSettingsWindow(!settings); setActiveMenu(false)}}>Settings</button>
+                    <div className={classes.dropDownMenu} style={{display: act1ve? 'flex' : 'none'}} onClick={(e) => {e.stopPropagation()}}>
+                        <button className={classes.logOutBtn + ' ' + classes.menuButton} onClick={() => {setSettingsWindow(!settings); dispatch({type: 'DISABLE_MENU'})}}>Settings</button>
                         <a href="/un_authorize" className={classes.logOutBtn + ' ' + classes.menuButton} onClick={() => setLoggedOut(false)}>Log Out</a>
                     </div>
-                    <div className={classes.userInfo} onClick={() => (setActiveMenu(false))}><img src={unnamed} alt='' className={classes.userAvatar}/><h2>{user.name}</h2></div>
+                    <div className={classes.userInfo} onClick={() => (dispatch({type: 'DISABLE_MENU'}))}><img src={unnamed} alt='' className={classes.userAvatar}/><h2>{user.name}</h2></div>
                 </div>
-                {/* <a href="/un_authorize" className={classes.logOutBtn} onClick={() => setLoggedOut(false)}>Log Out</a> */}
-                <Search user={user} createDialog={createDialog} setInputActive={setInputActive} activeInput={activeInput} searchInput={searchInput} setSearchInput={setSearchInput}/>
+                <Search createDialog={createDialog}/>
             </div>
 
 
@@ -104,7 +85,7 @@ const DialogsField = ({
                         current={currentDialog === post.id? true : false}
                         unread={unread}/>
                 ))
-                : <Setting user={user} setSettingsWindow={setSettingsWindow}/>
+                : <Setting setSettingsWindow={setSettingsWindow}/>
                 }
             </div>
         </div>

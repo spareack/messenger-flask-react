@@ -1,6 +1,6 @@
 import React from 'react'
-import classes from './styles/dialog-item.module.css'
-import unnamed from '../unnamed.jpg'
+import classes from './dialog-item.module.css'
+import unnamed from './unnamed.jpg'
 
 const DialogItem = ({id, index, name, lastTalk, onclick, current, unread}) => {
     const sendID = () => {

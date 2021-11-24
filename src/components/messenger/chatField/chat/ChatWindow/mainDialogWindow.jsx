@@ -1,12 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react'
-import classes from './styles/MainWindow.module.css'
-import MessageList from './messageList'
-import Companion from './Companion'
+import classes from './MainWindow.module.css'
+import MessageList from '../MessageList/messageList'
+import Companion from '../Companion/Companion'
 
-const MainWindow = ({companion, messages, user, sendMessage,active , setActiveTalkMenu}) => {
+const MainWindow = ({companion, sendMessage,active , setActiveTalkMenu}) => {
     const textareaRef = useRef(null);
     const [messageText, setMessageText] = useState('')
-
 
     const sendMessageLocal = (e) => {
         e.preventDefault()
@@ -30,7 +29,7 @@ const MainWindow = ({companion, messages, user, sendMessage,active , setActiveTa
         <div className={classes.dialogWindow}>
             <Companion companion={companion} setActive={setActiveTalkMenu}/>
             {/* <div className={classes.wtf}> */}
-                <MessageList messages={messages} user={user} active={active}/>
+                <MessageList active={active}/>
             {/* </div> */}
             <form style={{marginInline: active? '15px' : '15%'}} className={classes.txtArea}>
                 <div className={classes.wInputContainer}>

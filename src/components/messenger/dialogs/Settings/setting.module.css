@@ -19,7 +19,7 @@
     justify-content: flex-start;
     align-items: center;
     height: 46px;
-    background-color: #2a2a2a;
+    background-color: #232323;
     padding: 0px 20px;
 }
 
@@ -40,5 +40,5 @@
 }
 
 .backButton:hover {
-    background-color: #232323;
+    background-color: #444;
 }

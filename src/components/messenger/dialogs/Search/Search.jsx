@@ -1,11 +1,16 @@
 import React, {useState} from 'react'
-import classes from './styles/Search.module.css'
+import classes from './Search.module.css'
 import axios from 'axios'
 import unnamed from './unnamed.jpg'
+import { useDispatch, useSelector } from 'react-redux';
 
-const Search = ({user, createDialog, setInputActive, activeInput, searchInput, setSearchInput}) => {
+const Search = ({createDialog}) => {
     const [names, setNames] = useState([])
-    // const [activeInput, setInputActive] = useState(false)
+
+    const user = useSelector(state => state.user)
+    const searchInput = useSelector(state => state.search.value)
+    const activeInput = useSelector(state => state.search.activeInput)
+    const dispatch = useDispatch()
 
     const search = (e) => {
         if(e.target.value.length !== 0)axios({
@@ -20,7 +25,7 @@ const Search = ({user, createDialog, setInputActive, activeInput, searchInput, s
         })
         .catch(error => console.log(error))
         else setNames([])
-        setSearchInput(e.target.value)
+        dispatch({type: 'searchInputChange', payload: e.target.value})
     }
 
     const searchUser = (name, id) => {
@@ -43,7 +48,7 @@ const Search = ({user, createDialog, setInputActive, activeInput, searchInput, s
 
     return (
         <div className={classes.searchBox}>
-            <input onClick={(e) => (e.stopPropagation())} className={classes.searchInput} onFocus={() => (setInputActive(true))} placeholder="Search" value={searchInput} onChange={search}></input>
+            <input onClick={(e) => (e.stopPropagation())} className={classes.searchInput} onFocus={() => (dispatch({type: 'SHOW_NAMES'}))} placeholder="Search" value={searchInput} onChange={search}></input>
             <div className={classes.dropDownList} style={{display: searchInput.length && activeInput ? 'flex' : 'none'}}>
                 <ul>
                     {names.length ? names.map( (name, index) => (

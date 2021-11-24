@@ -1,5 +1,5 @@
 import React from 'react'
-import classes from './styles/MessageListItem.module.css'
+import classes from './MessageListItem.module.css'
 
 const MessageListItem = ({from, text, name, time}) => {
     return (

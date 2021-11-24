@@ -1,5 +1,5 @@
 import React from 'react'
-import classes from './styles/talkItem.module.css'
+import classes from './talkItem.module.css'
 
 const TalkItem = ({id, name, item, current, onclick}) => {
 

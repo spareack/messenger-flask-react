@@ -1,13 +1,16 @@
 import React, {useState} from 'react'
-import './styles/loginpage.css'
+import './loginpage.css'
 import {useLocation} from 'react-router-dom'
 import axios from 'axios'
+import {useDispatch} from 'react-redux'
 
-const LogIn = ({setLoggedIn, setUser}) => {
+const LogIn = ({setLoggedIn}) => {
     const [logPassword, setForm] = useState({
         login: '',
         password: ''
     })
+
+    const dispatch = useDispatch()
     const [forgotSmth, setForgotsmth] = useState('')
     const location = useLocation()
     
@@ -17,7 +20,7 @@ const LogIn = ({setLoggedIn, setUser}) => {
             method: 'post',
             url: '/authorize',
             data: {
-                email: logPassword.login,
+                email: logPassword.login.trim(),
                 password: logPassword.password
             },
             headers: {
@@ -28,12 +31,11 @@ const LogIn = ({setLoggedIn, setUser}) => {
             if(!res.data.status){
                 setLoggedIn(true)
                 // console.log(res.data)
-                setUser({
-                    id: res.data.id,
+                dispatch({type: 'setUser', payload: 
+                    {id: res.data.id,
                     name: res.data.name,
                     photoURL: 0,
-                    dialogs: res.data.dialogs
-                  })
+                    dialogs: res.data.dialogs}})
             }
             if(res.data.status === 1){
                 if(res.data.info === 'user not found'){

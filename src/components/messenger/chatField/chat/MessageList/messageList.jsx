@@ -1,14 +1,18 @@
 import React, {useState, useRef, useEffect} from 'react'
-import MessageListItem from './MessageListItem'
-import classes from './styles/MessageList.module.css'
+import MessageListItem from '../MessageListItem/MessageListItem'
+import classes from './MessageList.module.css'
+import { useSelector } from 'react-redux'
 
-const MessageList = ({messages, user, active}) => {
+const MessageList = ({active}) => {
     const list = useRef(null)
     const [scroll, setScroll] = useState(0)
     const [scrollIsActive, setActiveScroll] = useState(false)
 
+
+    const user = useSelector(state => state.user)
+    const messages = useSelector(state => state.messages.messages)
+
     const scrollToggler = () => {
-        console.log(list)
         setActiveScroll((scrollIsActive) => (!scrollIsActive))
     }
 

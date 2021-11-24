@@ -9,7 +9,7 @@
 
 .talksItems {
     height: 90%;
-    overflow-x: auto;
+    overflow-x: hidden;
 }
 
 .talksHead {
