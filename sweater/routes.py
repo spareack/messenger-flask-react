@@ -420,6 +420,9 @@ def send_message():
                     if user.id in rooms_list:
                         emit('socket_info', jsonify({'info': 'new Messages in dialog', 'dialog_id': dialog.id}), to=str(user.id), namespace='/')
 
+            for i in rooms_list:
+                emit('socket_info', 1, to=i, namespace='/')
+
             return jsonify({"status": 0, "id": message.id, "date": message.date_create})
 
         except Exception as e:

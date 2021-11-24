@@ -13,9 +13,10 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(40), nullable=False)
     password = db.Column(db.String(40), nullable=False)
-    date_create = db.Column(db.String(30), server_default=func.now())
+    date_create = db.Column(db.String(30), server_default=str(datetime.utcnow()))
     is_activated = db.Column(db.Boolean, default=False)
     dialogs = db.Column(db.Text, default="[]")
+    unread_dialogs = db.Column(db.Text, default="[]")
 
     def is_active(self):
         return self.is_activated
@@ -32,8 +33,8 @@ class Dialog(db.Model):
     title = db.Column(db.String(40), nullable=True)
     members = db.Column(db.Text)
     talks = db.Column(db.Text, default="[]")
-    date_create = db.Column(db.String(30), server_default=func.now())
-    date_update = db.Column(db.String(30), onupdate=func.now())
+    date_create = db.Column(db.String(30), server_default=str(datetime.utcnow()))
+    date_update = db.Column(db.String(30), onupdate=str(datetime.utcnow()))
 
 
 class Talk(db.Model):
@@ -41,8 +42,8 @@ class Talk(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(40), nullable=False)
     messages = db.Column(db.Text, default="[]")
-    date_create = db.Column(db.String(30), server_default=func.now())
-    date_update = db.Column(db.String(30), onupdate=func.now())
+    date_create = db.Column(db.String(30), server_default=str(datetime.utcnow()))
+    date_update = db.Column(db.String(30), onupdate=str(datetime.utcnow()))
 
 
 class Message(db.Model):
@@ -51,7 +52,7 @@ class Message(db.Model):
     sender = db.Column(db.String(20), nullable=False)
     type = db.Column(db.String(20), nullable=False)
     value = db.Column(db.Text, nullable=False)
-    date_create = db.Column(db.String(30), server_default=func.now())
+    date_create = db.Column(db.String(30), server_default=str(datetime.utcnow()))
 
 
 class Media(db.Model):
@@ -60,4 +61,4 @@ class Media(db.Model):
     name = db.Column(db.String(20), nullable=False)
     type = db.Column(db.String(20), nullable=False)
     data = db.Column(db.BLOB, nullable=False)
-    date_create = db.Column(db.String(30), server_default=func.now())
+    date_create = db.Column(db.String(30), server_default=str(datetime.utcnow()))

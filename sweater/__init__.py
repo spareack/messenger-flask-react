@@ -13,7 +13,7 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
 
 # DB CONFIG
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///box.db'
 app.config['SECRET_KEY'] = 'YSAFDB978WH8AYIFHSNUSIJDFK'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
