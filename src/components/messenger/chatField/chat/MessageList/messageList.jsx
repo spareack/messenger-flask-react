@@ -18,16 +18,17 @@ const MessageList = ({active, getMessages}) => {
 
     const messageFetching = async () => {
         if(list.current.scrollHeight + list.current.scrollTop === list.current.clientHeight){
-            console.log('fetch new messages!')
             const currentTalkIndex = talks.talks.findIndex((element) => {if(element.id === talks.currentTalk) return true})
-            console.log(currentTalkIndex)
+            console.log('currentTalkIndex ' + currentTalkIndex)
             if(currentTalkIndex){
                 const fetchCurrentTalk = talks.talks[currentTalkIndex-1].id
                 dispatch({type: 'setCurrentTalk', payload: fetchCurrentTalk})
-                getMessages(fetchCurrentTalk)
-                list.current.scrollTo({
-                    top: 0
-                })
+                let _messages = await getMessages(fetchCurrentTalk)
+                dispatch({type: 'setMessages', payload: [...messages, ..._messages]})
+                // console.log(messages)
+                // list.current.scrollTo({
+                //     top: 0
+                //   })
             }
         }
     }

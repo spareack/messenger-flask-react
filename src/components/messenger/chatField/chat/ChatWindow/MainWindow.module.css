@@ -74,13 +74,14 @@
 }
 
 .wrapper {
+    font-style:normal ;
     white-space: pre-wrap;
     word-wrap: break-word;
     margin: 0;
     padding: 0;
     width: 100%;
     resize: none;
-    font-size: 1.5em;
+    font-size: 1.4em;
     height: min-content;
     border: none;
     outline: none;

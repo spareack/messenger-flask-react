@@ -10,6 +10,7 @@ const Talks = ({ current, setTalk, createTalk, currentDialog, active}) => {
         <div className={active ? classes.talks : classes.talks} style={active ? {width: '35%'} : {width: '0%', border: 'none'}}>
             <button onClick={() => (createTalk('123', currentDialog))} className={classes.talksHead}>Search</button>
             <div className={classes.talksItems}>
+            <div className={classes.noTalkItem}>Coming soon!</div>
                 {talks ? talks.map((talk) => <TalkItem   
                                                 key={talk.id}
                                                 id={talk.id}

@@ -41,17 +41,22 @@ function Messenger({setLoggedOut}) {
   const currentTalk = useSelector(state => state.talks.currentTalk)
 
   const getMessages = async (talkId) => {
-    axios({
+    let response = await axios({
       method: 'get',
       url: "/get_messages",
       params: {
         talk_id: talkId
       }
     })
-    .then(res => {
-      dispatch({type: 'setMessages', payload: res.data.messages.reverse()})
+    // .then(res => {
+    //   dispatch({type: 'setMessages', payload: res.data.messages.reverse()})
+    // })
+    // .catch(error => console.log(error))
+    console.log(response.data)
+    return new Promise((resolve, reject) => {
+      resolve(response.data.messages.reverse())
     })
-    .catch(error => console.log(error))
+    
   }
 
   const getTalks = async (id) => {

@@ -59,10 +59,11 @@ const DialogsField = ({setDialog, dialogs, currentDialog, setTalk, setLoggedOut,
         setDialog(id)
         // setTalk(null)
         let res = await getTalks(id)
+        console.log(res)
         dispatch({type: 'setTalks', payload: res.talks.sort(byField("id")).reverse()})
         dispatch({type: 'setCurrentTalk', payload: res.talks.sort(byField("id")).reverse()[res.talks.length-1].id})
-        dispatch({type: 'setLastTalk', payload: res.talks.sort(byField("id")).reverse()[res.talks.length-1].id})
-        getMessages(res.talks.sort(byField("id")).reverse()[res.talks.length-1].id)
+        let messages = await getMessages(res.talks.sort(byField("id")).reverse()[res.talks.length-1].id)
+        dispatch({type: 'setMessages', payload: messages})
     }
     
     return (

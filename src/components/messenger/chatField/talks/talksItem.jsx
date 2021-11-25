@@ -12,7 +12,7 @@ const TalkItem = ({id, name, item, current, onclick}) => {
     }
 
     return (
-        <div className={current ? classes.talkItem + ' ' + classes.currentTalkItem : classes.talkItem} onClick={sendTalkID}>
+        <div className={current ? classes.talkItem + ' ' + classes.currentTalkItem : classes.talkItem} /*onClick={sendTalkID}*/>
             {name}
         </div>
     )
