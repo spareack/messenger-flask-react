@@ -1,10 +1,14 @@
 import React from 'react'
 import classes from './talkItem.module.css'
+import {useDispatch} from 'react-redux'
 
 const TalkItem = ({id, name, item, current, onclick}) => {
 
+    const dispatch = useDispatch()
+
     const sendTalkID = () => {
         onclick(item.id)
+        dispatch({type: 'setCurrentTalk', payload: item.id})
     }
 
     return (

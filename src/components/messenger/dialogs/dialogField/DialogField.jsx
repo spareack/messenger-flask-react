@@ -7,14 +7,20 @@ import unnamed from './unnamed.jpg'
 import Setting from '../Settings/Setting'
 import { useDispatch, useSelector } from 'react-redux';
 
+function byField(field) {
+    return (a, b) => +a[field] > +b[field] ? -1 : 1;
+  }
+  
+
 const DialogsField = ({setDialog, dialogs, currentDialog, setTalk, setLoggedOut, getTalks,getMessages, createDialog,unread}) => {
-    /* UI */
+    
     const dispatch = useDispatch()
     const act1ve = useSelector(state => state.settings.active)
     const user = useSelector(state => state.user)
-    const talks = useSelector(state => state.talks.talks)
-    const [settings, setSettingsWindow] = useState(false)
+    const talks = useSelector(state => state.talks)
     
+    const [settings, setSettingsWindow] = useState(false)
+    /* UI */
     useEffect( () => {
         const container = document.getElementById('leftColumn')
         const rightColumg = document.getElementById('rightColumn')
@@ -49,11 +55,14 @@ const DialogsField = ({setDialog, dialogs, currentDialog, setTalk, setLoggedOut,
     }  
     /* UI */
 
-    const changeDialog = (id) => {
-        // console.log(talks[0].id)
+    const changeDialog = async (id) => {
         setDialog(id)
-        setTalk(null)
-        getTalks(id)
+        // setTalk(null)
+        let res = await getTalks(id)
+        dispatch({type: 'setTalks', payload: res.talks.sort(byField("id")).reverse()})
+        dispatch({type: 'setCurrentTalk', payload: res.talks.sort(byField("id")).reverse()[res.talks.length-1].id})
+        dispatch({type: 'setLastTalk', payload: res.talks.sort(byField("id")).reverse()[res.talks.length-1].id})
+        getMessages(res.talks.sort(byField("id")).reverse()[res.talks.length-1].id)
     }
     
     return (

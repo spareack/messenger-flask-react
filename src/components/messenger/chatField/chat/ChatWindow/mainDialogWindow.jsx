@@ -3,7 +3,7 @@ import classes from './MainWindow.module.css'
 import MessageList from '../MessageList/messageList'
 import Companion from '../Companion/Companion'
 
-const MainWindow = ({companion, sendMessage,active , setActiveTalkMenu}) => {
+const MainWindow = ({companion, sendMessage,active , setActiveTalkMenu, getMessages}) => {
     const textareaRef = useRef(null);
     const [messageText, setMessageText] = useState('')
 
@@ -31,7 +31,7 @@ const MainWindow = ({companion, sendMessage,active , setActiveTalkMenu}) => {
         <div className={classes.dialogWindow}>
             <Companion companion={companion} setActive={setActiveTalkMenu}/>
             {/* <div className={classes.wtf}> */}
-                <MessageList active={active}/>
+                <MessageList active={active} getMessages={getMessages}/>
             {/* </div> */}
             <form style={{marginInline: active? '15px' : '15%'}} className={classes.txtArea}>
                 <div className={classes.wInputContainer}>

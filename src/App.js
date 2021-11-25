@@ -16,6 +16,7 @@ function App() {
       method: 'get',
       url: '/is_authorized',
     }).then(res => {
+        // console.log(res.data)
         if(res.data.status === 0){
             setUserLoggedIn(res.data.is_auth)
             dispatch({type: 'setUser', payload: {
