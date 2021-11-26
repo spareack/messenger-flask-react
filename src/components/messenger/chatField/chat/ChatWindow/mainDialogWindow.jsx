@@ -3,7 +3,7 @@ import classes from './MainWindow.module.css'
 import MessageList from '../MessageList/messageList'
 import Companion from '../Companion/Companion'
 
-const MainWindow = ({companion, sendMessage,active , setActiveTalkMenu, getMessages}) => {
+const MainWindow = ({companion, sendMessage,active, setActiveTalkMenu, getMessages}) => {
     const textareaRef = useRef(null);
     const [messageText, setMessageText] = useState('')
 

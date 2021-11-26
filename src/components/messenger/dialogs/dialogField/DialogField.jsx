@@ -12,12 +12,12 @@ function byField(field) {
   }
   
 
-const DialogsField = ({setDialog, dialogs, currentDialog, setTalk, setLoggedOut, getTalks,getMessages, createDialog,unread}) => {
+const DialogsField = ({ dialogs, setLoggedOut, getTalks,getMessages, createDialog}) => {
     
     const dispatch = useDispatch()
     const act1ve = useSelector(state => state.settings.active)
     const user = useSelector(state => state.user)
-    const talks = useSelector(state => state.talks)
+    const currentDialog = useSelector(state=> state.user.currentDialog)
     
     const [settings, setSettingsWindow] = useState(false)
     /* UI */
@@ -56,10 +56,8 @@ const DialogsField = ({setDialog, dialogs, currentDialog, setTalk, setLoggedOut,
     /* UI */
 
     const changeDialog = async (id) => {
-        setDialog(id)
-        // setTalk(null)
+        dispatch({type:'setCurrentDialog', payload: id})
         let res = await getTalks(id)
-        console.log(res)
         dispatch({type: 'setTalks', payload: res.talks.sort(byField("id")).reverse()})
         dispatch({type: 'setCurrentTalk', payload: res.talks.sort(byField("id")).reverse()[res.talks.length-1].id})
         let messages = await getMessages(res.talks.sort(byField("id")).reverse()[res.talks.length-1].id)
@@ -95,7 +93,7 @@ const DialogsField = ({setDialog, dialogs, currentDialog, setTalk, setLoggedOut,
                         lastTalk={post?.last_message ? post?.last_message : 'There is no messages'}
                         onclick={changeDialog}
                         current={currentDialog === post.id? true : false}
-                        unread={unread}/>
+                        unreadCount = {post.unread_count}/>
                 ))
                 : <Setting setSettingsWindow={setSettingsWindow}/>
                 }

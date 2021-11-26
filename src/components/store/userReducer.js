@@ -2,8 +2,11 @@ const defaultState = {
     photoURL: 0,
     id: 0,
     name: 'none',
-    dialogs: []
+    dialogs: [],
+    currentDialog: -1
 }
+
+//dialog item = {id: int, last_message: str, other_members: list of names, unread_count: int}
 
 export const userReducer = (state = defaultState, action) => {
     switch(action.type){
@@ -15,6 +18,8 @@ export const userReducer = (state = defaultState, action) => {
             return {...state, name: action.payload}
         case 'setUserDialogs': 
             return {...state, dialogs: action.payload}
+        case 'setCurrentDialog':
+            return {...state, currentDialog: action.payload}
         default: return state
     }
 }

@@ -1,11 +1,12 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import classes from './dialog-item.module.css'
 import unnamed from './unnamed.jpg'
 
-const DialogItem = ({id, index, name, lastTalk, onclick, current, unread}) => {
+const DialogItem = ({id, index, name, lastTalk, onclick, current, unreadCount}) => {
     const sendID = () => {
         onclick(id)
     }
+    
 
     return (
         <div className={current ? classes.dialogItem + ' ' + classes.currentItem : classes.dialogItem} onClick={sendID}>
@@ -16,8 +17,8 @@ const DialogItem = ({id, index, name, lastTalk, onclick, current, unread}) => {
                     <p>{lastTalk}</p>
                 </div>
             </div>
-            <div className={classes.dot} style={{opacity: unread ? '1' : '0'}}>
-                •
+            <div className={classes.dot} style={{opacity: unreadCount ? '1' : '0'}}>
+                {unreadCount}
             </div>
         </div>
     )

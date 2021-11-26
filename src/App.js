@@ -5,7 +5,8 @@ import {Route, Switch, Redirect, BrowserRouter} from 'react-router-dom'
 import Messenger from './messenger';
 import Loader from './components/Loader';
 import WelcomePage from './components/welcomepage/WelcomePage';
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
+import {socket} from './socket'
 
 function App() {
   const dispatch = useDispatch()
@@ -24,6 +25,7 @@ function App() {
               name: res.data.name,
               dialogs: res.data.dialogs ? res.data.dialogs : []
             }})
+            // socket.emit("authorize", {id: res.data.id})
         }
     }).catch(error => console.log(error))
    }, [dispatch]);

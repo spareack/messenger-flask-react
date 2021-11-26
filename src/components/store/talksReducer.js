@@ -1,5 +1,3 @@
-
-
 const defaultState = {
     talks: [],
     currentTalk: 0,

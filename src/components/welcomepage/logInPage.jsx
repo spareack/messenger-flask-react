@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import './loginpage.css'
 import {useLocation} from 'react-router-dom'
 import axios from 'axios'
+import {socket} from '../../socket'
 import {useDispatch} from 'react-redux'
 
 const LogIn = ({setLoggedIn}) => {
@@ -36,6 +37,7 @@ const LogIn = ({setLoggedIn}) => {
                     name: res.data.name,
                     photoURL: 0,
                     dialogs: res.data.dialogs}})
+                    socket.emit("authorize", {id: res.data.id})
             }
             if(res.data.status === 1){
                 if(res.data.info === 'user not found'){
