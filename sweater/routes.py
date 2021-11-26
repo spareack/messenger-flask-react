@@ -17,7 +17,7 @@ from sweater import app, db, mail, token_key, socketio
 from sweater.models import User, Talk, Message, Dialog, Media
 
 
-rooms_list = []
+rooms_list = set()
 
 
 @app.route('/')
@@ -32,16 +32,38 @@ def handle_connection(data):
     global rooms_list
     user_id = data['id']
     join_room(user_id)
-    rooms_list.append(user_id)
-    print("connect!", user_id)
+    rooms_list.add(user_id)
+    print("authorize user", user_id)
 
     # emit('server-client', 'Test message')
+
+
+@socketio.on('read_messages')
+# @cross_origin()
+def read_unread(data):
+    dialog_id = data['dialog_id']
+
+    user_id = int(current_user.get_id())
+    user = db.session.query(User).filter_by(id=user_id).first_or_404()
+
+    unread_dialogs_list = json.loads(user.unread_dialogs)
+    if dialog_id in unread_dialogs_list:
+        unread_dialogs_list.pop(dialog_id)
+
+    db.session.commit()
 
 
 @socketio.on('connect')
 # @cross_origin()
 def disconnect_socket():
-    print("first-connect!")
+    global rooms_list
+    user_id = current_user.get_id()
+
+    if user_id is not None:
+        join_room(user_id)
+        rooms_list.add(user_id)
+
+    print("connect user", str(user_id), "!")
 
 
 @socketio.on('disconnect')
@@ -50,20 +72,6 @@ def disconnect_socket():
     user_id = current_user.get_id()
     leave_room(user_id)
     print("disconnect(", user_id)
-
-
-@socketio.on('client-server')
-# @cross_origin()
-def handle_client_msg(msg):
-    print("\n" + str(msg))
-
-
-# @app.before_request
-# def before_request():
-#     if not request.is_secure:
-#         url = request.url.replace('http://', 'https://', 1)
-#         code = 301
-#         return redirect(url, code=code)
 
 
 @app.route('/check_name', methods=['GET'])
@@ -80,7 +88,7 @@ def check_name():
                 return jsonify({"status": 0, "info": "ye, this is good"})
 
         except Exception as e:
-            return jsonify({"status": 666, "info": str(e)})
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
 @app.route('/check_mail', methods=['GET'])
@@ -96,7 +104,7 @@ def check_mail():
             else:
                 return jsonify({"status": 0, "info": "ye, this is good"})
         except Exception as e:
-            return jsonify({"status": 666, "info": str(e)})
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
 @app.route('/register_new_user', methods=['POST'])
@@ -111,7 +119,7 @@ def register_new_user():
         if any((x.name == name or x.email == email) for x in all_users):
             return jsonify({"status": 1, "id": "name or email already engaged"})
 
-        user = User(name=name, email=email, password=generate_password_hash(password))
+        user = User(name=name, email=email, password=generate_password_hash(password), date_create=str(datetime.datetime.utcnow()))
         try:
             db.session.add(user)
             db.session.commit()
@@ -126,7 +134,7 @@ def register_new_user():
             return jsonify({"status": 0, "id": last_id[0]})
 
         except Exception as e:
-            return jsonify({"status": 666, "info": str(e)})
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
 @app.route('/confirm_email/<token>', methods=['GET'])
@@ -141,7 +149,7 @@ def confirm_token(token):
             user.is_activated = True
             db.session.commit()
         except Exception as e:
-            return str(e)
+            return str(e) + traceback.format_exc()
         return redirect("/")
 
 
@@ -152,7 +160,6 @@ def login():
         response = request.get_json()
         name_mail = response['email']
         password = response['password']
-
 
         users = User.query.all()
         try:
@@ -208,7 +215,7 @@ def login():
             return jsonify({"status": 1, "info": "user not found"})
 
         except Exception as e:
-            return jsonify({"status": 666, "info": str(e)})
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
 @app.route('/is_authorized', methods=['GET'])
@@ -260,7 +267,7 @@ def is_authorized():
                 return jsonify({"status": 0, "is_auth": False})
 
         except Exception as e:
-            return jsonify({"status": 666, "info": str(e)})
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
 @app.route('/un_authorize', methods=['GET'])
@@ -270,7 +277,7 @@ def log_out():
             logout_user()
             return redirect("/")
         except Exception as e:
-            return jsonify({"status": 666, "info": str(e)})
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
 @app.route('/static/<path:static_type>/<path:filename>')
@@ -301,7 +308,7 @@ def search_user():
             response = list({"id": user.id, "name": user.name} for user in users)
             return jsonify({"status": 0, "users": response})
         except Exception as e:
-            return jsonify({"status": 666, "info": str(e)})
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
 def add_to_json(obj, count):
@@ -334,7 +341,7 @@ def create_dialog():
                 if all(member_id in own_members for member_id in members):
                     return jsonify({"status": 1, "info": "already have dialog with that user"})
 
-            dialog = Dialog(members=json.dumps(members))
+            dialog = Dialog(members=json.dumps(members), date_create=str(datetime.datetime.utcnow()))
             db.session.add(dialog)
             db.session.commit()
 
@@ -347,7 +354,7 @@ def create_dialog():
             return jsonify({"status": 0, "id": dialog.id})
 
         except Exception as e:
-            return jsonify({"status": 666, "info": str(e)})
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
 @app.route('/create_talk', methods=['POST'])
@@ -359,7 +366,7 @@ def create_talk():
             # members = data["members"]
             dialog_id = data["dialog_id"]
 
-            talk = Talk(title=title)
+            talk = Talk(title=title, date_create=str(datetime.datetime.utcnow()))
             db.session.add(talk)
             db.session.commit()
 
@@ -371,7 +378,7 @@ def create_talk():
             return jsonify({"status": 0, "id": talk.id})
 
         except Exception as e:
-            return jsonify({"status": 666, "info": str(e)})
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
 @app.route('/send_message', methods=['POST'])
@@ -394,14 +401,14 @@ def send_message():
                     filename = secure_filename(file.filename)
                     split_name = filename.rsplit('.', 1)
                     if split_name[1] in allowed_extension:
-                        media = Media(name=split_name[0], type=split_name[1], data=file.read())
+                        media = Media(name=split_name[0], type=split_name[1], data=file.read(), date_create=str(datetime.datetime.utcnow()))
                         db.session.add(media)
                         db.session.commit()
                         value = media.id
             else:
                 value = data["value"]
 
-            message = Message(sender=sender_id, type=message_type, value=value)
+            message = Message(sender=sender_id, type=message_type, value=value, date_create=str(datetime.datetime.utcnow()))
             db.session.add(message)
             db.session.commit()
 
@@ -409,21 +416,32 @@ def send_message():
             talk.messages = add_to_json(talk.messages, message.id)
 
             dialog = db.session.query(Dialog).filter_by(id=dialog_id).first_or_404()
-            dialog.date_update = func.now()
-
             db.session.commit()
 
             users = db.session.query(User).all()
             for user in users:
                 dialogs_ids = json.loads(user.dialogs)
                 if dialog.id in dialogs_ids:
-                    if user.id in rooms_list:
-                        emit('socket_info', jsonify({'info': 'new Messages in dialog', 'dialog_id': dialog.id}), to=str(user.id), namespace='/')
 
-            for i in rooms_list:
-                emit('socket_info', 1, to=i, namespace='/')
+                    unread_dialogs_list = json.loads(user.unread_dialogs)
+                    if dialog.id in unread_dialogs_list:
+                        unread_dialogs_list[dialog.id] += 1
+                    else:
+                        unread_dialogs_list[dialog.id] = 1
 
-            return jsonify({"status": 0, "id": message.id, "date": message.date_create})
+                    db.session.commit()
+
+                    if str(user.id) in rooms_list:
+                        """ and user.id is not sender_id """
+                        emit('socket_info', {'info': 'new Messages in dialog',
+                                             'dialog_id': dialog.id,
+                                             'value': value,
+                                             'unread_count': unread_dialogs_list[dialog.id]},
+                             to=str(user.id), namespace='/')
+
+            return jsonify({"status": 0,
+                            "id": message.id,
+                            "date": str(datetime.datetime.fromisoformat(message.date_create).time().strftime("%H:%M"))})
 
         except Exception as e:
             return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
@@ -472,7 +490,7 @@ def get_dialog():
             return jsonify({"status": 0, "dialogs": response_list})
 
         except Exception as e:
-            return jsonify({"status": 666, "info": str(e)})
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
 @app.route('/get_talks', methods=['GET'])
@@ -488,32 +506,19 @@ def get_talks():
 
             response_list = list({"id": talk.id, "title": talk.title} for talk in talks)
 
+            user_id = int(current_user.get_id())
+            user = db.session.query(User).filter_by(id=user_id).first_or_404()
+
+            unread_dialogs_list = json.loads(user.unread_dialogs)
+            if dialog_id in unread_dialogs_list:
+                unread_dialogs_list.pop(dialog_id)
+
+            db.session.commit()
+
             return jsonify({"status": 0, "talks": response_list})
 
         except Exception as e:
-            return jsonify({"status": 666, "info": str(e)})
-
-
-# @app.route('/upload_file', methods=['POST'])
-# def upload_file():
-#     if request.method == 'POST':
-#         allowed_extension = {'txt', 'png', 'jpg', 'jpeg'}
-#         response_list = []
-#
-#         for message in allowed_extension:
-#             if message.type == "text":
-#                 value = message.value
-#             else:
-#                 media = db.session.query(Media).filter_by(id=12).first()
-#                 value = send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
-#
-#         # file.save(os.path.join(app.config['UPLOAD_FOLDER'], str(media.id) + "." + split_name[1]))
-#         # media = db.session.query(Media).filter_by(id=12).first()
-#         # return send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
-#
-#         return jsonify({"status": 0, "info": "successful"})
-#     else:
-#         return jsonify({"status": 1, "info": "invalid file"})
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
 @app.route('/get_messages', methods=['GET'])
@@ -539,12 +544,14 @@ def get_messages():
                                       "sender": message.sender,
                                       "type": message.type,
                                       "value": value,
-                                      "date": message.date_create})
+                                      "date": str(datetime.datetime.fromisoformat(message.date_create).time().strftime("%H:%M"))})
+
+
 
             return jsonify({"status": 0, "messages": response_list})
 
         except Exception as e:
-            return jsonify({"status": 666, "info": str(e)})
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
 @app.route('/get_last_messages', methods=['GET'])
@@ -572,7 +579,52 @@ def get_last_messages():
                 return jsonify({"status": 1, "info": "no founded dialogs..."})
 
         except Exception as e:
-            return jsonify({"status": 666, "info": str(e)})
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
+
+
+@app.route('/upload_avatar', methods=['POST'])
+def upload_avatar():
+    if request.method == "POST":
+        try:
+            user_id = current_user.get_id()
+            user = db.session.query(User).filter_by(id=user_id).first_or_404()
+            file = request.files["file"]
+            allowed_extension = ['txt', 'png', 'jpg', 'jpeg']
+
+            if file and '.' in file.filename:
+                filename = secure_filename(file.filename)
+                split_name = filename.rsplit('.', 1)
+                if split_name[1] in allowed_extension:
+                    media = Media(name=split_name[0], type=split_name[1], data=file.read(), date_create=str(datetime.datetime.utcnow()))
+                    db.session.add(media)
+                    db.session.commit()
+                    user.avatar_id = media.id
+                    db.session.commit()
+
+        except Exception as e:
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
+
+
+# @app.route('/upload_file', methods=['POST'])
+# def upload_file():
+#     if request.method == 'POST':
+#         allowed_extension = {'txt', 'png', 'jpg', 'jpeg'}
+#         response_list = []
+#
+#         for message in allowed_extension:
+#             if message.type == "text":
+#                 value = message.value
+#             else:
+#                 media = db.session.query(Media).filter_by(id=12).first()
+#                 value = send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
+#
+#         # file.save(os.path.join(app.config['UPLOAD_FOLDER'], str(media.id) + "." + split_name[1]))
+#         # media = db.session.query(Media).filter_by(id=12).first()
+#         # return send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
+#
+#         return jsonify({"status": 0, "info": "successful"})
+#     else:
+#         return jsonify({"status": 1, "info": "invalid file"})
 
 
 @app.errorhandler(404)

@@ -30,6 +30,11 @@ function Messenger({setLoggedOut}) {
   useEffect(() => {
     socket.on('authorize', {user_id: user.id})
   }, [])
+
+//    useEffect(() => {
+//    socket.on("socket_info", msg => { console.log(msg); })
+//    socket.emit('authorize', {id: user.id})
+//  }, [])
   
   const [currentDialog, setCurrentDialog] = useState(0)
   // const [currentTalk, setCurrentTalk] = useState(0)
