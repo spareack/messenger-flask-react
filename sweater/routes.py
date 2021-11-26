@@ -255,8 +255,14 @@ def is_authorized():
                             else:
                                 last_message_value = message.type
 
+                    unread_dialogs_list = json.loads(user.unread_dialogs)
+                    unread_count = unread_dialogs_list[dialog.id] if dialog.id in unread_dialogs_list else 0
+
                     response_list.append(
-                        {"id": dialog.id, "other_members": members_list, "last_message": last_message_value})
+                        {"id": dialog.id,
+                         "other_members": members_list,
+                         "last_message": last_message_value,
+                         "unread_count": unread_count})
 
                 return jsonify({"status": 0,
                                 "is_auth": True,
