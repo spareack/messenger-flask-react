@@ -15,7 +15,7 @@ app = Flask(__name__, static_folder='../build', static_url_path='/', template_fo
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # DB CONFIG
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:zxcursed@localhost/boxPostgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://tdgstkkyczujlt:852ab945f253745eeca395825dee53182360dcaf8277cccccd86fc30683f233c@ec2-34-242-89-204.eu-west-1.compute.amazonaws.com:5432/d29h35ednv6at3'
 app.config['SECRET_KEY'] = 'YSAFDB978WH8AYIFHSNUSIJDFK'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
