@@ -1,6 +1,7 @@
 altgraph==0.17.2
 bidict==0.21.4
 blinker==1.4
+cffi==1.15.0
 click==8.0.2
 colorama==0.4.4
 DateTime==4.3
@@ -14,6 +15,8 @@ Flask-SocketIO==5.1.1
 Flask-SQLAlchemy==2.5.1
 Frozen-Flask==0.18
 future==0.18.2
+gevent==21.8.0
+gevent-websocket==0.10.1
 greenlet==1.1.2
 gunicorn==20.1.0
 importlib-metadata==4.8.1
@@ -21,6 +24,7 @@ itsdangerous==2.0.1
 Jinja2==3.0.2
 MarkupSafe==2.0.1
 pefile==2021.9.3
+pycparser==2.21
 pyinstaller-hooks-contrib==2021.3
 python-engineio==4.3.0
 python-socketio==5.5.0
@@ -31,4 +35,5 @@ SQLAlchemy==1.4.25
 typing-extensions==3.10.0.2
 Werkzeug==2.0.2
 zipp==3.6.0
+zope.event==4.5.0
 zope.interface==5.4.0
