@@ -1,0 +1,23 @@
+.MessageList {
+    display: flex; 
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    overflow-y: auto;
+    transition: padding 0.2s linear;
+}
+
+.MessageList::-webkit-scrollbar {
+    width: 6px;
+}
+
+.MessageList::-webkit-scrollbar-thumb {
+    background-color: #242424;
+    transition: all 0.2s ease-in-out;
+}
+
+.MessageListNoScroll::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}

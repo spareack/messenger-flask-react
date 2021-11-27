@@ -1,0 +1,157 @@
+.Dialogs {
+    position: relative;
+    min-width: 17%;
+    width: 30%;
+    max-width: 45%;
+    height: 100%;
+    background-color: #212121;
+}
+
+.handlerRight {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    right: -3px;
+    cursor: ew-resize;
+    width: 5px;
+    background-color: #83889600;
+}
+
+.searchBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: 1.2em;
+    padding: 25px 20px 25px 20px;
+    color: #FFFFF0;
+    width: 100%;
+    height: 22%;
+    background-color: #333333;
+}
+
+.DialogList {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    height: 78%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+  
+.DialogList::-webkit-scrollbar{
+    width: 10px;
+}
+
+.dialogFieldSBox {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.logOutBtn {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #202124;
+    font-size: 0.8em;
+    font-weight: 700;
+    color: #838896;
+}
+
+.menuButton {
+    width: 100%;
+    border-radius: 0;
+}
+
+.dropDownMenuButton {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: inherit;
+    height: 45px;
+    width: 45px;
+    outline: none;
+    border: none;
+    border-radius: 75%;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    margin-right: 10px;
+}
+
+.dropDownMenuButton img {
+    height: 100%;
+    width: 100%;
+}
+
+.dropDownMenuButton:hover {
+    background-color: #2C2C2C;
+}
+
+.userAvatar {
+    height: 45px;
+    width: 45px;
+    border-radius: 75%;
+}
+
+.userInfo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    overflow-x: hidden;
+}
+
+.userInfo h2 {
+    margin: 0;
+    margin-left: 10px;
+    overflow-x: hidden;
+}
+
+.dropDownMenu {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 1;
+    top: 60px;
+    left: 50px;
+    width: 100px;
+    height: fit-content;
+    padding: 5px;
+    background-color: #202124;
+    border-radius: 10px;
+    opacity: 1;
+    animation: appear 0.1s ease-in-out both;
+}
+
+.dropDownMenu a {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+@keyframes appear {
+    from {
+        display: none;
+        opacity: 0;
+    }
+    to {
+        display: flex;
+        opacity: 1;
+    }
+}
+
+@keyframes disappear {
+    from {
+        display: flex;
+        opacity: 1;
+    }
+    to {
+        display: none;
+        opacity: 0;
+    }
+}
