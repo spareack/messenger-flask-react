@@ -39,4 +39,4 @@ token_key = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 from sweater import models, routes
 
 # app.run(debug=True)
-socketio.run(app, debug=True, host='talk-messenger.herokuapp.com')
+socketio.run(app)
