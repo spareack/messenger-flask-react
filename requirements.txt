@@ -1,3 +1,4 @@
+alembic==1.7.5
 altgraph==0.17.2
 bidict==0.21.4
 blinker==1.4
@@ -11,6 +12,7 @@ Flask==2.0.2
 Flask-Cors==3.0.10
 Flask-Login==0.5.0
 Flask-Mail==0.9.1
+Flask-Migrate==3.1.0
 Flask-SocketIO==5.1.1
 Flask-SQLAlchemy==2.5.1
 Frozen-Flask==0.18
@@ -20,10 +22,13 @@ gevent-websocket==0.10.1
 greenlet==1.1.2
 gunicorn==20.1.0
 importlib-metadata==4.8.1
+importlib-resources==5.4.0
 itsdangerous==2.0.1
 Jinja2==3.0.2
+Mako==1.1.6
 MarkupSafe==2.0.1
 pefile==2021.9.3
+psycopg2==2.9.2
 pycparser==2.21
 pyinstaller-hooks-contrib==2021.3
 python-engineio==4.3.0

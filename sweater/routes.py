@@ -70,9 +70,9 @@ def disconnect_socket():
 # @cross_origin()
 def disconnect_socket():
     user_id = current_user.get_id()
-    user = db.session.query(User).filter_by(id=user_id).first_or_404()
-    user.date_visited = str(datetime.datetime.utcnow())
-    db.session.commit()
+    # user = db.session.query(User).filter_by(id=user_id).first_or_404()
+    # user.date_visited = str(datetime.datetime.utcnow())
+    # db.session.commit()
 
     leave_room(user_id)
     print("disconnect(", user_id)
