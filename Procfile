@@ -1,2 +1,2 @@
-web: gunicorn app:app — log-file=-
+web: gunicorn python app.py
 web: gunicorn — worker-class eventlet -w 1 app:app
