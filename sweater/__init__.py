@@ -8,7 +8,7 @@ from flask_socketio import SocketIO
 from sqlalchemy import create_engine
 import argparse
 
-app = Flask(__name__, static_folder='../build', static_url_path='/', template_folder="../build")
+app = Flask(__name__, static_folder='../build', static_url_path='/static', template_folder="../build")
 
 
 # CORS CONFIG
@@ -66,5 +66,5 @@ token_key = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 from sweater import models, routes
 
-# app.run(debug=True)
-socketio.run(app)
+app.run(debug=True)
+# socketio.run(app)
