@@ -2,6 +2,7 @@ const defaultState = {
     photoURL: 0,
     id: 0,
     name: 'none',
+    bio: '',
     dialogs: [],
     currentDialog: -1
 }

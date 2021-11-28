@@ -17,15 +17,15 @@ const MessageList = ({active, getMessages}) => {
     }
 
     const messageFetching = async () => {
-        if(list.current.scrollHeight + list.current.scrollTop === list.current.clientHeight){
+        if(Math.abs(list.current.scrollHeight + list.current.scrollTop - list.current.clientHeight) < 10){
             const currentTalkIndex = talks.talks.findIndex((element) => {if(element.id === talks.currentTalk) return true})
-            console.log('currentTalkIndex ' + currentTalkIndex)
+            // console.log('currentTalkIndex ' + currentTalkIndex)
             if(currentTalkIndex){
                 const fetchCurrentTalk = talks.talks[currentTalkIndex-1].id
                 dispatch({type: 'setCurrentTalk', payload: fetchCurrentTalk})
                 let _messages = await getMessages(fetchCurrentTalk)
                 dispatch({type: 'setMessages', payload: [...messages, ..._messages]})
-                // console.log(messages)
+                // console.log(messages, talks, list.current.scrollHeight + list.current.scrollTop === list.current.clientHeight)
                 // list.current.scrollTo({
                 //     top: 0
                 //   })
@@ -35,8 +35,8 @@ const MessageList = ({active, getMessages}) => {
 
     return (
         <div style={{paddingInline: active? '15px' : '15%'}} ref={list} className={!scrollIsActive ? classes.MessageList + ' ' + classes.MessageListNoScroll : classes.MessageList} onScroll={messageFetching} onMouseOver={scrollToggler} onMouseOut={scrollToggler}>
-            {messages ?
-            messages.map((msgItem, index) => 
+            {messages 
+            ? messages.map((msgItem, index) => 
                 <MessageListItem from={user.id === msgItem.sender} text={msgItem.value} time={msgItem.date} key={index}/>
             )
             :<MessageListItem from={true} text={'Напишите этому человеку!'} time={'А это не важно'}/>}

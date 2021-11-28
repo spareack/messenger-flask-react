@@ -4,7 +4,8 @@ import DialogItem from '../dialogItem/DialogItem'
 import menu from './menu.svg'
 import Search from '../Search/Search'
 import unnamed from './unnamed.jpg'
-import Setting from '../Settings/Setting'
+import ProfileSetting from '../Settings/profileSettings/ProfileSettings'
+import Settings from '../Settings/Settings'
 import { useDispatch, useSelector } from 'react-redux';
 
 function byField(field) {
@@ -65,11 +66,11 @@ const DialogsField = ({ dialogs, setLoggedOut, getTalks,getMessages, createDialo
     }
     
     return (
-        <div className={classes.Dialogs + ' ' + classes.resizableBox} id="leftColumn">
+        <div className={classes.Dialogs} id="leftColumn">
             <div className={classes.handlerRight} id="resizer"></div>
 
 
-            <div className={classes.searchBox}>
+            <div style={{height: settings ? '10%' : '20%'}} className={classes.searchBox}>
                 <div className={classes.dialogFieldSBox}>
                     <div onClick={(e) => {e.stopPropagation()}}><button onClick={toggleDownMenu} className={classes.dropDownMenuButton}><img src={menu} alt=''/></button></div>
                     <div className={classes.dropDownMenu} style={{display: act1ve? 'flex' : 'none'}} onClick={(e) => {e.stopPropagation()}}>
@@ -82,7 +83,7 @@ const DialogsField = ({ dialogs, setLoggedOut, getTalks,getMessages, createDialo
             </div>
 
 
-            <div className={classes.DialogList}>
+            <div className={classes.DialogList} style={{height: settings ? '90%' : '80%'}}>
                 {!settings ? 
                 dialogs.map((post, index)=> (
                     <DialogItem 
@@ -95,7 +96,7 @@ const DialogsField = ({ dialogs, setLoggedOut, getTalks,getMessages, createDialo
                         current={currentDialog === post.id? true : false}
                         unreadCount = {post.unread_count}/>
                 ))
-                : <Setting setSettingsWindow={setSettingsWindow}/>
+                : <Settings setSettingsWindow={setSettingsWindow}/>
                 }
             </div>
         </div>
