@@ -50,6 +50,7 @@ def read_unread(data):
     if dialog_id in unread_dialogs_list:
         unread_dialogs_list.pop(dialog_id)
 
+    user.unread_dialogs = json.dumps(unread_dialogs_list)
     db.session.commit()
 
 
@@ -239,7 +240,9 @@ def is_authorized():
                 dialogs = db.session.query(Dialog).filter(
                     Dialog.id.in_(dialogs_ids)).order_by(Dialog.date_update.desc()).all()
 
+                unread_dialogs_list = json.loads(user.unread_dialogs)
                 response_list = []
+
                 for dialog in dialogs:
                     members_list = []
                     members = json.loads(dialog.members)
@@ -264,7 +267,6 @@ def is_authorized():
                             else:
                                 last_message_value = message.type
 
-                    unread_dialogs_list = json.loads(user.unread_dialogs)
                     unread_count = unread_dialogs_list[dialog.id] if dialog.id in unread_dialogs_list else 0
 
                     response_list.append(
@@ -444,6 +446,7 @@ def send_message():
                     else:
                         unread_dialogs_list[dialog.id] = 1
 
+                    user.unread_dialogs = json.dumps(unread_dialogs_list)
                     db.session.commit()
 
                     if str(user.id) in rooms_list:
@@ -533,7 +536,8 @@ def get_talks():
             if dialog_id in unread_dialogs_list:
                 unread_dialogs_list.pop(dialog_id)
 
-            db.session.commit()
+                user.unread_dialogs = json.dumps(unread_dialogs_list)
+                db.session.commit()
 
             return jsonify({"status": 0, "talks": response_list})
 
