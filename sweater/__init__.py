@@ -66,8 +66,8 @@ token_key = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 from sweater import models, routes
 
-# import eventlet
-# eventlet.monkey_patch()
+import eventlet
+eventlet.monkey_patch()
 
 # app.run(debug=True)
 # socketio.run(app, debug=True, host='0.0.0.0', port=8080)
