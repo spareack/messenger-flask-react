@@ -71,4 +71,4 @@ eventlet.monkey_patch()
 
 # app.run(debug=True)
 # socketio.run(app, debug=True, host='0.0.0.0', port=8080)
-# socketio.run(app, debug=True, port=8000)
+socketio.run(app, debug=True, port=8000)
