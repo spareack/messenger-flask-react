@@ -1,0 +1,50 @@
+.uisettings {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type=number] {
+    width: min-content;
+    outline: none;
+}
+
+input[type=range] {
+    -webkit-appearance: none;
+    background: none;
+    margin: 10px 0;
+    width: 100%;
+  }
+  input[type=range]:focus {
+    outline: none;
+  }
+  input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 3px;
+    cursor: pointer;
+    background: linear-gradient(90deg, rgba(124,17,90,1) 0%, rgba(232,8,8,1) 100%);
+    border-radius: 25px;
+    border: 0px solid #000101;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    border: 0px solid #000000;
+    height: 12px;
+    width: 12px;
+    border-radius: 75%;
+    background: #B20C30;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -4px;
+    transition: all 0.2s ease-in-out;
+  }
+
+  input[type=range]::-webkit-slider-thumb:hover {
+    border: 0px solid #000000;
+    height: 16px;
+    width: 16px;
+    border-radius: 75%;
+    background: linear-gradient(90deg, rgba(124,17,90,1) 0%, rgba(232,8,8,1) 100%);
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -6.3px;
+  }
+ 
