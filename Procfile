@@ -1,8 +1,8 @@
-# heroku ps:scale web=1
+heroku ps:scale web=1
 # web:gunicorn app:app --log-level debug
 
 # web:gunicorn — worker-class eventlet -w 1 app:app
 # web:gunicorn -k flask_socketio.worker app:app
 
-web:gunicorn --worker-class eventlet -w 1 application:app
-heroku ps:scale web=1
+# web:gunicorn --worker-class eventlet -w 1 application:app
+# heroku ps:scale web=1
