@@ -40,11 +40,11 @@ mail = Mail(app)
 token_key = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 
-engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-conn = engine.connect()
-
-for i in conn.execute('SELECT * FROM pg_catalog.pg_tables'):
-    print(i)
+# engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+# conn = engine.connect()
+#
+# for i in conn.execute('SELECT * FROM pg_catalog.pg_tables'):
+#     print(i)
 
 
 # import psycopg2
@@ -66,9 +66,9 @@ for i in conn.execute('SELECT * FROM pg_catalog.pg_tables'):
 
 from sweater import models, routes
 
-import eventlet
-eventlet.monkey_patch()
+# import eventlet
+# eventlet.monkey_patch()
 
 # app.run(debug=True)
 # socketio.run(app, debug=True, host='0.0.0.0', port=8080)
-socketio.run(app, debug=True, port=8000)
+socketio.run(app, debug=True)
