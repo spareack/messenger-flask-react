@@ -41,7 +41,7 @@ def handle_connection(data):
 @socketio.on('read_messages')
 # @cross_origin()
 def read_unread(data):
-    dialog_id = data['dialog_id']
+    dialog_id = str(data['dialog_id'])
 
     user_id = int(current_user.get_id())
     user = db.session.query(User).filter_by(id=user_id).first_or_404()
@@ -71,9 +71,9 @@ def disconnect_socket():
 # @cross_origin()
 def disconnect_socket():
     user_id = current_user.get_id()
-    # user = db.session.query(User).filter_by(id=user_id).first_or_404()
-    # user.date_visited = str(datetime.datetime.utcnow())
-    # db.session.commit()
+    user = db.session.query(User).filter_by(id=user_id).first_or_404()
+    user.date_visited = str(datetime.datetime.utcnow())
+    db.session.commit()
 
     leave_room(user_id)
     print("disconnect(", user_id)
@@ -240,9 +240,7 @@ def is_authorized():
                 dialogs = db.session.query(Dialog).filter(
                     Dialog.id.in_(dialogs_ids)).order_by(Dialog.date_update.desc()).all()
 
-                unread_dialogs_list = json.loads(user.unread_dialogs)
                 response_list = []
-
                 for dialog in dialogs:
                     members_list = []
                     members = json.loads(dialog.members)
@@ -267,7 +265,8 @@ def is_authorized():
                             else:
                                 last_message_value = message.type
 
-                    unread_count = unread_dialogs_list[dialog.id] if dialog.id in unread_dialogs_list else 0
+                    unread_dialogs_list = json.loads(user.unread_dialogs)
+                    unread_count = unread_dialogs_list[str(dialog.id)] if str(dialog.id) in unread_dialogs_list else 0
 
                     response_list.append(
                         {"id": dialog.id,
@@ -441,10 +440,10 @@ def send_message():
                 if dialog.id in dialogs_ids:
 
                     unread_dialogs_list = json.loads(user.unread_dialogs)
-                    if dialog.id in unread_dialogs_list:
-                        unread_dialogs_list[dialog.id] += 1
+                    if str(dialog.id) in unread_dialogs_list:
+                        unread_dialogs_list[str(dialog.id)] += 1
                     else:
-                        unread_dialogs_list[dialog.id] = 1
+                        unread_dialogs_list[str(dialog.id)] = 1
 
                     user.unread_dialogs = json.dumps(unread_dialogs_list)
                     db.session.commit()
@@ -459,7 +458,7 @@ def send_message():
                                              'date': str(datetime.datetime.fromisoformat(
                                                        message.date_create).time().strftime("%H:%M")),
                                              'value': value,
-                                             'unread_count': unread_dialogs_list[dialog.id]},
+                                             'unread_count': unread_dialogs_list[str(dialog.id)]},
                              to=str(user.id), namespace='/')
 
             return jsonify({"status": 0,
@@ -533,11 +532,11 @@ def get_talks():
             user = db.session.query(User).filter_by(id=user_id).first_or_404()
 
             unread_dialogs_list = json.loads(user.unread_dialogs)
-            if dialog_id in unread_dialogs_list:
-                unread_dialogs_list.pop(dialog_id)
+            if str(dialog_id) in unread_dialogs_list:
+                unread_dialogs_list.pop(str(dialog_id))
 
-                user.unread_dialogs = json.dumps(unread_dialogs_list)
-                db.session.commit()
+            user.unread_dialogs = json.dumps(unread_dialogs_list)
+            db.session.commit()
 
             return jsonify({"status": 0, "talks": response_list})
 

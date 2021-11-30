@@ -41,11 +41,22 @@ mail = Mail(app)
 token_key = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 
-# engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-# conn = engine.connect()
-#
-# for i in conn.execute('SELECT * FROM pg_catalog.pg_tables'):
-#     print(i)
+engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+conn = engine.connect()
+
+count = conn.execute("SELECT unread_dialogs FROM public.user")
+
+# count = conn.execute("SELECT column_name, column_default "
+#                      "FROM information_schema.columns "
+#                      "WHERE (table_schema, table_name) = ('public', 'mytable') "
+#                      "ORDER BY ordinal_position;")
+
+# count = conn.execute("SELECT * FROM TABLE USER;")
+
+# print(count)
+
+for i in count:
+    print(i)
 
 
 # import psycopg2
