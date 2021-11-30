@@ -16,6 +16,7 @@ class User(db.Model, UserMixin):
     unread_dialogs = db.Column(db.Text, default="{}")
     date_create = db.Column(db.String(30))
     date_visited = db.Column(db.String(30))
+    user_status = db.Column(db.Integer, default=0)
     avatar_id = db.Column(db.Integer)
 
     def is_active(self):
