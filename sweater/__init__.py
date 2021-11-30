@@ -74,4 +74,4 @@ from sweater import models, routes
 # socketio.run(app, debug=True, host='0.0.0.0', port=8080)
 
 if __name__ == "__main__":
-    socketio.run(app, debug=True, host='0.0.0.0', port=5004)
+    socketio.run(app, debug=True)
