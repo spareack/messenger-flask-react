@@ -15,7 +15,7 @@ app = Flask(__name__, static_folder='../build', static_url_path='/static', templ
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # DB CONFIG
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://tdgstkkyczujlt:852ab945f253745eeca395825dee53182360dcaf8277cccccd86fc30683f233c@ec2-34-242-89-204.eu-west-1.compute.amazonaws.com:5432/d29h35ednv6at3'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://kbjqzvudqjenhr:a8de169a9e725cb5131f652cb713e9ec454c0011f0bd5c00e3d39df14f243fd1@ec2-52-211-158-144.eu-west-1.compute.amazonaws.com:5432/dui2neaevnm15'
 app.config['SECRET_KEY'] = 'YSAFDB978WH8AYIFHSNUSIJDFK'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -40,11 +40,11 @@ mail = Mail(app)
 token_key = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 
-# engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-# conn = engine.connect()
-#
-# for i in conn.execute('SELECT * FROM pg_catalog.pg_tables'):
-#     print(i)
+engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+conn = engine.connect()
+
+for i in conn.execute('SELECT * FROM pg_catalog.pg_tables'):
+    print(i)
 
 
 # import psycopg2
@@ -71,4 +71,4 @@ eventlet.monkey_patch()
 
 # app.run(debug=True)
 # socketio.run(app, debug=True, host='0.0.0.0', port=8080)
-socketio.run(app, debug=True, port=8000)
+# socketio.run(app, debug=True, port=8000)

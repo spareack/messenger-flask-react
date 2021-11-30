@@ -1,3 +1,4 @@
+heroku ps:scale web=1
 # web: gunicorn app:app --log-level debug
 
 # web: gunicorn — worker-class eventlet -w 1 app:app
