@@ -68,4 +68,4 @@ from sweater import models, routes
 
 # app.run(debug=True)
 # socketio.run(app, debug=True, host='0.0.0.0', port=8080)
-socketio.run(app, debug=True)
+socketio.run(app, debug=True, port=8000)
