@@ -319,9 +319,11 @@ def is_authorized():
                     for member_id in members:
                         member = db.session.query(User).filter_by(id=member_id).first_or_404()
 
-                        media = db.session.query(Media).filter_by(id=member.avatar_id).first()
-                        user_avatar = send_file(io.BytesIO(media.data),
-                                                attachment_filename=(media.name + "." + media.type))
+                        user_avatar = -1
+                        if member.avatar_id is not None:
+                            media = db.session.query(Media).filter_by(id=member.avatar_id).first()
+                            user_avatar = send_file(io.BytesIO(media.data),
+                                                    attachment_filename=(media.name + "." + media.type))
 
                         members_list.append({"name": member.name,
                                              "user_status": member.user_status,
