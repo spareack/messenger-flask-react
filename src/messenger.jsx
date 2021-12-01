@@ -50,12 +50,12 @@ function Messenger({ setLoggedOut }) {
     })
     socket.on('socket_status', res => {
       const _dialogs = dialogs.map((dialog) => {
-        if(dialog.id === res.dialog_id){  
+        if(dialog.id === res.dialog_id){
           return {...dialog, other_members: dialog.map((item) => item.user_status = res.user_status )} //в будущем надо будет поменять НАВЕРНОЕ
         } else return dialog
       })
       dispatch({type:'setDialogs', _dialogs})
-      // console.log(res)
+      console.log(res)
     })
   }, []) 
 

@@ -36,27 +36,28 @@ def handle_connection(data):
         join_room(user_id)
         rooms_list.add(user_id)
 
-        user = db.session.query(User).filte_by(id=int(user_id)).first_or_404()
+        user = db.session.query(User).filter_by(id=int(user_id)).first_or_404()
         user.date_visited = str(datetime.datetime.utcnow() + datetime.timedelta(hours=3))
         user.user_status = 1
         db.session.commit()
 
-        dialog_ids = json.load(user.dialogs)
+        dialog_ids = json.loads(user.dialogs)
         for dialog_id in dialog_ids:
-            dialog = db.session.query(Dialog).filte_by(id=dialog_id).first_or_404()
+            dialog = db.session.query(Dialog).filter_by(id=dialog_id).first_or_404()
             dialog_members = json.loads(dialog.members)
 
             for member_id in dialog_members:
                 if str(member_id) is not user_id and str(member_id) in rooms_list:
                     emit('socket_status', {'info': 'status_info',
-                                          'dialog_id': int(dialog_id),
-                                          'user_id': int(member_id),
-                                          'user_status': 1},
+                                           'dialog_id': int(dialog_id),
+                                           'user_id': int(member_id),
+                                           'user_status': 1},
                          to=str(member_id), namespace='/')
 
         print("authorize user", user_id)
 
     except Exception as e:
+        print('connect error', str(e) + traceback.format_exc())
         return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
@@ -87,27 +88,28 @@ def connect_socket():
             join_room(user_id)
             rooms_list.add(user_id)
 
-            user = db.session.query(User).filte_by(id=int(user_id)).first_or_404()
+            user = db.session.query(User).filter_by(id=int(user_id)).first_or_404()
             user.date_visited = str(datetime.datetime.utcnow() + datetime.timedelta(hours=3))
             user.user_status = 1
             db.session.commit()
 
-            dialog_ids = json.load(user.dialogs)
+            dialog_ids = json.loads(user.dialogs)
             for dialog_id in dialog_ids:
-                dialog = db.session.query(Dialog).filte_by(id=dialog_id).first_or_404()
+                dialog = db.session.query(Dialog).filter_by(id=dialog_id).first_or_404()
                 dialog_members = json.loads(dialog.members)
 
                 for member_id in dialog_members:
                     if str(member_id) is not user_id and str(member_id) in rooms_list:
-                        emit('socket_info2', {'info': 'status_info',
-                                              'dialog_id': int(dialog_id),
-                                              'user_id': int(member_id),
-                                              'user_status': 1},
+                        emit('socket_status', {'info': 'status_info',
+                                               'dialog_id': int(dialog_id),
+                                               'user_id': int(member_id),
+                                               'user_status': 1},
                              to=str(member_id), namespace='/')
 
         print("connect user", str(user_id), "!")
 
     except Exception as e:
+        print('connect error', str(e) + traceback.format_exc())
         return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
@@ -123,22 +125,23 @@ def disconnect_socket():
         user.user_status = 0
         db.session.commit()
 
-        dialog_ids = json.load(user.dialogs)
+        dialog_ids = json.loads(user.dialogs)
         for dialog_id in dialog_ids:
-            dialog = db.session.query(Dialog).filte_by(id=dialog_id).first_or_404()
+            dialog = db.session.query(Dialog).filter_by(id=dialog_id).first_or_404()
             dialog_members = json.loads(dialog.members)
 
             for member_id in dialog_members:
                 if str(member_id) is not user_id and str(member_id) in rooms_list:
-                    emit('socket_info2', {'info': 'status_info',
-                                          'dialog_id': int(dialog_id),
-                                          'user_id': int(member_id),
-                                          'user_status': 0},
+                    emit('socket_status', {'info': 'status_info',
+                                           'dialog_id': int(dialog_id),
+                                           'user_id': int(member_id),
+                                           'user_status': 0},
                          to=str(member_id), namespace='/')
 
         print("disconnect(", user_id)
 
     except Exception as e:
+        print('connect error', str(e) + traceback.format_exc())
         return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
