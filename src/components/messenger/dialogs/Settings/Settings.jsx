@@ -6,7 +6,7 @@ import UISettings from './UISettings/UISettings'
 import classes from './Settings.module.css'
 import arrowBack from './arrowBack.svg'
 
-const Settings = ({setSettingsWindow}) => {
+const Settings = ({setSettingsWindow, setLoggedOut}) => {
     const [buttons, setButtons] = useState(true) 
     const [settings, setSetting] = useState('Global')
 
@@ -31,6 +31,7 @@ const Settings = ({setSettingsWindow}) => {
                 <button className={classes.settingButton} onClick={() => {setButtons(false); setSetting(PROFILE)}}>Profile Settings</button>
                 <button className={classes.settingButton} onClick={() => {setButtons(false); setSetting(NOTIFICATIONS)}}>Notifications</button>
                 <button className={classes.settingButton} onClick={() => {setButtons(false); setSetting(PRIVATE)}}>Privacy</button>
+                <a href="/un_authorize" className={classes.settingButton} onClick={() => setLoggedOut(false)}>Log Out</a>
             </div>
             :((settings) => {
                 switch(settings){
@@ -45,7 +46,7 @@ const Settings = ({setSettingsWindow}) => {
                     case UI:
                         return <UISettings />
                     default:
-                        return <div>Чё бля?</div>
+                        return <div>Чё блин ты чё совсем долбанутый? ты как сюда попал?</div>
                 }             
             })(settings)
         }

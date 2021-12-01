@@ -23,13 +23,13 @@
     justify-content: space-between;
     align-items: flex-start;
     font-size: 1.2em;
-    padding: 10px 20px 12px 20px;
+    padding: 10px 10px 12px 20px;
     color: #FFFFF0;
     width: 100%;
     height: 20%;
     background-color: #333333;
     border-bottom: 2px solid #333333;
-    overflow-y: hidden;
+    /* overflow-y: hidden; */
     transition: height 0.5s ease-in-out;
 }
 
@@ -55,19 +55,24 @@
 }
 
 .logOutBtn {
-    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    /* padding: 10px; */
     border: none;
     border-radius: 5px;
     background-color: #202124;
+    background: none;
     font-size: 0.8em;
     font-weight: 700;
     color: #838896;
+    text-decoration: none;
 }
 
-.menuButton {
+/* .menuButton {
     width: 100%;
     border-radius: 0;
-}
+} */
 
 .dropDownMenuButton {
     position: relative;
@@ -88,6 +93,11 @@
 .dropDownMenuButton img {
     height: 100%;
     width: 100%;
+}
+
+.logOutBtn img {
+    height: 45px;
+    width: 45px;
 }
 
 .dropDownMenuButton:hover {

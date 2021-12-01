@@ -48,7 +48,7 @@ def handle_connection(data):
 
             for member_id in dialog_members:
                 if str(member_id) is not user_id and str(member_id) in rooms_list:
-                    emit('socket_info2', {'info': 'status_info',
+                    emit('socket_status', {'info': 'status_info',
                                           'dialog_id': int(dialog_id),
                                           'user_id': int(member_id),
                                           'user_status': 1},
@@ -259,7 +259,7 @@ def login():
                             members.remove(user_id)
                             for member_id in members:
                                 member = db.session.query(User).filter_by(id=member_id).first_or_404()
-                                members_list.append(member.name)
+                                members_list.append({"name": member.name, "user_status": member.user_status})
 
                             talks_ids = json.loads(dialog.talks)
                             last_message_value = None
@@ -315,8 +315,8 @@ def is_authorized():
 
                     for member_id in members:
                         member = db.session.query(User).filter_by(id=member_id).first_or_404()
-                        # members_list.append([member.name, member.user_status])
-                        members_list.append(member.name)
+                        members_list.append({"name": member.name, "user_status": member.user_status})
+                        # members_list.append(member.name)
 
                     talks_ids = json.loads(dialog.talks)
                     last_message_value = None

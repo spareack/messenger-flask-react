@@ -4,6 +4,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    margin-top: 5px;
 }
 
 .settings::-webkit-scrollbar{
@@ -20,6 +21,7 @@
     height: 46px;
     background-color: #212121;
     padding: 0px 20px;
+    z-index: 2;
 }
 
 .backButton {
@@ -63,6 +65,7 @@
     color: #eee;
     margin-top: 16px;
     transition: all 0.2s ease;
+    /* text-decoration: none; */
 }
 
 .settingButton:hover {

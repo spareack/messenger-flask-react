@@ -16,6 +16,10 @@ const MessageList = ({active, getMessages}) => {
         setActiveScroll((scrollIsActive) => (!scrollIsActive))
     }
 
+    useEffect(() => {
+        list.current.scrollTo({top: 0, behavior: 'instant'})
+    }, [user.currentDialog])
+
     const messageFetching = async () => {
         if(Math.abs(list.current.scrollHeight + list.current.scrollTop - list.current.clientHeight) < 10){
             const currentTalkIndex = talks.talks.findIndex((element) => {if(element.id === talks.currentTalk) return true})
@@ -26,9 +30,6 @@ const MessageList = ({active, getMessages}) => {
                 let _messages = await getMessages(fetchCurrentTalk)
                 dispatch({type: 'setMessages', payload: [...messages, ..._messages]})
                 // console.log(messages, talks, list.current.scrollHeight + list.current.scrollTop === list.current.clientHeight)
-                // list.current.scrollTo({
-                //     top: 0
-                //   })
             }
         }
     }

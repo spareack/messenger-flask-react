@@ -4,7 +4,7 @@ import axios from 'axios'
 import unnamed from './unnamed.jpg'
 import { useDispatch, useSelector } from 'react-redux';
 
-const Search = ({createDialog}) => {
+const Search = ({createDialog, settings}) => {
     const [names, setNames] = useState([])
 
     const user = useSelector(state => state.user)
@@ -48,7 +48,7 @@ const Search = ({createDialog}) => {
 
     return (
         <div className={classes.searchBox}>
-            <input onClick={(e) => (e.stopPropagation())} className={classes.searchInput} onFocus={() => (dispatch({type: 'SHOW_NAMES'}))} placeholder="Search" value={searchInput} onChange={search}></input>
+            <input onClick={(e) => (e.stopPropagation())} style={{opacity: settings ? 0 : 1}} className={classes.searchInput} onFocus={() => (dispatch({type: 'SHOW_NAMES'}))} placeholder="Search" value={searchInput} onChange={search}></input>
             <div className={classes.dropDownList} style={{display: searchInput.length && activeInput ? 'flex' : 'none'}}>
                 <ul>
                     {names.length ? names.map( (name, index) => (

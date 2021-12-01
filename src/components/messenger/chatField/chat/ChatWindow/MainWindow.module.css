@@ -8,8 +8,7 @@
     background-color: #0F0F0F;
     padding: 0;
     margin: 0;
-    border-left: 1px solid  #555;
-    
+    border-left: 1px solid  #333;
 }
 
 .txtArea {
@@ -18,8 +17,9 @@
     align-items: center;
     min-height: 62px;
     max-height: 110px;
-    background-color: #333;
+    background: none;
     width: 100%;
+    margin: 5px 0px;
 }
 
 
@@ -47,15 +47,33 @@
   }
   
 .wInputContainer {
+    display: flex;
+    /* justify-content: flex-start; */
+    align-items: center;
     width: 500px;
     min-height: 20px;
     box-sizing: border-box;
-    padding: 6px 18px 3px;
-    margin: 5px 10px;
-    background-color: #fff;
-    border: 1px solid #fff;
+    padding: 7px;
+    padding-inline: 15px;
+    /* margin: 5px 10px; */
+    background-color: #212121;
+    border: 1px solid #212121;
     border-radius: 21px;
     max-height: min-content;
+}
+
+.attachButton {
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+}
+
+.inputAttachment {
+    height: 25px;
+    margin-left: 5px;
 }
 
 .wInputTextGroup {
@@ -81,12 +99,14 @@
     padding: 0;
     width: 100%;
     resize: none;
-    font-size: 1.4em;
+    font-size: 1.3em;
     height: min-content;
+    color: white;
     border: none;
     outline: none;
     max-height:4.5em;
     height: 1.5em;
+    background-color: #212121;
 }
 
 .wrapper:is(:focus, :valid) {

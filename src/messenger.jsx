@@ -38,11 +38,25 @@ function Messenger({ setLoggedOut }) {
   // }, [])
 
   const [res, setResponse] = useState(null)
-
+  // const [userStatus, setUserStatus] = useState(null)
+  // {'info': 'status_info',
+  //   'dialog_id': int(dialog_id),
+  //   'user_id': int(member_id),
+  //   'user_status': 1}
+  console.log(dialogs)
   useEffect(() => {
     socket.on("socket_info", res => {
       setResponse(res) 
+    })
+    socket.on('socket_status', res => {
+      const _dialogs = dialogs.map((dialog) => {
+        if(dialog.id === res.dialog_id){  
+          return {...dialog, other_members: dialog.map((item) => item.user_status = res.user_status )} //в будущем надо будет поменять НАВЕРНОЕ
+        } else return dialog
       })
+      dispatch({type:'setDialogs', _dialogs})
+      // console.log(res)
+    })
   }, []) 
 
   useEffect(() => {
@@ -55,6 +69,7 @@ function Messenger({ setLoggedOut }) {
       })
       dispatch({ type: 'setUserDialogs', payload: _dialog })
       if(currentDialog === res.dialog_id)dispatch({type: 'setMessages', payload: [{ sender: res.sender, value: res.value, date: res.date, id: res.message_id }, ...messages] })
+      socket.emit('read_messages', {dialog_id :user.currentDialog})
     }
   }, [res])
 
