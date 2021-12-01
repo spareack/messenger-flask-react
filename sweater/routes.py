@@ -318,7 +318,14 @@ def is_authorized():
 
                     for member_id in members:
                         member = db.session.query(User).filter_by(id=member_id).first_or_404()
-                        members_list.append({"name": member.name, "user_status": member.user_status})
+
+                        media = db.session.query(Media).filter_by(id=member.avatar_id).first()
+                        user_avatar = send_file(io.BytesIO(media.data),
+                                                attachment_filename=(media.name + "." + media.type))
+
+                        members_list.append({"name": member.name,
+                                             "user_status": member.user_status,
+                                             "avatar": user_avatar})
                         # members_list.append(member.name)
 
                     talks_ids = json.loads(dialog.talks)
@@ -346,9 +353,13 @@ def is_authorized():
                          "last_message": last_message_value,
                          "unread_count": unread_count})
 
+                media = db.session.query(Media).filter_by(id=user_id).first()
+                user_avatar = send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
+
                 return jsonify({"status": 0,
                                 "is_auth": True,
                                 "id": user_id,
+                                "avatar": user_avatar,
                                 "name": user.name,
                                 "dialogs": response_list})
             else:
@@ -635,7 +646,7 @@ def get_messages():
                 if message.type == "text":
                     value = message.value
                 else:
-                    media = db.session.query(Media).filter_by(id=12).first()
+                    media = db.session.query(Media).filter_by(id=message.value).first()
                     value = send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
 
                 response_list.append({"id": message.id,
@@ -662,12 +673,18 @@ def upload_avatar():
             if file and '.' in file.filename:
                 filename = secure_filename(file.filename)
                 split_name = filename.rsplit('.', 1)
+
                 if split_name[1] in allowed_extension:
                     media = Media(name=split_name[0], type=split_name[1], data=file.read(), date_create=str(datetime.datetime.utcnow() + datetime.timedelta(hours=3)))
                     db.session.add(media)
                     db.session.commit()
                     user.avatar_id = media.id
                     db.session.commit()
+
+                    user_avatar = send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
+                    return jsonify({"status": 0, "info": "successful", "avatar": user_avatar})
+
+            return jsonify({"status": 1, "info": "invalid file"})
 
         except Exception as e:
             return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
