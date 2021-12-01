@@ -659,7 +659,7 @@ def get_messages():
 
 
 @app.route('/get_file', methods=['POST'])
-def upload_avatar():
+def get_file():
     if request.method == "POST":
         try:
             data = request.get_json()
