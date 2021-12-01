@@ -319,16 +319,9 @@ def is_authorized():
                     for member_id in members:
                         member = db.session.query(User).filter_by(id=member_id).first_or_404()
 
-                        user_avatar = -1
-                        if member.avatar_id is not None:
-                            media = db.session.query(Media).filter_by(id=member.avatar_id).first()
-                            user_avatar = send_file(io.BytesIO(media.data),
-                                                    attachment_filename=(media.name + "." + media.type))
-
                         members_list.append({"name": member.name,
                                              "user_status": member.user_status,
-                                             "avatar": user_avatar})
-                        # members_list.append(member.name)
+                                             "avatar_id": member.avatar_id})
 
                     talks_ids = json.loads(dialog.talks)
                     last_message_value = None
@@ -355,15 +348,15 @@ def is_authorized():
                          "last_message": last_message_value,
                          "unread_count": unread_count})
 
-                user_avatar = -1
+                avatar_id = -1
                 if user.avatar_id is not None:
                     media = db.session.query(Media).filter_by(id=user.avatar_id).first()
-                    user_avatar = send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
+                    avatar_id = media.id
 
                 return jsonify({"status": 0,
                                 "is_auth": True,
                                 "id": user_id,
-                                "avatar": user_avatar,
+                                "avatar_id": avatar_id,
                                 "name": user.name,
                                 "dialogs": response_list})
             else:
@@ -665,6 +658,20 @@ def get_messages():
             return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
+@app.route('/get_file', methods=['POST'])
+def upload_avatar():
+    if request.method == "POST":
+        try:
+            data = request.get_json()
+            file_id = data["file_id"]
+            media = db.session.query(Media).filter_by(id=file_id).first()
+
+            return send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
+
+        except Exception as e:
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
+
+
 @app.route('/upload_avatar', methods=['POST'])
 def upload_avatar():
     if request.method == "POST":
@@ -685,8 +692,7 @@ def upload_avatar():
                     user.avatar_id = media.id
                     db.session.commit()
 
-                    user_avatar = send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
-                    return jsonify({"status": 0, "info": "successful", "avatar": user_avatar})
+                    return jsonify({"status": 0, "info": "successful", "avatar_id": media.id})
 
             return jsonify({"status": 1, "info": "invalid file"})
 
