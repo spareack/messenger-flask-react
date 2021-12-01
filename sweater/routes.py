@@ -353,8 +353,10 @@ def is_authorized():
                          "last_message": last_message_value,
                          "unread_count": unread_count})
 
-                media = db.session.query(Media).filter_by(id=user_id).first()
-                user_avatar = send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
+                user_avatar = -1
+                if user.avatar_id is not None:
+                    media = db.session.query(Media).filter_by(id=user.avatar_id).first()
+                    user_avatar = send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
 
                 return jsonify({"status": 0,
                                 "is_auth": True,
