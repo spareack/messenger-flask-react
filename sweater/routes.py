@@ -348,15 +348,10 @@ def is_authorized():
                          "last_message": last_message_value,
                          "unread_count": unread_count})
 
-                avatar_id = -1
-                if user.avatar_id is not None:
-                    media = db.session.query(Media).filter_by(id=user.avatar_id).first()
-                    avatar_id = media.id
-
                 return jsonify({"status": 0,
                                 "is_auth": True,
                                 "id": user_id,
-                                "avatar_id": avatar_id,
+                                "avatar_id": user.avatar_id,
                                 "name": user.name,
                                 "dialogs": response_list})
             else:
