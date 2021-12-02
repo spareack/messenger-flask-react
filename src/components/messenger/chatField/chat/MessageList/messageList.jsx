@@ -36,7 +36,10 @@ const MessageList = ({active, getMessages}) => {
 
     useEffect(() => {
         list.current.scrollTo({top: 0, behavior: 'instant'})
-        console.log(user, messages)
+
+        console.log(user.id, messages, '!!!')
+
+        //console.log(user, messages)
     }, [user.currentDialog])
     return (
         <div style={{paddingInline: active? '15px' : '15%'}} 
@@ -46,8 +49,8 @@ const MessageList = ({active, getMessages}) => {
             onMouseOver={scrollToggler} 
             onMouseOut={scrollToggler}>
             {messages 
-            ? messages.map((msgItem, index) => 
-                <MessageListItem from={user.id === msgItem.sender} center={msgItem.center ? msgItem.center : null} text={msgItem.value} time={msgItem.date} key={index}/>
+            ? messages.map((msgItem, index) =>
+                <MessageListItem from={user.id == msgItem.sender} center={msgItem.center ? msgItem.center : null} text={msgItem.value} time={msgItem.date} key={index}/>
             )
             :<MessageListItem from={true} text={'Напишите этому человеку!'} time={'А это не важно'}/>}
         </div>

@@ -398,6 +398,16 @@ def serve_static(static_type, filename):
     return send_from_directory(os.path.join('../', 'build', 'static', static_type), filename)
 
 
+@app.route('/manifest.json')
+def get_manifest():
+    return send_from_directory(os.path.join('../', 'build'), 'manifest.json')
+
+
+@app.route('/icons/<path:filename>')
+def get_icon(filename):
+    return send_from_directory(os.path.join('../', 'build'), filename)
+
+
 @app.route('/search_user', methods=['GET'])
 def search_user():
     if request.method == "GET":
@@ -669,12 +679,11 @@ def get_messages():
             return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
-@app.route('/get_file', methods=['POST'])
+@app.route('/get_file', methods=['GET'])
 def get_file():
-    if request.method == "POST":
+    if request.method == "GET":
         try:
-            data = request.get_json()
-            file_id = data["file_id"]
+            file_id = request.args.get("file_id")
             media = db.session.query(Media).filter_by(id=file_id).first()
 
             return send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
