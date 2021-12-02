@@ -15,8 +15,10 @@ app = Flask(__name__, static_folder='../build', static_url_path='/static', templ
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # DB CONFIG
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://kbjqzvudqjenhr:a8de169a9e725cb5131f652cb713e9ec454c0011f0bd5c00e3d39df14f243fd1@ec2-52-211-158-144.eu-west-1.compute.amazonaws.com:5432/dui2neaevnm15'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://jnhswycjcswlst:9b5195df03aa3102858be27dc5f5c2b1577f1c057ccd72c089ee76169f99ab60@ec2-54-220-166-184.eu-west-1.compute.amazonaws.com:5432/ddbk0hhom9sktr'
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://kbjqzvudqjenhr:a8de169a9e725cb5131f652cb713e9ec454c0011f0bd5c00e3d39df14f243fd1@ec2-52-211-158-144.eu-west-1.compute.amazonaws.com:5432/dui2neaevnm15'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:zxcursed@localhost/boxPostgres'
 app.config['SECRET_KEY'] = 'YSAFDB978WH8AYIFHSNUSIJDFK'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -44,19 +46,25 @@ token_key = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 conn = engine.connect()
 
-count = conn.execute("SELECT unread_dialogs FROM public.user")
+# count = conn.execute("SELECT * FROM information_schema.columns")
+
+# count = conn.execute("SELECT * FROM public.user")
 
 # count = conn.execute("SELECT column_name, column_default "
 #                      "FROM information_schema.columns "
-#                      "WHERE (table_schema, table_name) = ('public', 'mytable') "
+#                      # "WHERE (table_schema, table_name) = ('public', 'mytable') "
+#                      "WHERE (table_schema) = ('public')"
 #                      "ORDER BY ordinal_position;")
 
 # count = conn.execute("SELECT * FROM TABLE USER;")
 
+
+count = conn.execute("ALTER TABLE public.user ADD user_status TEXT NOT NULL DEFAULT '{}';")
+
 # print(count)
 
-for i in count:
-    print(i)
+# for i in count:
+#     print(i)
 
 
 # import psycopg2
