@@ -50,6 +50,7 @@ function Messenger({ setLoggedOut }) {
     })
     socket.on('socket_status', res => {
       setUserStatus(res)
+      console.log(res)
     })
   }, []) 
 

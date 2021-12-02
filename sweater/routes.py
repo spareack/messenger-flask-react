@@ -11,7 +11,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_cors import cross_origin
 from flask_socketio import emit, send, join_room, leave_room
-from sqlalchemy.sql import func
 
 from sweater import app, db, mail, token_key, socketio
 from sweater.models import User, Talk, Message, Dialog, Media
@@ -47,10 +46,10 @@ def handle_connection(data):
             dialog_members = json.loads(dialog.members)
 
             for member_id in dialog_members:
-                if str(member_id) is not user_id and str(member_id) in rooms_list:
+                if str(member_id) != user_id and str(member_id) in rooms_list:
                     emit('socket_status', {'info': 'status_info',
                                            'dialog_id': int(dialog_id),
-                                           'user_id': int(member_id),
+                                           'user_id': int(user_id),
                                            'user_status': 1},
                          to=str(member_id), namespace='/')
 
@@ -99,10 +98,10 @@ def connect_socket():
                 dialog_members = json.loads(dialog.members)
 
                 for member_id in dialog_members:
-                    if str(member_id) is not user_id and str(member_id) in rooms_list:
+                    if str(member_id) != user_id and str(member_id) in rooms_list:
                         emit('socket_status', {'info': 'status_info',
                                                'dialog_id': int(dialog_id),
-                                               'user_id': int(member_id),
+                                               'user_id': int(user_id),
                                                'user_status': 1},
                              to=str(member_id), namespace='/')
 
@@ -117,28 +116,30 @@ def connect_socket():
 # @cross_origin()
 def disconnect_socket():
     try:
+
         user_id = current_user.get_id()
         leave_room(user_id)
 
-        user = db.session.query(User).filter_by(id=user_id).first_or_404()
-        user.date_visited = str(datetime.datetime.utcnow() + datetime.timedelta(hours=3))
-        user.user_status = 0
-        db.session.commit()
+        if user_id is not None:
+            user = db.session.query(User).filter_by(id=user_id).first_or_404()
+            user.date_visited = str(datetime.datetime.utcnow() + datetime.timedelta(hours=3))
+            user.user_status = 0
+            db.session.commit()
 
-        dialog_ids = json.loads(user.dialogs)
-        for dialog_id in dialog_ids:
-            dialog = db.session.query(Dialog).filter_by(id=dialog_id).first_or_404()
-            dialog_members = json.loads(dialog.members)
+            dialog_ids = json.loads(user.dialogs)
+            for dialog_id in dialog_ids:
+                dialog = db.session.query(Dialog).filter_by(id=dialog_id).first_or_404()
+                dialog_members = json.loads(dialog.members)
 
-            for member_id in dialog_members:
-                if str(member_id) is not user_id and str(member_id) in rooms_list:
-                    emit('socket_status', {'info': 'status_info',
-                                           'dialog_id': int(dialog_id),
-                                           'user_id': int(member_id),
-                                           'user_status': 0},
-                         to=str(member_id), namespace='/')
+                for member_id in dialog_members:
+                    if str(member_id) != user_id and str(member_id) in rooms_list:
+                        emit('socket_status', {'info': 'status_info',
+                                               'dialog_id': int(dialog_id),
+                                               'user_id': int(user_id),
+                                               'user_status': 0},
+                             to=str(member_id), namespace='/')
 
-        print("disconnect(", user_id)
+            print("disconnect(", user_id)
 
     except Exception as e:
         print('connect error', str(e) + traceback.format_exc())
@@ -366,10 +367,24 @@ def log_out():
     if request.method == 'GET':
         try:
             user_id = current_user.get_id()
+            print('un_authorize', user_id)
             user = db.session.query(User).filter_by(id=user_id).first_or_404()
             user.date_visited = str(datetime.datetime.utcnow() + datetime.timedelta(hours=3))
             user.user_status = 0
             db.session.commit()
+
+            dialog_ids = json.loads(user.dialogs)
+            for dialog_id in dialog_ids:
+                dialog = db.session.query(Dialog).filter_by(id=dialog_id).first_or_404()
+                dialog_members = json.loads(dialog.members)
+
+                for member_id in dialog_members:
+                    if str(member_id) != user_id and str(member_id) in rooms_list:
+                        emit('socket_status', {'info': 'status_info',
+                                               'dialog_id': int(dialog_id),
+                                               'user_id': int(user_id),
+                                               'user_status': 0},
+                             to=str(member_id), namespace='/')
 
             logout_user()
             return redirect("/")
@@ -522,7 +537,7 @@ def send_message():
 
                     unread_dialogs_list = json.loads(user.unread_dialogs)
 
-                    if user.id is not sender_id:
+                    if user.id != sender_id:
                         if str(dialog.id) in unread_dialogs_list:
                             unread_dialogs_list[str(dialog.id)] += 1
                         else:
@@ -532,15 +547,15 @@ def send_message():
                     db.session.commit()
 
                     if str(user.id) in rooms_list:
-                        """ and user.id is not sender_id """
+                        """ and user.id != sender_id """
                         emit('socket_info', {'info': 'new Messages in dialog',
                                              'dialog_id': dialog.id,
                                              'message_id': message.id,
                                              'sender': sender_id,
                                              'type': message_type,
-                                             'date': message.date_create,
+                                             'date': str(datetime.datetime.fromisoformat(message.date_create).time().strftime("%H:%M")),
                                              'value': value,
-                                             'unread_count': unread_dialogs_list[str(dialog.id)] if user.id is not sender_id else 0},
+                                             'unread_count': unread_dialogs_list[str(dialog.id)] if user.id != sender_id else 0},
                              to=str(user.id), namespace='/')
 
             return jsonify({"status": 0,

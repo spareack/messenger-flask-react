@@ -1,12 +1,13 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import classes from './companion.module.css'
 import unnamed from './unnamed.jpg'
 import { useSelector } from 'react-redux'
 
 const Companion = ({companion, setActive}) => {
-    const online = useSelector(state => state.user.dialogs[state.user.currentDialog]?.other_members[0].user_status)
-    const store = useSelector(state => state.user.dialogs)
-    console.log(online, store)
+    const online = useSelector(state => state.user.dialogs.find((dialog) => (dialog.id === state.user.currentDialog))?.other_members[0].user_status)
+    useEffect(()=> {
+        console.log("user status = "+online)
+    })
     const getAvatar = (id) => {
         return id ? '/get_file?file_id=' + id : unnamed
     }
