@@ -1,9 +1,9 @@
 import React from 'react'
 import classes from './MessageListItem.module.css'
 
-const MessageListItem = ({from, text, name, time}) => {
+const MessageListItem = ({from,center, text, name, time}) => {
     return (
-        <div className={from ? classes.right + ' ' + classes.msgListItem: classes.left  + ' ' + classes.msgListItem} >
+        <div className={from ? classes.right + ' ' + classes.msgListItem: (center ? classes.msgListItem + ' ' + classes.center :classes.left  + ' ' + classes.msgListItem)} >
             {/*<h3>{name}</h3>*/}
             <p className={classes.text}>{text}</p>
             <span className={classes.time}>{time}</span>

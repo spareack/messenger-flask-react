@@ -72,8 +72,14 @@ const DialogsField = ({ dialogs, setLoggedOut, getTalks,getMessages, createDialo
         let res = await getTalks(id)
         dispatch({type: 'setTalks', payload: res.talks.sort(byField("id")).reverse()})
         dispatch({type: 'setCurrentTalk', payload: res.talks.sort(byField("id")).reverse()[res.talks.length-1].id})
+        dispatch({type: 'setLastTalk', payload: res.talks.sort(byField("id")).reverse()[res.talks.length-1].id})
         let messages = await getMessages(res.talks.sort(byField("id")).reverse()[res.talks.length-1].id)
         dispatch({type: 'setMessages', payload: messages})
+        if(messages.length < 10){
+            let messages2 = await getMessages(res.talks.sort(byField("id")).reverse()[res.talks.length-2].id)
+            let separator = {sender: null, center: true, value: res.talks.sort(byField("id")).reverse()[res.talks.length-1].title, date: ''}
+            dispatch({type: 'setMessages', payload: [...messages, separator ,...messages2]})
+        }
     }
 
     const getAvatar = (id) => {

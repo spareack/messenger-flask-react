@@ -26,6 +26,12 @@
     margin-right: 10px;
 }
 
+.center {
+    background: none;
+    color: #bbb;
+    margin-inline: auto;
+}
+
 .left {
     width: max-content;
     margin-left: 10px;
