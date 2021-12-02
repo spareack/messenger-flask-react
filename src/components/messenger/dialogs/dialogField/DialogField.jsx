@@ -75,6 +75,10 @@ const DialogsField = ({ dialogs, setLoggedOut, getTalks,getMessages, createDialo
         let messages = await getMessages(res.talks.sort(byField("id")).reverse()[res.talks.length-1].id)
         dispatch({type: 'setMessages', payload: messages})
     }
+
+    const getAvatar = (id) => {
+        return '/get_file?file_id=' + id
+    }
     
     return (
         <div className={classes.Dialogs} id="leftColumn">
@@ -84,7 +88,7 @@ const DialogsField = ({ dialogs, setLoggedOut, getTalks,getMessages, createDialo
             <div style={{height: settings ? '10%' : '20%'}} className={classes.searchBox}>
                 <div className={classes.dialogFieldSBox}>
                     <div onClick={(e) => {e.stopPropagation()}}><button className={classes.dropDownMenuButton} onClick={() => setSettingsWindow((settings => !settings))}><img src={settingsIMG} alt=''/></button></div>
-                    <div className={classes.userInfo} onClick={() => (dispatch({type: 'DISABLE_MENU'}))}><img src={unnamed} alt='' className={classes.userAvatar}/><h2>{user.name}</h2></div>
+                    <div className={classes.userInfo} onClick={() => (dispatch({type: 'DISABLE_MENU'}))}><img src={user.photoURL ? getAvatar(user.photoURL) : unnamed} alt='' className={classes.userAvatar}/><h2>{user.name}</h2></div>
                     {/* <a href="/un_authorize" className={classes.logOutBtn + ' ' + classes.menuButton} onClick={() => setLoggedOut(false)}>Log Out <img src={logout} alt=''/></a> */}
                 </div>
                 <Search createDialog={createDialog} settings={settings}/>
@@ -103,7 +107,8 @@ const DialogsField = ({ dialogs, setLoggedOut, getTalks,getMessages, createDialo
                         onclick={changeDialog}
                         current={currentDialog === post.id? true : false}
                         unreadCount = {post.unread_count}
-                        online={post?.other_members.length === 1 ? post?.other_members[0].user_status : undefined}/>
+                        online={post?.other_members.length === 1 ? post?.other_members[0].user_status : undefined}
+                        otherMembers={post?.other_members}/>
                 ))
                 : <Settings setSettingsWindow={setSettingsWindow} setLoggedOut={setLoggedOut}/>
                 }

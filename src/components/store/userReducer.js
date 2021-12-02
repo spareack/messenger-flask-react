@@ -21,6 +21,8 @@ export const userReducer = (state = defaultState, action) => {
             return {...state, dialogs: action.payload}
         case 'setCurrentDialog':
             return {...state, currentDialog: action.payload}
+        case 'setUserPhoto':
+            return {...state, photoURL: action.payload}
         default: return state
     }
 }

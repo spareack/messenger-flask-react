@@ -7,6 +7,7 @@ import { socket } from './socket'
 import { io } from 'socket.io-client'
 import { useDispatch, useSelector } from 'react-redux';
 import { afkManager } from './afkManager';
+import { itemFromArray } from 'tsparticles';
 
 // function byField(field) {
 //   return (a, b) => +a[field] > +b[field] ? -1 : 1;
@@ -38,26 +39,31 @@ function Messenger({ setLoggedOut }) {
   // }, [])
 
   const [res, setResponse] = useState(null)
-  // const [userStatus, setUserStatus] = useState(null)
+  const [userStatus, setUserStatus] = useState(null)
   // {'info': 'status_info',
   //   'dialog_id': int(dialog_id),
   //   'user_id': int(member_id),
   //   'user_status': 1}
-  console.log(dialogs)
   useEffect(() => {
     socket.on("socket_info", res => {
       setResponse(res) 
     })
     socket.on('socket_status', res => {
-      const _dialogs = dialogs.map((dialog) => {
-        if(dialog.id === res.dialog_id){
-          return {...dialog, other_members: dialog.map((item) => item.user_status = res.user_status )} //в будущем надо будет поменять НАВЕРНОЕ
-        } else return dialog
-      })
-      dispatch({type:'setDialogs', _dialogs})
-      console.log(res)
+      setUserStatus(res)
     })
   }, []) 
+
+  useEffect(() => {
+    if(userStatus !== null){
+      const _dialogs = dialogs.map((dialog) => {
+        if(dialog.id === userStatus.dialog_id){
+          return {...dialog, other_members: dialog.other_members.map( (item)=> {return {...item, user_status: userStatus.user_status}}) } 
+        } else return dialog
+      })
+      dispatch({ type: 'setUserDialogs', payload: _dialogs })
+    }
+  }, [userStatus, dispatch])
+
 
   useEffect(() => {
     if(res !== null){
@@ -148,10 +154,10 @@ function Messenger({ setLoggedOut }) {
       .catch(error => console.log(error))
   }
 
+  console.log(dialogs)
   return (
     <div className="App" onClick={() => (blurInput())}>
       <DialogsField dialogs={dialogs}
-        // setTalk={setCurrentTalk} 
         setLoggedOut={setLoggedOut}
         getTalks={getTalks}
         getMessages={getMessages}
@@ -160,8 +166,7 @@ function Messenger({ setLoggedOut }) {
 
       <WorkSpace id={currentDialog}
         companion={dialogs.find(Dialog => (Dialog.id === currentDialog))}
-        currentTalk={currentTalk}
-        // setTalk={setCurrentTalk} 
+        currentTalk={currentTalk} 
         getMsg={getMessages}
         sendMessage={pushMessage}
         createTalk={createTalk} />

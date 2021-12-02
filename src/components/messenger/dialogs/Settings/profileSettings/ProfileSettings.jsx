@@ -32,10 +32,31 @@ const ProfileSettings = () => {
         }).catch(error => alert(error))
     }
 
+    const customAvatar = () => {
+        const form = new FormData()
+        form.append('file', photo)
+        axios.post('/upload_avatar', form, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        .then(res => {if(res.data.status === 0){
+            console.log(photo)
+            // dispatch({type: 'setUserPhoto', payload: photo})
+        }})
+        .catch(error => console.log(error))
+    }
 
     return (
         <div className={classes.ProfileSettings}>
-            <input type="file" className={classes.userPhoto} src={user.photoURL ? user.photoURL : unnamed} alt='' onChange={(e) => {console.log(e.target.files[0]); setPhoto(e.target.files[0])}}/>
+            <p>axios</p>
+                <input type="file" onChange={(e) => {console.log(e.target.files[0]); setPhoto(e.target.files[0])}}/>
+                <button onClick={customAvatar}>Сменить!</button>
+            <p>html?</p>
+            {/* <form encType='multipart/form-data' action='/upload_avatar' method='post'>
+                <input name='file' type="file" className={classes.userPhoto} src={user.photoURL ? user.photoURL : unnamed} alt='' onChange={(e) => {console.log(e.target.files[0]); setPhoto(e.target.files[0])}}/>
+                <button type='submit'>Сменить!</button>
+            </form> */}
             {/* <button className={classes.userPhoto}><img src={user.photoURL ? user.photoURL : unnamed} alt=''/></button> */}
             <div className={classes.ProfileSettingsField}>
                 <div className={classes.inputBox}>
