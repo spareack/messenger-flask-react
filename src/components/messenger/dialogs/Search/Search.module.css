@@ -10,6 +10,7 @@
     outline: none;
     border-radius: 5px 5px 0px 0px;
     transition: 0.2s all ease-in-out;
+    transition: opacity 0.125s ease-in-out;
 }
 
 .dropDownList {
@@ -22,6 +23,7 @@
     padding: 2px 5px ;
     color: #222;
     z-index:2;
+    overflow-y:auto;
     width: 100%;
 }
 

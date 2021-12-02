@@ -23,7 +23,8 @@ function App() {
             dispatch({type: 'setUser', payload: {
               id: res.data.id,
               name: res.data.name,
-              dialogs: res.data.dialogs ? res.data.dialogs : []
+              dialogs: res.data.dialogs ? res.data.dialogs : [],
+              photoURL: res.data.avatar_id
             }})
             // socket.emit("authorize", {id: res.data.id})
         }

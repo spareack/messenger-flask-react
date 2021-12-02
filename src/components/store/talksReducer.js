@@ -1,7 +1,7 @@
 const defaultState = {
     talks: [],
-    currentTalk: 0,
-    lastTalk: 0
+    currentTalk: -1,
+    lastTalk: -1
 }
 
 export const talksReducer = (state = defaultState, action) => {

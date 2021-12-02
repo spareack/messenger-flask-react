@@ -4,13 +4,8 @@ import DialogsField from './components/messenger/dialogs/dialogField/DialogField
 import WorkSpace from './components/messenger/chatField/chat/workSpace/workSpace';
 import axios from 'axios'
 import { socket } from './socket'
-import { io } from 'socket.io-client'
 import { useDispatch, useSelector } from 'react-redux';
 import { afkManager } from './afkManager';
-
-// function byField(field) {
-//   return (a, b) => +a[field] > +b[field] ? -1 : 1;
-// }
 
 function Messenger({ setLoggedOut }) {
 
@@ -21,6 +16,7 @@ function Messenger({ setLoggedOut }) {
   const dialogs = useSelector(state => state.user.dialogs)
   const talks = useSelector(state => state.talks.talks)
   const currentTalk = useSelector(state => state.talks.currentTalk)
+  const lastTalk = useSelector(state => state.talks.lastTalk)
   const currentDialog = useSelector(state => state.user.currentDialog)
   
   /* UI */
@@ -30,21 +26,34 @@ function Messenger({ setLoggedOut }) {
     dispatch({ type: 'DISABLE_MENU' })
   }
   /* UI ends */
-
-  // useEffect(() => afkManager(alert, 4, 2500, 'Не стой афк!'), [])
-  // useEffect(()=> {console.log('Messenger mounted!')}, [])
-  // useEffect(() => {
-  //   socket.on('authorize', {user_id: user.id})
-  // }, [])
-
   const [res, setResponse] = useState(null)
+  const [userStatus, setUserStatus] = useState(null)
+
 
   useEffect(() => {
     socket.on("socket_info", res => {
       setResponse(res) 
-      })
+    })
+    socket.on('socket_status', res => {
+      setUserStatus(res)
+      console.log(res)
+    })
   }, []) 
 
+  /* Обновление статуса пользователя */
+  useEffect(() => {
+    if(userStatus !== null){
+      const _dialogs = dialogs.map((dialog) => {
+        if(dialog.id === userStatus.dialog_id){
+          return {...dialog, other_members: dialog.other_members.map( (item)=> {return {...item, user_status: userStatus.user_status}}) } 
+        } else return dialog
+      })
+      dispatch({ type: 'setUserDialogs', payload: _dialogs })
+    }
+  }, [userStatus, dispatch])
+
+
+  /* Обработка ответа на socket_info */
   useEffect(() => {
     if(res !== null){
       const _dialog = dialogs.map( (dialog) => {
@@ -55,6 +64,7 @@ function Messenger({ setLoggedOut }) {
       })
       dispatch({ type: 'setUserDialogs', payload: _dialog })
       if(currentDialog === res.dialog_id)dispatch({type: 'setMessages', payload: [{ sender: res.sender, value: res.value, date: res.date, id: res.message_id }, ...messages] })
+      socket.emit('read_messages', {dialog_id :user.currentDialog})
     }
   }, [res])
 
@@ -88,11 +98,6 @@ function Messenger({ setLoggedOut }) {
     return new Promise((resolve, reject) => {
       resolve(response.data)
     })
-    // .then(res => {
-    //   dispatch({type: 'setTalks', payload: res.data.talks.sort(byField("id")).reverse()})
-    //   dispatch({type: 'setCurrentTalk', payload: res.data.talks.sort(byField("id")).reverse()[res.data.talks.length-1].id})
-    // })
-    // .catch(error => console.log(error))
   }
 
   const createTalk = (name, dialogID) => {
@@ -115,12 +120,13 @@ function Messenger({ setLoggedOut }) {
   }
 
   const pushMessage = (messageText) => {
+    console.log(messageText, lastTalk)
     axios({
       method: 'post',
       url: "/send_message",
       data: {
         sender_id: user.id,
-        talk_id: currentTalk,
+        talk_id: lastTalk,
         dialog_id: currentDialog,
         message_type: 'text',
         value: messageText
@@ -135,18 +141,18 @@ function Messenger({ setLoggedOut }) {
 
   return (
     <div className="App" onClick={() => (blurInput())}>
-      <DialogsField dialogs={dialogs}
-        // setTalk={setCurrentTalk} 
+      <DialogsField 
+        dialogs={dialogs}
         setLoggedOut={setLoggedOut}
         getTalks={getTalks}
         getMessages={getMessages}
         createDialog={createDialog}
       />
 
-      <WorkSpace id={currentDialog}
+      <WorkSpace 
+        id={currentDialog}
         companion={dialogs.find(Dialog => (Dialog.id === currentDialog))}
-        currentTalk={currentTalk}
-        // setTalk={setCurrentTalk} 
+        currentTalk={currentTalk} 
         getMsg={getMessages}
         sendMessage={pushMessage}
         createTalk={createTalk} />
