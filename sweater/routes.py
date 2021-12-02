@@ -399,7 +399,7 @@ def serve_static(static_type, filename):
 
 
 @app.route('/favicon.ico')
-def serve_static():
+def get_favicon():
     return send_from_directory(os.path.join('../', 'build'), 'favicon.ico')
 
 
