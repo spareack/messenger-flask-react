@@ -76,14 +76,15 @@ function Messenger({ setLoggedOut }) {
         talk_id: talkId
       }
     })
-    // .then(res => {
-    //   dispatch({type: 'setMessages', payload: res.data.messages.reverse()})
-    // })
-    // .catch(error => console.log(error))
-    // console.log(response.data)
-    return new Promise((resolve, reject) => {
-      resolve(response.data.messages.reverse())
-    })
+    if(response.data.messages !== undefined){
+      return new Promise((resolve, reject) => {
+        resolve(response.data.messages.reverse())
+      })
+    } else {
+      return new Promise((resolve, reject) => {
+        resolve(null)
+      })
+    }
 
   }
 
@@ -116,11 +117,10 @@ function Messenger({ setLoggedOut }) {
   }
 
   const createDialog = (name, dialogID) => {
-    dispatch({ type: 'setUserDialogs', payload: [...dialogs, { id: dialogID, last_message: null, other_members: [name] }] })
+    dispatch({ type: 'setUserDialogs', payload: [...dialogs, { id: dialogID, last_message: null, other_members: [{avatar_id: null, name: name, user_status: 0}] }] })
   }
 
   const pushMessage = (messageText) => {
-    console.log(messageText, lastTalk)
     axios({
       method: 'post',
       url: "/send_message",
@@ -147,6 +147,7 @@ function Messenger({ setLoggedOut }) {
         getTalks={getTalks}
         getMessages={getMessages}
         createDialog={createDialog}
+        createTalk={createTalk}
       />
 
       <WorkSpace 

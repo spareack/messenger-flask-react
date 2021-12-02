@@ -14,7 +14,7 @@ function byField(field) {
   }
   
 
-const DialogsField = ({ dialogs, setLoggedOut, getTalks,getMessages, createDialog}) => {
+const DialogsField = ({ dialogs, setLoggedOut, getTalks,getMessages, createDialog, createTalk}) => {
     
     const dispatch = useDispatch()
     // const act1ve = useSelector(state => state.settings.active)
@@ -70,16 +70,22 @@ const DialogsField = ({ dialogs, setLoggedOut, getTalks,getMessages, createDialo
     const changeDialog = async (id) => {
         dispatch({type:'setCurrentDialog', payload: id})
         let res = await getTalks(id)
-        dispatch({type: 'setTalks', payload: res.talks.sort(byField("id")).reverse()})
-        dispatch({type: 'setCurrentTalk', payload: res.talks.sort(byField("id")).reverse()[res.talks.length-1].id})
-        dispatch({type: 'setLastTalk', payload: res.talks.sort(byField("id")).reverse()[res.talks.length-1].id})
-        let messages = await getMessages(res.talks.sort(byField("id")).reverse()[res.talks.length-1].id)
-        dispatch({type: 'setMessages', payload: messages})
-        if(messages.length < 10){
-            let messages2 = await getMessages(res.talks.sort(byField("id")).reverse()[res.talks.length-2].id)
-            let separator = {sender: null, center: true, value: res.talks.sort(byField("id")).reverse()[res.talks.length-1].title, date: ''}
-            dispatch({type: 'setMessages', payload: [...messages, separator ,...messages2]})
-        }
+        if(res.talks.length){
+            dispatch({type: 'setTalks', payload: res.talks.sort(byField("id")).reverse()})
+            dispatch({type: 'setCurrentTalk', payload: res.talks.sort(byField("id")).reverse()[res.talks.length-1].id})
+            dispatch({type: 'setLastTalk', payload: res.talks.sort(byField("id")).reverse()[res.talks.length-1].id})
+            let messages = await getMessages(res.talks.sort(byField("id")).reverse()[res.talks.length-1].id)
+            dispatch({type: 'setMessages', payload: messages})
+            if(messages.length < 10){
+                let messages2 = await getMessages(res.talks.sort(byField("id")).reverse()[res.talks.length-2]?.id)
+                if(messages2){
+                    let separator = {sender: null, center: true, value: res.talks.sort(byField("id")).reverse()[res.talks.length-1].title, date: ''}
+                    dispatch({type: 'setMessages', payload: [...messages, separator ,...messages2]})
+                }
+            }
+        } else {
+            createTalk('First talk!', id)
+        }  
     }
 
     const getAvatar = (id) => {
