@@ -48,7 +48,7 @@ const MessageList = ({active, getMessages}) => {
             onMouseOut={scrollToggler}>
             {messages 
             ? messages.map((msgItem, index) => 
-                <MessageListItem from={user.id === msgItem.sender} center={msgItem.center ? msgItem.center : null} text={msgItem.value} time={msgItem.date} key={index}/>
+                <MessageListItem from={user.id == msgItem.sender} center={msgItem.center ? msgItem.center : null} text={msgItem.value} time={msgItem.date} key={index}/>
             )
             :<MessageListItem from={true} text={'Напишите этому человеку!'} time={'А это не важно'}/>}
         </div>

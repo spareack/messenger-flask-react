@@ -19,6 +19,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://jnhswycjcswlst:9b
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://kbjqzvudqjenhr:a8de169a9e725cb5131f652cb713e9ec454c0011f0bd5c00e3d39df14f243fd1@ec2-52-211-158-144.eu-west-1.compute.amazonaws.com:5432/dui2neaevnm15'
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:zxcursed@localhost/boxPostgres'
+
 app.config['SECRET_KEY'] = 'YSAFDB978WH8AYIFHSNUSIJDFK'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -46,25 +47,26 @@ token_key = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 conn = engine.connect()
 
-# count = conn.execute("SELECT * FROM information_schema.columns")
+# count = conn.execute("SELECT * FROM information_schema.columns WHERE (column_name) = ('user_status')")
 
-# count = conn.execute("SELECT * FROM public.user")
+count = conn.execute("SELECT * FROM public.user")
 
 # count = conn.execute("SELECT column_name, column_default "
 #                      "FROM information_schema.columns "
-#                      # "WHERE (table_schema, table_name) = ('public', 'mytable') "
-#                      "WHERE (table_schema) = ('public')"
+#                      "WHERE (table_schema, table_name) = ('public', 'user') "
+#                      # "WHERE (table_schema) = ('public')"
 #                      "ORDER BY ordinal_position;")
 
 # count = conn.execute("SELECT * FROM TABLE USER;")
 
 
-# count = conn.execute("ALTER TABLE public.user ADD user_status TEXT NOT NULL DEFAULT '{}';")
+# count = conn.execute("ALTER TABLE public.user ADD user_status integer NOT NULL DEFAULT '0';")
+# count = conn.execute("ALTER TABLE public.user DROP COLUMN user_status;")
 
 # print(count)
 
-# for i in count:
-#     print(i)
+for i in count:
+    print(i)
 
 
 # import psycopg2

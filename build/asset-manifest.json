@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.ca4f986f.chunk.css",
-    "main.js": "/static/js/main.68fbb456.chunk.js",
-    "main.js.map": "/static/js/main.68fbb456.chunk.js.map",
+    "main.css": "/static/css/main.574b3edc.chunk.css",
+    "main.js": "/static/js/main.9e497fad.chunk.js",
+    "main.js.map": "/static/js/main.9e497fad.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.a35b77ae.js",
     "runtime-main.js.map": "/static/js/runtime-main.a35b77ae.js.map",
     "static/js/2.bfd625ad.chunk.js": "/static/js/2.bfd625ad.chunk.js",
     "static/js/2.bfd625ad.chunk.js.map": "/static/js/2.bfd625ad.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/main.ca4f986f.chunk.css.map": "/static/css/main.ca4f986f.chunk.css.map",
+    "static/css/main.574b3edc.chunk.css.map": "/static/css/main.574b3edc.chunk.css.map",
     "static/js/2.bfd625ad.chunk.js.LICENSE.txt": "/static/js/2.bfd625ad.chunk.js.LICENSE.txt",
     "static/media/arrowBack.44d5abd3.svg": "/static/media/arrowBack.44d5abd3.svg",
     "static/media/attach.fd096489.svg": "/static/media/attach.fd096489.svg",
@@ -20,7 +20,7 @@
   "entrypoints": [
     "static/js/runtime-main.a35b77ae.js",
     "static/js/2.bfd625ad.chunk.js",
-    "static/css/main.ca4f986f.chunk.css",
-    "static/js/main.68fbb456.chunk.js"
+    "static/css/main.574b3edc.chunk.css",
+    "static/js/main.9e497fad.chunk.js"
   ]
 }
