@@ -40,8 +40,8 @@ const Search = ({createDialog, settings}) => {
         })
         .then(res => {
             if(res.data.status === 0)createDialog(name, res.data.id)
-            else if(res.data.status === 1) alert('диалог занят крч')
-            else if(res.data.status === 666) alert('пизда')
+            else if(res.data.status === 1) alert('диалог занят')
+            else if(res.data.status === 666) alert('Ошибка')
         })
         .catch(error => console.log(error))
     }

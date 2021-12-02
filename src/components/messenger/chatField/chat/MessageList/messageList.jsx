@@ -36,9 +36,11 @@ const MessageList = ({active, getMessages}) => {
 
     useEffect(() => {
         list.current.scrollTo({top: 0, behavior: 'instant'})
-        // if(talks.currentTalk !== -1)messageFetching(list.current.scrollHeight === list.current.clientHeight)
+
+        console.log(user.id, messages, '!!!')
+
+        //console.log(user, messages)
     }, [user.currentDialog])
-    // if(list.current)messageFetching(list.current.scrollHeight === list.current.clientHeight)
     return (
         <div style={{paddingInline: active? '15px' : '15%'}} 
             ref={list} 
@@ -47,7 +49,7 @@ const MessageList = ({active, getMessages}) => {
             onMouseOver={scrollToggler} 
             onMouseOut={scrollToggler}>
             {messages 
-            ? messages.map((msgItem, index) => 
+            ? messages.map((msgItem, index) =>
                 <MessageListItem from={user.id == msgItem.sender} center={msgItem.center ? msgItem.center : null} text={msgItem.value} time={msgItem.date} key={index}/>
             )
             :<MessageListItem from={true} text={'Напишите этому человеку!'} time={'А это не важно'}/>}

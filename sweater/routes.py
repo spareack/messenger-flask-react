@@ -405,7 +405,7 @@ def get_manifest():
 
 @app.route('/icons/<path:filename>')
 def get_icon(filename):
-    return send_from_directory(os.path.join('../', 'build', 'icons'), filename)
+    return send_from_directory(os.path.join('../', 'build'), filename)
 
 
 @app.route('/search_user', methods=['GET'])

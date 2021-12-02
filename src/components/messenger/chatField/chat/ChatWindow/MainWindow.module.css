@@ -22,8 +22,6 @@
     margin: 5px 0px;
 }
 
-
-
 .messageText {
     border: none;
     outline: none;
@@ -92,7 +90,8 @@
 }
 
 .wrapper {
-    font-style:normal ;
+    font: inherit;
+    font-style: normal;
     white-space: pre-wrap;
     word-wrap: break-word;
     margin: 0;

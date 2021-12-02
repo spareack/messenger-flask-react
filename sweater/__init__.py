@@ -49,7 +49,7 @@ conn = engine.connect()
 
 # count = conn.execute("SELECT * FROM information_schema.columns WHERE (column_name) = ('user_status')")
 
-count = conn.execute("SELECT * FROM public.user")
+# count = conn.execute("SELECT * FROM public.user")
 
 # count = conn.execute("SELECT column_name, column_default "
 #                      "FROM information_schema.columns "
@@ -65,8 +65,8 @@ count = conn.execute("SELECT * FROM public.user")
 
 # print(count)
 
-for i in count:
-    print(i)
+# for i in count:
+#     print(i)
 
 
 # import psycopg2
