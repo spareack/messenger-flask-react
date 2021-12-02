@@ -398,6 +398,11 @@ def serve_static(static_type, filename):
     return send_from_directory(os.path.join('../', 'build', 'static', static_type), filename)
 
 
+@app.route('/favicon.ico')
+def serve_static():
+    return send_from_directory(os.path.join('../', 'build'), 'favicon.ico')
+
+
 @app.route('/search_user', methods=['GET'])
 def search_user():
     if request.method == "GET":
