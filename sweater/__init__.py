@@ -59,7 +59,7 @@ conn = engine.connect()
 # count = conn.execute("SELECT * FROM TABLE USER;")
 
 
-count = conn.execute("ALTER TABLE public.user ADD user_status TEXT NOT NULL DEFAULT '{}';")
+# count = conn.execute("ALTER TABLE public.user ADD user_status TEXT NOT NULL DEFAULT '{}';")
 
 # print(count)
 
