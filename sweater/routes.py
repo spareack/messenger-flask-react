@@ -521,10 +521,12 @@ def send_message():
                 if dialog.id in dialogs_ids:
 
                     unread_dialogs_list = json.loads(user.unread_dialogs)
-                    if str(dialog.id) in unread_dialogs_list:
-                        unread_dialogs_list[str(dialog.id)] += 1
-                    else:
-                        unread_dialogs_list[str(dialog.id)] = 1
+
+                    if user.id is not sender_id:
+                        if str(dialog.id) in unread_dialogs_list:
+                            unread_dialogs_list[str(dialog.id)] += 1
+                        else:
+                            unread_dialogs_list[str(dialog.id)] = 1
 
                     user.unread_dialogs = json.dumps(unread_dialogs_list)
                     db.session.commit()
@@ -536,10 +538,9 @@ def send_message():
                                              'message_id': message.id,
                                              'sender': sender_id,
                                              'type': message_type,
-                                             'date': str(datetime.datetime.fromisoformat(
-                                                       message.date_create).time().strftime("%H:%M")),
+                                             'date': message.date_create,
                                              'value': value,
-                                             'unread_count': unread_dialogs_list[str(dialog.id)]},
+                                             'unread_count': unread_dialogs_list[str(dialog.id)] if user.id is not sender_id else 0},
                              to=str(user.id), namespace='/')
 
             return jsonify({"status": 0,
