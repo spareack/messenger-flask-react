@@ -36,9 +36,8 @@ const MessageList = ({active, getMessages}) => {
 
     useEffect(() => {
         list.current.scrollTo({top: 0, behavior: 'instant'})
-        // if(talks.currentTalk !== -1)messageFetching(list.current.scrollHeight === list.current.clientHeight)
+        console.log(user, messages)
     }, [user.currentDialog])
-    // if(list.current)messageFetching(list.current.scrollHeight === list.current.clientHeight)
     return (
         <div style={{paddingInline: active? '15px' : '15%'}} 
             ref={list} 
