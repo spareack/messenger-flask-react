@@ -398,14 +398,14 @@ def serve_static(static_type, filename):
     return send_from_directory(os.path.join('../', 'build', 'static', static_type), filename)
 
 
-@app.route('/favicon.ico')
-def get_favicon():
-    return send_from_directory(os.path.join('../', 'build'), 'favicon.ico')
-
-
 @app.route('/manifest.json')
 def get_manifest():
     return send_from_directory(os.path.join('../', 'build'), 'manifest.json')
+
+
+@app.route('/icons/<path:filename>')
+def get_icon(filename):
+    return send_from_directory(os.path.join('../', 'build', 'icons'), filename)
 
 
 @app.route('/search_user', methods=['GET'])
