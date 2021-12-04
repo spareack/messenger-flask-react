@@ -1,13 +1,12 @@
 import React, {useState, useEffect} from 'react'
 import classes from './dialogsField.module.css'
 import DialogItem from '../dialogItem/DialogItem'
-import menu from './menu.svg'
-import logout from './logout.svg'
 import settingsIMG from './settings.svg'
 import Search from '../Search/Search'
 import unnamed from './unnamed.jpg'
 import Settings from '../Settings/Settings'
 import { useDispatch, useSelector } from 'react-redux';
+import { Talk, Member, Message, Dialog } from '../../../constructor'
 
 function byField(field) {
     return (a, b) => +a[field] > +b[field] ? -1 : 1;
@@ -71,20 +70,24 @@ const DialogsField = ({ dialogs, setLoggedOut, getTalks,getMessages, createDialo
         dispatch({type:'setCurrentDialog', payload: id})
         let res = await getTalks(id)
         if(res.talks.length){
-            dispatch({type: 'setTalks', payload: res.talks.sort(byField("id")).reverse()})
-            dispatch({type: 'setCurrentTalk', payload: res.talks.sort(byField("id")).reverse()[res.talks.length-1].id})
-            dispatch({type: 'setLastTalk', payload: res.talks.sort(byField("id")).reverse()[res.talks.length-1].id})
-            let messages = await getMessages(res.talks.sort(byField("id")).reverse()[res.talks.length-1].id)
+            const lastTalkIndex = res.talks.length-1
+            const sortedTalks = res.talks.sort(byField("id")).reverse()
+            dispatch({type: 'setTalks', payload: sortedTalks})
+            dispatch({type: 'setCurrentTalk', payload: sortedTalks[lastTalkIndex].id})
+            dispatch({type: 'setLastTalk', payload: sortedTalks[lastTalkIndex].id})
+            let messages = await getMessages(sortedTalks[lastTalkIndex].id)
             dispatch({type: 'setMessages', payload: messages})
             if(messages.length < 10){
-                let messages2 = await getMessages(res.talks.sort(byField("id")).reverse()[res.talks.length-2]?.id)
+                let messages2 = await getMessages(sortedTalks[lastTalkIndex-1]?.id)
                 if(messages2){
-                    let separator = {sender: null, center: true, value: res.talks.sort(byField("id")).reverse()[res.talks.length-1].title, date: ''}
+                    let separator = {sender: null, center: true, value: sortedTalks[lastTalkIndex].title, date: ''}
                     dispatch({type: 'setMessages', payload: [...messages, separator ,...messages2]})
                 }
             }
         } else {
-            createTalk('First talk!', id)
+            let newTalk = await createTalk('First talk!', id)
+            dispatch({type: 'setCurrentTalk', payload: newTalk.id})
+            dispatch({type: 'setLastTalk', payload: newTalk.id})
         }  
     }
 

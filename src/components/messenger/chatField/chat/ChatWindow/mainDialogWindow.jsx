@@ -35,7 +35,7 @@ const MainWindow = ({companion, sendMessage,active, setActiveTalkMenu, getMessag
         <div className={classes.dialogWindow}>
             <Companion companion={companion} setActive={setActiveTalkMenu}/>
             {/* <div className={classes.wtf}> */}
-                <MessageList active={active} getMessages={getMessages}/>
+            <MessageList active={active} getMessages={getMessages}/>
             {/* </div> */}
             <form style={{marginInline: active? '15px' : '15%', visibility: user.currentDialog === -1 ? 'hidden' : 'visible'}} className={classes.txtArea}>
                 <div className={classes.wInputContainer}>

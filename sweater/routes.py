@@ -50,6 +50,7 @@ def handle_connection(data):
                     emit('socket_status', {'info': 'status_info',
                                            'dialog_id': int(dialog_id),
                                            'user_id': int(user_id),
+                                           "date_visit": user.date_visited,
                                            'user_status': 1},
                          to=str(member_id), namespace='/')
 
@@ -102,6 +103,7 @@ def connect_socket():
                         emit('socket_status', {'info': 'status_info',
                                                'dialog_id': int(dialog_id),
                                                'user_id': int(user_id),
+                                               "date_visit": user.date_visited,
                                                'user_status': 1},
                              to=str(member_id), namespace='/')
 
@@ -136,7 +138,8 @@ def disconnect_socket():
                         emit('socket_status', {'info': 'status_info',
                                                'dialog_id': int(dialog_id),
                                                'user_id': int(user_id),
-                                               'user_status': 0},
+                                               'user_status': 0,
+                                               'date_visit': user.date_visited},
                              to=str(member_id), namespace='/')
 
             print("disconnect(", user_id)
@@ -144,11 +147,6 @@ def disconnect_socket():
     except Exception as e:
         print('connect error', str(e) + traceback.format_exc())
         return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
-
-
-# @socketio.on('user_status')
-# # @cross_origin()
-# def user_status():
 
 
 @app.route('/check_name', methods=['GET'])
@@ -263,7 +261,10 @@ def login():
                             members.remove(user_id)
                             for member_id in members:
                                 member = db.session.query(User).filter_by(id=member_id).first_or_404()
-                                members_list.append({"name": member.name, "user_status": member.user_status})
+                                members_list.append({"name": member.name,
+                                                     "user_status": member.user_status,
+                                                     'date_visit': member.date_visited,
+                                                     "avatar_id": member.avatar_id})
 
                             talks_ids = json.loads(dialog.talks)
                             last_message_value = None
@@ -289,6 +290,7 @@ def login():
                                         "id": user.id,
                                         "name": user.name,
                                         "dialogs": response_list,
+                                        "avatar_id": user.avatar_id,
                                         "info": "authorization successful"})
                     else:
                         return jsonify({"status": 1, "info": "email not activated"})
@@ -322,6 +324,7 @@ def is_authorized():
 
                         members_list.append({"name": member.name,
                                              "user_status": member.user_status,
+                                             'date_visit': member.date_visited,
                                              "avatar_id": member.avatar_id})
 
                     talks_ids = json.loads(dialog.talks)
@@ -383,6 +386,7 @@ def log_out():
                         emit('socket_status', {'info': 'status_info',
                                                'dialog_id': int(dialog_id),
                                                'user_id': int(user_id),
+                                               'date_visit': user.date_visited,
                                                'user_status': 0},
                              to=str(member_id), namespace='/')
 
@@ -427,7 +431,12 @@ def search_user():
             users = db.session.query(User).filter(User.name.startswith(value)).filter(
                 User.id.not_in(own_members)).limit(10).all()
 
-            response = list({"id": user.id, "name": user.name} for user in users)
+            response = list({"id": user.id,
+                             "name": user.name,
+                             "avatar_id": user.avatar_id,
+                             "date_visit": user.date_visited,
+                             "user_status": user.user_status} for user in users)
+
             return jsonify({"status": 0, "users": response})
         except Exception as e:
             return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
@@ -442,8 +451,9 @@ def add_to_json(obj, count):
 @app.route('/create_dialog', methods=['POST'])
 def create_dialog():
     if request.method == "POST":
-
         try:
+            global rooms_list
+
             data = request.get_json()
             title = data["title"]
             members = data["members"]
@@ -470,8 +480,29 @@ def create_dialog():
             for user_id in members:
                 user = db.session.query(User).filter_by(id=user_id).first_or_404()
                 user.dialogs = add_to_json(user.dialogs, dialog.id)
-
             db.session.commit()
+
+            dialog_members = json.loads(dialog.members)
+
+            for member_id in dialog_members:
+                if member_id != cur_id and str(member_id) in rooms_list:
+
+                    members_list = []
+                    other_members = dialog_members.copy()
+                    other_members.remove(member_id)
+
+                    for other_member in other_members:
+                        member = db.session.query(User).filter_by(id=other_member).first_or_404()
+
+                        members_list.append({"name": member.name,
+                                             "user_status": member.user_status,
+                                             "date_visit": member.date_visited,
+                                             "avatar_id": member.avatar_id})
+
+                    emit('new_dialog', {'info': 'new_dialog',
+                                        'dialog_id': dialog.id,
+                                        'other_members': other_members},
+                         to=str(member_id), namespace='/')
 
             return jsonify({"status": 0, "id": dialog.id})
 
@@ -485,8 +516,8 @@ def create_talk():
         try:
             data = request.get_json()
             title = data["title"]
-            # members = data["members"]
             dialog_id = data["dialog_id"]
+            cur_id = int(current_user.get_id())
 
             talk = Talk(title=title, date_create=str(datetime.datetime.utcnow() + datetime.timedelta(hours=3)))
             db.session.add(talk)
@@ -494,8 +525,21 @@ def create_talk():
 
             dialog = db.session.query(Dialog).filter_by(id=dialog_id).first_or_404()
             dialog.talks = add_to_json(dialog.talks, talk.id)
-
             db.session.commit()
+
+            dialog_members = json.loads(dialog.members)
+            other_members = dialog_members.copy()
+            other_members.remove(cur_id)
+
+            for member_id in other_members:
+                if str(member_id) in rooms_list:
+
+                    emit('new_talk', {'info': 'new_talk',
+                                      "dialog_id": dialog.id,
+                                      "talk_id": talk.id,
+                                      "title": talk.title,
+                                      "date": talk.date_create},
+                         to=str(member_id), namespace='/')
 
             return jsonify({"status": 0, "id": talk.id})
 
@@ -634,7 +678,7 @@ def get_talks():
             user = db.session.query(User).filter_by(id=user_id).first_or_404()
 
             talks = db.session.query(Talk).filter(Talk.id.in_(talks_ids)).order_by(Talk.id.desc()).all()
-            response_list = list({"id": talk.id, "title": talk.title} for talk in talks)
+            response_list = list({"id": talk.id, "title": talk.title, "date": talk.date_create} for talk in talks)
 
             unread_dialogs_list = json.loads(user.unread_dialogs)
             if str(dialog_id) in unread_dialogs_list:
