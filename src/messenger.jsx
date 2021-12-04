@@ -5,6 +5,7 @@ import WorkSpace from './components/messenger/chatField/chat/workSpace/workSpace
 import axios from 'axios'
 import { socket } from './socket'
 import { useDispatch, useSelector } from 'react-redux';
+import { Talk, Message, Dialog, Member } from './components/constructor';
 import { afkManager } from './afkManager';
 
 function Messenger({ setLoggedOut }) {
@@ -63,7 +64,7 @@ function Messenger({ setLoggedOut }) {
         else return dialog
       })
       dispatch({ type: 'setUserDialogs', payload: _dialog })
-      if(currentDialog === res.dialog_id)dispatch({type: 'setMessages', payload: [{ sender: res.sender, value: res.value, date: res.date, id: res.message_id }, ...messages] })
+      if(currentDialog === res.dialog_id)dispatch({type: 'setMessages', payload: [ new Message(res.message_id, res.sender, res.value, res.date), ...messages] })
       socket.emit('read_messages', {dialog_id :user.currentDialog})
     }
   }, [res])
@@ -101,8 +102,8 @@ function Messenger({ setLoggedOut }) {
     })
   }
 
-  const createTalk = (name, dialogID) => {
-    axios({
+  const createTalk = async (name, dialogID) => {
+    let response = await axios({
       method: 'POST',
       url: '/create_talk',
       data: {
@@ -110,14 +111,13 @@ function Messenger({ setLoggedOut }) {
         dialog_id: dialogID
       }
     })
-      .then(res => {
-        dispatch({ type: 'setTalks', payload: [...talks, { id: res.data.id, title: name, messages: [] }] })
+      return new Promise((resolve, reject) => {
+        resolve(response.data)
       })
-      .catch(error => console.log(error))
   }
 
   const createDialog = (name, dialogID) => {
-    dispatch({ type: 'setUserDialogs', payload: [...dialogs, { id: dialogID, last_message: null, other_members: [{avatar_id: null, name: name, user_status: 0}] }] })
+    dispatch({ type: 'setUserDialogs', payload: [...dialogs, new Dialog(dialogID, null, [new Member(null, name, 0)])] }) 
   }
 
   const pushMessage = (messageText) => {
@@ -133,7 +133,9 @@ function Messenger({ setLoggedOut }) {
       }
     }).then(res => {
       if (!res.data.status) {
-        dispatch({ type: 'setMessages', payload: [{ sender: user.id, value: messageText, date: res.data.date, id: res.data.id }, ...messages] })
+        return
+        // dispatch({ type: 'setMessages', payload: [{ sender: user.id, value: messageText, date: res.data.date, id: res.data.id }, ...messages] })
+        // console.log('message received')
       }
     })
       .catch(error => console.log(error))

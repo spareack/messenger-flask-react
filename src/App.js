@@ -6,7 +6,6 @@ import Messenger from './messenger';
 import Loader from './components/Loader';
 import WelcomePage from './components/welcomepage/WelcomePage';
 import {useDispatch} from 'react-redux'
-import {socket} from './socket'
 
 function App() {
   const dispatch = useDispatch()
@@ -17,7 +16,7 @@ function App() {
       method: 'get',
       url: '/is_authorized',
     }).then(res => {
-        // console.log(res.data)
+        console.log(res.data)
         if(res.data.status === 0){
             setUserLoggedIn(res.data.is_auth)
             dispatch({type: 'setUser', payload: {

@@ -31,11 +31,11 @@ const LogIn = ({setLoggedIn}) => {
         }).then(res => {
             if(!res.data.status){
                 setLoggedIn(true)
-                // console.log(res.data)
+                console.log(res.data)
                 dispatch({type: 'setUser', payload: 
                     {id: res.data.id,
                     name: res.data.name,
-                    photoURL: 0,
+                    photoURL: res.data.avatar_id ? res.data.avatar_id: 0,
                     dialogs: res.data.dialogs}})
                     socket.emit("authorize", {id: res.data.id})
             }
