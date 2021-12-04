@@ -582,6 +582,7 @@ def send_message():
             talk.messages = add_to_json(talk.messages, message.id)
 
             dialog = db.session.query(Dialog).filter_by(id=dialog_id).first_or_404()
+            dialog.date_update = str(datetime.datetime.utcnow() + datetime.timedelta(hours=3))
             db.session.commit()
 
             users = db.session.query(User).all()
