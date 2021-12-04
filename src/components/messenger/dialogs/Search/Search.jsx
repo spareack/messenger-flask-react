@@ -21,6 +21,7 @@ const Search = ({createDialog, settings}) => {
             }
         })
         .then(res => {
+            console.log(res.data)
             setNames(res.data.users)
         })
         .catch(error => console.log(error))
@@ -39,11 +40,16 @@ const Search = ({createDialog, settings}) => {
             }
         })
         .then(res => {
+            console.log(name, res.data.id)
             if(res.data.status === 0)createDialog(name, res.data.id)
             else if(res.data.status === 1) alert('диалог занят')
             else if(res.data.status === 666) alert('Ошибка')
         })
         .catch(error => console.log(error))
+    }
+
+    function getAvatar(id) {
+        return id ? '/get_file?file_id=' + id : unnamed
     }
 
     return (
