@@ -263,7 +263,9 @@ def login():
                             members.remove(user_id)
                             for member_id in members:
                                 member = db.session.query(User).filter_by(id=member_id).first_or_404()
-                                members_list.append({"name": member.name, "user_status": member.user_status})
+                                members_list.append({"name": member.name,
+                                                     "user_status": member.user_status,
+                                                     "avatar_id": member.avatar_id})
 
                             talks_ids = json.loads(dialog.talks)
                             last_message_value = None
