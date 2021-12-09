@@ -7,22 +7,25 @@ import { socket } from './socket'
 import { useDispatch, useSelector } from 'react-redux';
 import { Talk, Message, Dialog, Member } from './components/constructor';
 import { afkManager } from './afkManager';
+import { changeSearchInput } from './components/store/searchReducer';
+import useSound from 'use-sound'
+import meow from './imagesAndSounds/meow.mp3'
 
 function Messenger({ setLoggedOut }) {
 
   const dispatch = useDispatch()
-
+  const [meowSound] = useSound(meow, {volume: 0.03})
   const user = useSelector(state => state.user)
   const messages = useSelector(state => state.messages.messages)
   const dialogs = useSelector(state => state.user.dialogs)
-  const talks = useSelector(state => state.talks.talks)
+  const talks  = useSelector(state => state.talks.talks)
   const currentTalk = useSelector(state => state.talks.currentTalk)
   const lastTalk = useSelector(state => state.talks.lastTalk)
   const currentDialog = useSelector(state => state.user.currentDialog)
   
   /* UI */
   const blurInput = () => {
-    dispatch({ type: 'searchInputChange', payload: '' })
+    dispatch(changeSearchInput(''))
     dispatch({ type: 'DISABLE_NAMES' })
     dispatch({ type: 'DISABLE_MENU' })
   }
@@ -59,12 +62,14 @@ function Messenger({ setLoggedOut }) {
     if(res !== null){
       const _dialog = dialogs.map( (dialog) => {
         if (dialog.id === res.dialog_id) {
-          return { ...dialog, unread_count: res.unread_count, last_message: res.value}
+          return { ...dialog, unread_count: res.dialog_id !== currentDialog ? res.unread_count : 0, last_message: res.value}
         }
         else return dialog
       })
       dispatch({ type: 'setUserDialogs', payload: _dialog })
       if(currentDialog === res.dialog_id)dispatch({type: 'setMessages', payload: [ new Message(res.message_id, res.sender, res.value, res.date), ...messages] })
+      if(currentDialog !== res.dialog_id)meowSound()
+      console.log(res)
       socket.emit('read_messages', {dialog_id :user.currentDialog})
     }
   }, [res])

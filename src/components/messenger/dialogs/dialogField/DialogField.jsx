@@ -69,19 +69,22 @@ const DialogsField = ({ dialogs, setLoggedOut, getTalks,getMessages, createDialo
     const changeDialog = async (id) => {
         dispatch({type:'setCurrentDialog', payload: id})
         let res = await getTalks(id)
-        if(res.talks.length){
+        if(res.talks?.length){
             const lastTalkIndex = res.talks.length-1
             const sortedTalks = res.talks.sort(byField("id")).reverse()
             dispatch({type: 'setTalks', payload: sortedTalks})
             dispatch({type: 'setCurrentTalk', payload: sortedTalks[lastTalkIndex].id})
             dispatch({type: 'setLastTalk', payload: sortedTalks[lastTalkIndex].id})
             let messages = await getMessages(sortedTalks[lastTalkIndex].id)
+            console.log(messages)
             dispatch({type: 'setMessages', payload: messages})
             if(messages.length < 10){
                 let messages2 = await getMessages(sortedTalks[lastTalkIndex-1]?.id)
+                console.log(messages)
                 if(messages2){
                     let separator = {sender: null, center: true, value: sortedTalks[lastTalkIndex].title, date: ''}
                     dispatch({type: 'setMessages', payload: [...messages, separator ,...messages2]})
+                    console.log(messages2)
                 }
             }
         } else {
@@ -125,7 +128,7 @@ const DialogsField = ({ dialogs, setLoggedOut, getTalks,getMessages, createDialo
                         online={post?.other_members.length === 1 ? post?.other_members[0].user_status : undefined}
                         otherMembers={post?.other_members}/>
                 ))
-                : <Settings setSettingsWindow={setSettingsWindow} setLoggedOut={setLoggedOut}/>
+                : <Settings setSettingsWindow={setSettingsWindow} setLoggedOut={setLoggedOut} active={settings}/>
                 }
             </div>
         </div>
