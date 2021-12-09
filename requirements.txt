@@ -44,6 +44,7 @@ Mako==1.1.6
 MarkupSafe==2.0.1
 migrate==0.3.7
 pefile==2021.9.3
+Pillow==8.4.0
 platformdirs==2.4.0
 protobuf==3.19.1
 psycopg2==2.9.2
