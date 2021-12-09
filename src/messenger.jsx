@@ -5,7 +5,7 @@ import WorkSpace from './components/messenger/chatField/chat/workSpace/workSpace
 import axios from 'axios'
 import { socket } from './socket'
 import { useDispatch, useSelector } from 'react-redux';
-import { Talk, Message, Dialog, Member } from './components/constructor';
+import { Talk, Message, Dialog, Member, Separator } from './components/constructor';
 import { afkManager } from './afkManager';
 import { changeSearchInput } from './components/store/searchReducer';
 import useSound from 'use-sound'
@@ -22,6 +22,7 @@ function Messenger({ setLoggedOut }) {
   const currentTalk = useSelector(state => state.talks.currentTalk)
   const lastTalk = useSelector(state => state.talks.lastTalk)
   const currentDialog = useSelector(state => state.user.currentDialog)
+  console.log(dialogs)
   
   /* UI */
   const blurInput = () => {
@@ -32,7 +33,8 @@ function Messenger({ setLoggedOut }) {
   /* UI ends */
   const [res, setResponse] = useState(null)
   const [userStatus, setUserStatus] = useState(null)
-
+  const [newDialog, setNewDialog] = useState(null)
+  const [newTalk, setNewTalk] = useState(null)
 
   useEffect(() => {
     socket.on("socket_info", res => {
@@ -40,10 +42,34 @@ function Messenger({ setLoggedOut }) {
     })
     socket.on('socket_status', res => {
       setUserStatus(res)
-      console.log(res)
+    })
+    socket.on("new_dialog", res => {
+      setNewDialog(res)
+    })
+    socket.on("new_talk", res => {
+      setNewTalk(res)
     })
   }, []) 
 
+  /* Добавление диалога в режиме real time */
+  useEffect(() => {
+    if(newDialog !== null) {
+      const _dialogs = [...dialogs, new Dialog(newDialog.dialog_id, 'There is no messages', [new Member(newDialog.other_members[0].avatar_id, newDialog.other_members[0].name, newDialog.other_members[0].user_status)])]
+      dispatch({ type: 'setUserDialogs', payload: _dialogs })
+    }
+  }, [newDialog, dispatch] )
+  /* Обработка добавления нового разговора у другого человека */
+  useEffect(() => {
+    if(newTalk !== null){
+      if(currentDialog === newTalk.dialog_id){
+        const _talks = [...talks, new Talk(newTalk.talk_id, newTalk.title, newTalk.date)]
+        dispatch({type: 'setTalks', payload: _talks})
+        dispatch({type: 'setCurrentTalk', payload: newTalk.talk_id})
+        dispatch({type: 'setLastTalk', payload: newTalk.talk_id})
+        dispatch({type: 'setMessages', payload: [...messages, new Separator(newTalk.title)]})
+      }
+    }
+  }, [newTalk, dispatch])
   /* Обновление статуса пользователя */
   useEffect(() => {
     if(userStatus !== null){
@@ -68,8 +94,7 @@ function Messenger({ setLoggedOut }) {
       })
       dispatch({ type: 'setUserDialogs', payload: _dialog })
       if(currentDialog === res.dialog_id)dispatch({type: 'setMessages', payload: [ new Message(res.message_id, res.sender, res.value, res.date), ...messages] })
-      if(currentDialog !== res.dialog_id)meowSound()
-      console.log(res)
+      if(currentDialog !== res.dialog_id || document.visibilityState === 'hidden')meowSound()
       socket.emit('read_messages', {dialog_id :user.currentDialog})
     }
   }, [res])

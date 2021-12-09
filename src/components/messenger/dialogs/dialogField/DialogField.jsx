@@ -6,7 +6,7 @@ import Search from '../Search/Search'
 import unnamed from './unnamed.jpg'
 import Settings from '../Settings/Settings'
 import { useDispatch, useSelector } from 'react-redux';
-import { Talk, Member, Message, Dialog } from '../../../constructor'
+import { Talk, Member, Message, Dialog, Separator } from '../../../constructor'
 
 function byField(field) {
     return (a, b) => +a[field] > +b[field] ? -1 : 1;
@@ -68,6 +68,7 @@ const DialogsField = ({ dialogs, setLoggedOut, getTalks,getMessages, createDialo
 
     const changeDialog = async (id) => {
         dispatch({type:'setCurrentDialog', payload: id})
+
         let res = await getTalks(id)
         if(res.talks?.length){
             const lastTalkIndex = res.talks.length-1
@@ -76,16 +77,18 @@ const DialogsField = ({ dialogs, setLoggedOut, getTalks,getMessages, createDialo
             dispatch({type: 'setCurrentTalk', payload: sortedTalks[lastTalkIndex].id})
             dispatch({type: 'setLastTalk', payload: sortedTalks[lastTalkIndex].id})
             let messages = await getMessages(sortedTalks[lastTalkIndex].id)
-            console.log(messages)
             dispatch({type: 'setMessages', payload: messages})
-            if(messages.length < 10){
-                let messages2 = await getMessages(sortedTalks[lastTalkIndex-1]?.id)
-                console.log(messages)
-                if(messages2){
-                    let separator = {sender: null, center: true, value: sortedTalks[lastTalkIndex].title, date: ''}
-                    dispatch({type: 'setMessages', payload: [...messages, separator ,...messages2]})
-                    console.log(messages2)
-                }
+            let totalMessages = [...messages]
+            console.log(totalMessages)
+            let loadedTalkId = lastTalkIndex
+            while(totalMessages.length < 20){
+                loadedTalkId = loadedTalkId - 1
+                let nextMessages = await getMessages(sortedTalks[loadedTalkId]?.id)
+                if(nextMessages){
+                    let separator = new Separator(sortedTalks[loadedTalkId].title)
+                    totalMessages = [...totalMessages, separator, ...nextMessages]
+                    dispatch({type: 'setMessages', payload: totalMessages})
+                } else break
             }
         } else {
             let newTalk = await createTalk('First talk!', id)

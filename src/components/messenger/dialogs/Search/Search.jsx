@@ -59,7 +59,7 @@ const Search = ({createDialog, settings}) => {
             <div className={classes.dropDownList} style={{display: searchInput.length && activeInput ? 'flex' : 'none'}}>
                 <ul>
                     {names.length ? names.map( (name, index) => (
-                        <SearchItem key={name.id} srcPath={name?.photoURL ? name.photoURL : unnamed} name={name.name} id={name.id} searchUser={searchUser}/>
+                        <SearchItem key={name.id} srcPath={getAvatar(name.avatar_id)} name={name.name} id={name.id} searchUser={searchUser} isOnline={name.user_status}/>
                     )) : <li className={classes.searchItem}>Пользователь не найден</li>}
                 </ul>
             </div>
@@ -69,10 +69,10 @@ const Search = ({createDialog, settings}) => {
 
 export default Search
 
-const SearchItem = ({srcPath, name, id, searchUser}) => {
+const SearchItem = ({srcPath, name, id, searchUser, isOnline}) => {
     return (
     <li className={classes.searchItem} onClick={() => {searchUser(name, id)}}>
-        <img height='30' width='30' style={{borderRadius: '75%'}} src={srcPath} alt=''/> <p>{name}</p>
+        <div className={classes.searchImage}><img height='30' width='30' style={{borderRadius: '75%'}} src={srcPath} alt=''/><span style={{display: isOnline ? 'flex': 'none'}} className={classes.isOnline}>•</span></div><p>{name}</p>
     </li>
     )
 }

@@ -28,13 +28,13 @@ export function Message(id, sender, value, date, type) {
     this.type = 'text'
 }
 
-export function Talk(id, title, messages) {
+export function Talk(id, title, date) {
     if (!new.target) {
-        return new Talk(id, title, messages); 
+        return new Talk(id, title, date); 
     }
     this.id = id
     this.title = title
-    this.messages = messages
+    this.date = date
 }
 
 export function Separator(value) {
@@ -46,7 +46,7 @@ export function Separator(value) {
     this.value = value
     this.date = ''
     this.type = 'text'
-    this.id = null
+    this.id = Math.random()* 10000
 }
 
 // { Message Configuration
