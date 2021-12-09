@@ -502,7 +502,7 @@ def create_dialog():
 
                     emit('new_dialog', {'info': 'new_dialog',
                                         'dialog_id': dialog.id,
-                                        'other_members': other_members},
+                                        'other_members': members_list},
                          to=str(member_id), namespace='/')
 
             return jsonify({"status": 0, "id": dialog.id})
