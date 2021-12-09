@@ -11,6 +11,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_cors import cross_origin
 from flask_socketio import emit, send, join_room, leave_room
+from PIL import Image
 
 from sweater import app, db, mail, token_key, socketio
 from sweater.models import User, Talk, Message, Dialog, Media
@@ -729,7 +730,22 @@ def get_file():
     if request.method == "GET":
         try:
             file_id = request.args.get("file_id")
-            media = db.session.query(Media).filter_by(id=file_id).first()
+            media = db.session.query(Media).filter_by(id=file_id).first_or_404()
+
+            if media.type == 'jpg' or media.type == 'png':
+
+                original_image = Image.open(io.BytesIO(media.data))
+                w, h = original_image.size
+
+                if w != 45 or w != 45:
+                    original_image = Image.open(io.BytesIO(media.data))
+                    resized_image = original_image.resize((45, 45))
+                    img_byte_arr = io.BytesIO()
+                    resized_image.save(img_byte_arr, 'jpeg' if media.type == 'jpg' else media.type)
+                    media.data = img_byte_arr.getvalue()
+                    db.session.commit()
+
+                return send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
 
             return send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
 

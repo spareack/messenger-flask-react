@@ -3,6 +3,7 @@ import classes from './Search.module.css'
 import axios from 'axios'
 import unnamed from './unnamed.jpg'
 import { useDispatch, useSelector } from 'react-redux';
+import { changeSearchInput } from '../../../store/searchReducer';
 
 const Search = ({createDialog, settings}) => {
     const [names, setNames] = useState([])
@@ -26,7 +27,7 @@ const Search = ({createDialog, settings}) => {
         })
         .catch(error => console.log(error))
         else setNames([])
-        dispatch({type: 'searchInputChange', payload: e.target.value})
+        dispatch(changeSearchInput(e.target.value))
     }
 
     const searchUser = (name, id) => {
