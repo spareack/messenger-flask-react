@@ -1,6 +1,6 @@
 const defaultState = {
     active: false,
-    talksIsActive: true 
+    talksIsActive: true
 }
 
 const SET_ACTIVE = 'setCompanionActive'

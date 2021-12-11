@@ -48,6 +48,7 @@
 .wInputContainer {
     display: flex;
     /* justify-content: flex-start; */
+    position: relative;
     align-items: center;
     width: 500px;
     min-height: 20px;
@@ -158,4 +159,55 @@
     height: 100%;
     width: 100%;
     overflow-y: auto;
+}
+
+@keyframes appear {
+    from {
+        display: none;
+        opacity: 0;
+    }
+    to {
+        display: flex;
+        opacity: 1;
+    }
+}
+
+.dropDownMenu {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 1;
+    top: -94px;
+    right: 0;
+    width: 100px;
+    height: fit-content;
+    padding: 5px;
+    background-color: #444444;
+    border-radius: 10px;
+    opacity: 1;
+    animation: appear 0.3s ease-in-out both;
+}
+
+.dropDownMenuItem {
+    background: none;
+    border: none;
+    outline: none;
+    color: #FFFFF1;
+    font-size: 1em;
+    cursor: pointer;
+    width: 100%;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+}
+
+.dropDownMenuItem:hover {
+    background-color: #333;
+}
+
+.dropDownMenuItem:first-child {
+    margin-bottom: 5px;
 }

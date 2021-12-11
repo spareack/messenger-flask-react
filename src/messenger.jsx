@@ -15,6 +15,8 @@ function Messenger({ setLoggedOut }) {
 
   const dispatch = useDispatch()
   const [meowSound] = useSound(meow, {volume: 0.03})
+
+  
   const user = useSelector(state => state.user)
   const messages = useSelector(state => state.messages.messages)
   const dialogs = useSelector(state => state.user.dialogs)
@@ -22,7 +24,6 @@ function Messenger({ setLoggedOut }) {
   const currentTalk = useSelector(state => state.talks.currentTalk)
   const lastTalk = useSelector(state => state.talks.lastTalk)
   const currentDialog = useSelector(state => state.user.currentDialog)
-  console.log(dialogs)
   
   /* UI */
   const blurInput = () => {
@@ -30,6 +31,7 @@ function Messenger({ setLoggedOut }) {
     dispatch({ type: 'DISABLE_NAMES' })
     dispatch({ type: 'DISABLE_MENU' })
     dispatch({ type: 'setCompanionDisabled' })
+    dispatch({ type: "setAttachDisabled"})
   }
   /* UI ends */
   const [res, setResponse] = useState(null)
@@ -37,6 +39,7 @@ function Messenger({ setLoggedOut }) {
   const [newDialog, setNewDialog] = useState(null)
   const [newTalk, setNewTalk] = useState(null)
 
+  /* прослушивание событий с бекенда */
   useEffect(() => {
     socket.on("socket_info", res => {
       setResponse(res) 

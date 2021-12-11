@@ -6,6 +6,7 @@ import { messagesReducer } from "./allMessagesReducer";
 import { talksReducer } from "./talksReducer";
 import { UIReducer } from "./UIReducer";
 import { companionReducer } from "./companionMenuReducer";
+import { attachMenuReducer } from "./attachMenuReducer";
 
 // action = {type: '', payload: ''}
 // в type - тип изменения, в payload - сами данные, которые нужны чтоб изменить состояние
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
     messages: messagesReducer,
     talks: talksReducer,
     UI: UIReducer,
-    companion: companionReducer
+    companion: companionReducer,
+    attachMenu: attachMenuReducer
 })
 
 export const store = createStore(rootReducer)

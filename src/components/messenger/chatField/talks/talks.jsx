@@ -22,6 +22,7 @@ const Talks = ({ current, setTalk, createTalk, currentDialog, active, setActive}
         setActive(false)
         setTimeout(() => dispatch({type: 'setTalksActive'}),300)
     }
+    
     if(talksIsActive) return (
         <div className={active ? classes.talks : classes.talks} style={active ? {width: '35%'} : {width: '0%', border: 'none'}}>
             <button onClick={talkCreator} className={classes.talksHead}>Search</button>
