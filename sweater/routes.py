@@ -735,17 +735,22 @@ def get_file():
             if media.type == 'jpg' or media.type == 'png':
 
                 original_image = Image.open(io.BytesIO(media.data))
-                w, h = original_image.size
+                # w, h = original_image.size
 
-                if w != 45 or w != 45:
-                    original_image = Image.open(io.BytesIO(media.data))
-                    resized_image = original_image.resize((45, 45))
-                    img_byte_arr = io.BytesIO()
-                    resized_image.save(img_byte_arr, 'jpeg' if media.type == 'jpg' else media.type)
-                    media.data = img_byte_arr.getvalue()
-                    db.session.commit()
+                resized_image = original_image.resize((45, 45))
+                img_byte_arr = io.BytesIO()
+                resized_image.save(img_byte_arr, 'jpeg' if media.type == 'jpg' else media.type)
+                data = img_byte_arr.getvalue()
 
-                return send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
+                # if w != 45 or w != 45:
+                #     original_image = Image.open(io.BytesIO(media.data))
+                #     resized_image = original_image.resize((45, 45))
+                #     img_byte_arr = io.BytesIO()
+                #     resized_image.save(img_byte_arr, 'jpeg' if media.type == 'jpg' else media.type)
+                #     media.data = img_byte_arr.getvalue()
+                #     db.session.commit()
+
+                return send_file(io.BytesIO(data), attachment_filename=(media.name + "." + media.type))
 
             return send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
 
