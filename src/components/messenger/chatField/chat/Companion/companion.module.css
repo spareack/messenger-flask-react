@@ -49,8 +49,66 @@
     border-radius: 5px;
     border: none;
     outline: none;
+    cursor: pointer;
 }
 
 .talkButton:hover {
     background-color: #333;
+}
+
+.companionButtons {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+
+.dropDownMenu {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 1;
+    top: 50px;
+    left: -85px;
+    width: 100px;
+    height: fit-content;
+    padding: 5px;
+    background-color: #444444;
+    border-radius: 10px;
+    opacity: 1;
+    animation: appear 0.1s ease-in-out both;
+}
+
+.companionButtonsItem {
+    background: none;
+    border: none;
+    outline: none;
+    color: #FFFFF1;
+    font-size: 1em;
+    cursor: pointer;
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 4px;
+    transition: all 0.2s ease-in-out;
+}
+
+.companionButtonsItem:hover {
+    background-color: #333;
+}
+
+.companionButtonsItem:first-child {
+    margin-bottom: 5px;
+}
+
+@keyframes appear {
+    from {
+        display: none;
+        opacity: 0;
+    }
+    to {
+        display: flex;
+        opacity: 1;
+    }
 }

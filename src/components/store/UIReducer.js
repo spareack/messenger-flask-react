@@ -2,7 +2,8 @@ const defaultState = {
     fontSize: 16,
     color: '#FFFFF1',
     backgroundColorMessage: '#333',
-    backgroundColorWindow: '#0F0F0F'
+    backgroundColorWindow: '#0F0F0F',
+    sound: true
 }
 
 const SET_FONT = 'setFontSize'

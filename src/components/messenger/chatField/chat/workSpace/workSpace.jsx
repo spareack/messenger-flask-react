@@ -16,7 +16,7 @@ const WorkSpace = ({id, companion, currentTalk, getMsg, sendMessage, createTalk}
             <Particles className={classes.particles}
             params={params.coolSnow}/>
             <MainWindow companion={companion} sendMessage={sendMessage} active={activeMenu} setActiveTalkMenu={setActiveRightMenu} getMessages={getMsg}/>
-            <Talks current={currentTalk} setTalk={getMessages} createTalk={createTalk} currentDialog={id} active={activeMenu}/>
+            <Talks current={currentTalk} setTalk={getMessages} createTalk={createTalk} currentDialog={id} active={activeMenu} setActive={setActiveRightMenu}/>
         </div>
     )
 }

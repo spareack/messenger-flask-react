@@ -13,7 +13,8 @@ const ProfileSettings = () => {
         password2: '',
         bio: user.bio
     })
-    const [photo, setPhoto] = useState('')
+    const [photo, setPhoto] = useState(null)
+    const [preview, setPreview] = useState(null)
 
     const checkName = (e) => {
         setSettings({...settingsForm, name: e.target.value})
@@ -42,22 +43,29 @@ const ProfileSettings = () => {
         })
         .then(res => {if(res.data.status === 0){
             console.log(photo)
-            // dispatch({type: 'setUserPhoto', payload: photo})
+            window.location.reload()
         }})
         .catch(error => console.log(error))
     }
 
+    const getAvatar = (id) => {
+        return id ? '/get_file?file_id=' + id : unnamed
+    }
+
+    const onSelectFile = (e) => {
+        setPhoto(e.target.files[0])
+        const previewURL = URL.createObjectURL(e.target.files[0])
+        setPreview(previewURL)
+    }
+
     return (
         <div className={classes.ProfileSettings}>
-            <p>axios</p>
-                <input type="file" onChange={(e) => {console.log(e.target.files[0]); setPhoto(e.target.files[0])}}/>
-                <button onClick={customAvatar}>Сменить!</button>
-            <p>html?</p>
-            {/* <form encType='multipart/form-data' action='/upload_avatar' method='post'>
-                <input name='file' type="file" className={classes.userPhoto} src={user.photoURL ? user.photoURL : unnamed} alt='' onChange={(e) => {console.log(e.target.files[0]); setPhoto(e.target.files[0])}}/>
-                <button type='submit'>Сменить!</button>
-            </form> */}
-            {/* <button className={classes.userPhoto}><img src={user.photoURL ? user.photoURL : unnamed} alt=''/></button> */}
+            <div className={classes.avatarChanger}>
+                <img height={45} width={45} src={preview? preview : getAvatar(user.photoURL)}/>
+                <input type="file" id="inputFile" onChange={onSelectFile}/>
+                <label className={classes.inputFile} htmlFor="inputFile"> Select a file </label>
+                <button className={classes.userPhoto} onClick={customAvatar}>Change avatar!</button>
+            </div>
             <div className={classes.ProfileSettingsField}>
                 <div className={classes.inputBox}>
                     <input name='settingsName' type="text" className={classes.profileInput} style={ validName && user.name !== settingsForm.name ? {color: "red"} : {color: '#FFFFF1'}} required value={settingsForm.name} onChange={checkName}/>

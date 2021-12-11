@@ -29,6 +29,7 @@ function Messenger({ setLoggedOut }) {
     dispatch(changeSearchInput(''))
     dispatch({ type: 'DISABLE_NAMES' })
     dispatch({ type: 'DISABLE_MENU' })
+    dispatch({ type: 'setCompanionDisabled' })
   }
   /* UI ends */
   const [res, setResponse] = useState(null)

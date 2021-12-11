@@ -54,8 +54,12 @@
 }
 
 .settingButton {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
     text-align: center;
     width: 80%;
+    max-width: 216px;
     background-color: #444;
     border: none;
     outline: none;
@@ -65,7 +69,13 @@
     color: #eee;
     margin-top: 16px;
     transition: all 0.2s ease;
-    /* text-decoration: none; */
+}
+
+.settingButton p {
+    text-align: left;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
 }
 
 .settingButton:hover {

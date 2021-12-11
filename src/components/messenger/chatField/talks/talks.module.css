@@ -46,3 +46,68 @@
     background-color: lightgrey;
     color: #111
 }
+
+.companionInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    color: #FFFFF1;
+    padding: 0 2em;
+    margin-top: 15px;
+}
+
+.companionInfoItem p {
+    margin: 0;
+    padding: 0;
+    font-size: 1.2em;
+    text-align: left;
+}
+
+.companionInfoItem h2 {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    font-weight: 400;
+    margin-bottom: 5px;
+}
+
+.companionInfoItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    border-bottom: 1px solid wheat;
+    padding: 5px 10px;
+    width: 100%;
+}
+
+.backButton {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: inherit;
+    outline: none;
+    border: none;
+    border-radius: 75%;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+    color: white;
+    font-size: 1em;
+}
+
+.backButton img {
+    transition: all 0.2s ease-in-out;
+    border-radius: 75%;
+    margin-right: 10px;
+}
+
+.backButton img:hover {
+    background-color: #444;
+}

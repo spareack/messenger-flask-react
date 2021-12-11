@@ -78,3 +78,62 @@
     text-align: left;
     color: #888;
 }
+
+.avatarChanger {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+
+.avatarChanger input[type='file'] {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+}
+
+.inputFile {
+    color: #fffff1;
+    background: none;
+    cursor: pointer;
+    padding: 5px;
+    margin-block: 5px;
+    border-radius: 2px;
+    font-size: 1.5em;
+    transition: all 0.2s ease-in-out;
+}
+
+.inputFile:hover {
+    background-color: #FFFFF1;
+    color: black;
+}
+
+.userPhoto {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 80%;
+    max-width: 230px;
+    background-color: #444;
+    border: none;
+    outline: none;
+    font-size: 1.25em;
+    padding: 8px 16px;
+    border-radius: 20px;
+    color: #eee;
+    transition: all 0.2s ease;
+}
+
+.userPhoto p {
+    text-align: left;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+}
+
+.userPhoto:hover {
+    background-color: #bbb;
+    color: #333;
+}
