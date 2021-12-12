@@ -730,16 +730,11 @@ def get_messages():
 
             response_list = []
             for message in messages:
-                if message.type == "text":
-                    value = message.value
-                else:
-                    media = db.session.query(Media).filter_by(id=message.value).first()
-                    value = send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
 
                 response_list.append({"id": message.id,
                                       "sender": message.sender,
-                                      "type": message.type,
-                                      "value": value,
+                                      "type": message.name if message.type == 'media' else 'text',
+                                      "value": message.value,
                                       "date": str(datetime.datetime.fromisoformat(message.date_create).time().strftime("%H:%M"))})
 
             return jsonify({"status": 0, "messages": response_list})
