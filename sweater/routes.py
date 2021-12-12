@@ -548,55 +548,55 @@ def create_talk():
             return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
+@app.route('/upload_file', methods=['POST'])
+def upload_file():
+    if request.method == "POST":
+        try:
+            file = request.files["value"]
+            image_extensions = {'txt', 'png', 'jpg', 'jpeg'}
+            audio_extensions = {'mp3'}
+            video_extensions = {'mpeg', 'avi', 'mpeg4', 'mp4'}
+
+            if file and '.' in file.filename:
+                filename = secure_filename(file.filename)
+                split_name = filename.rsplit('.', 1)
+
+                if split_name[1] in image_extensions:
+                    media = Media(name='image', type=split_name[1], data=file.read(), date_create=str(datetime.datetime.utcnow() + datetime.timedelta(hours=3)))
+                    db.session.add(media)
+                    db.session.commit()
+                    return jsonify({"status": 0, "info": "successful image!", "file_id": media.id})
+
+                elif split_name[1] in audio_extensions:
+                    media = Media(name='audio', type=split_name[1], data=file.read(), date_create=str(datetime.datetime.utcnow() + datetime.timedelta(hours=3)))
+                    db.session.add(media)
+                    db.session.commit()
+                    return jsonify({"status": 0, "info": "successful audio!", "file_id": media.id})
+
+                elif split_name[1] in video_extensions:
+                    media = Media(name='video', type=split_name[1], data=file.read(), date_create=str(datetime.datetime.utcnow() + datetime.timedelta(hours=3)))
+                    db.session.add(media)
+                    db.session.commit()
+                    return jsonify({"status": 0, "info": "successful video!", "file_id": media.id})
+
+            else:
+                raise ValueError('Invalid file struct :-(')
+
+        except Exception as e:
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
+
+
 @app.route('/send_message', methods=['POST'])
 def send_message():
     if request.method == "POST":
         try:
             global rooms_list
             data = request.get_json()
-            sender_id = int(current_user.get_id())
+            sender_id = data["sender_id"]
             talk_id = data["talk_id"]
             dialog_id = data["dialog_id"]
             message_type = data["message_type"]
-            value = None
-
-            if message_type == "media":
-                file = request.files["value"]
-                image_extensions = {'txt', 'png', 'jpg', 'jpeg'}
-                audio_extensions = {'mp3'}
-                video_extensions = {'mpeg', 'avi', 'mpeg4', 'mp4'}
-
-                if file and '.' in file.filename:
-                    filename = secure_filename(file.filename)
-                    split_name = filename.rsplit('.', 1)
-
-                    if split_name[1] in image_extensions:
-                        media = Media(name='image', type=split_name[1], data=file.read(), date_create=str(datetime.datetime.utcnow() + datetime.timedelta(hours=3)))
-                        db.session.add(media)
-                        db.session.commit()
-                        value = media.id
-
-                    elif split_name[1] in audio_extensions:
-                        media = Media(name='audio', type=split_name[1], data=file.read(), date_create=str(datetime.datetime.utcnow() + datetime.timedelta(hours=3)))
-                        db.session.add(media)
-                        db.session.commit()
-                        value = media.id
-
-                    elif split_name[1] in video_extensions:
-                        media = Media(name='video', type=split_name[1], data=file.read(), date_create=str(datetime.datetime.utcnow() + datetime.timedelta(hours=3)))
-                        db.session.add(media)
-                        db.session.commit()
-                        value = media.id
-
-                    else:
-                        raise ValueError('Invalid file extension')
-                else:
-                    raise ValueError('Invalid file struct')
-
-            elif message_type == "text":
-                value = data["value"]
-            else:
-                raise ValueError('Invalid type file')
+            value = data['value']
 
             message = Message(sender=sender_id, type=message_type, value=value, date_create=str(datetime.datetime.utcnow() + datetime.timedelta(hours=3)))
             db.session.add(message)
