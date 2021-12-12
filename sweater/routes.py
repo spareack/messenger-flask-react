@@ -627,11 +627,16 @@ def send_message():
 
                     if str(user.id) in rooms_list:
                         """ and user.id != sender_id """
+                        type_message = 'text'
+                        if message_type == 'media':
+                            media = db.session.query(Media).filter_by(id=dialog_id).first_or_404()
+                            type_message = media.name
+
                         emit('socket_info', {'info': 'new Messages in dialog',
                                              'dialog_id': dialog.id,
                                              'message_id': message.id,
                                              'sender': sender_id,
-                                             'type': message_type,
+                                             'type': type_message,
                                              'date': str(datetime.datetime.fromisoformat(message.date_create).time().strftime("%H:%M")),
                                              'value': value,
                                              'unread_count': unread_dialogs_list[str(dialog.id)] if user.id != sender_id else 0},
@@ -752,9 +757,11 @@ def get_file():
     if request.method == "GET":
         try:
             file_id = request.args.get("file_id")
+            file_purpose = request.args.get("purpose")
+
             media = db.session.query(Media).filter_by(id=file_id).first_or_404()
 
-            if media.type == 'jpg' or media.type == 'png':
+            if file_purpose == 'avatar' and media.name == 'image':
 
                 original_image = Image.open(io.BytesIO(media.data))
                 # w, h = original_image.size
