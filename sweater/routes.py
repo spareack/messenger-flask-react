@@ -730,10 +730,14 @@ def get_messages():
 
             response_list = []
             for message in messages:
+                type_message = 'text'
+                if message.type == 'media':
+                    media = db.session.query(Media).filter_by(id=message.value).first_or_404()
+                    type_message = media.name
 
                 response_list.append({"id": message.id,
                                       "sender": message.sender,
-                                      "type": message.name if message.type == 'media' else 'text',
+                                      "type": type_message,
                                       "value": message.value,
                                       "date": str(datetime.datetime.fromisoformat(message.date_create).time().strftime("%H:%M"))})
 
