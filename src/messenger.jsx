@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import DialogsField from './components/messenger/dialogs/dialogField/DialogField';
-import WorkSpace from './components/messenger/chatField/chat/workSpace/workSpace';
+import React, { useState, useEffect } from 'react'
+import './App.css'
+import DialogsField from './components/messenger/dialogs/dialogField/DialogField'
+import WorkSpace from './components/messenger/chatField/chat/workSpace/workSpace'
 import axios from 'axios'
 import { socket } from './socket'
-import { useDispatch, useSelector } from 'react-redux';
-import { Talk, Message, Dialog, Member, Separator } from './components/constructor';
-import { afkManager } from './afkManager';
-import { changeSearchInput } from './components/store/searchReducer';
+import { useDispatch, useSelector } from 'react-redux'
+import { Talk, Message, Dialog, Member, Separator } from './components/constructor'
+import { afkManager } from './afkManager'
+import { changeSearchInput } from './components/store/searchReducer'
 import useSound from 'use-sound'
 import meow from './imagesAndSounds/meow.mp3'
 

@@ -60,7 +60,7 @@ const MainWindow = ({companion, sendMessage,active, setActiveTalkMenu, getMessag
                         <button onClick={fileHandler} className={classes.dropDownMenuItem}>File</button>
                     </div>
                 </div>
-                <button style={{display: 'none'}} className={classes.sendButton} onClick={(e) => (sendMessageLocal(e))}>Send</button>
+                <button className={classes.sendButton} onClick={(e) => (sendMessageLocal(e))}>Send</button>
             </form>
         </div>
     )
