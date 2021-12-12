@@ -44,7 +44,7 @@ const MessageList = ({active, getMessages}) => {
 
             {messages 
             ? messages.map((msgItem, index) =>
-                <MessageListItem from={user.id == msgItem.sender} center={msgItem.center ? msgItem.center : null} text={msgItem.value} time={msgItem.date} key={msgItem.id}/>
+                <MessageListItem from={user.id == msgItem.sender} type={msgItem.type} center={msgItem.center ? msgItem.center : null} value={msgItem.value} time={msgItem.date} key={msgItem.id}/>
             )
             :<MessageListItem from={true} text={'Напишите этому человеку!'} time={'А это не важно'}/>}
         </div>

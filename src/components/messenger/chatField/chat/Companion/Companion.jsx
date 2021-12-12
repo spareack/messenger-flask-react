@@ -9,7 +9,7 @@ const Companion = ({companion, setActive}) => {
     const active = useSelector(state => state.companion.active)
     const talksIsActive = useSelector(state => state.companion.talksIsActive)
     const getAvatar = (id) => {
-        return id ? '/get_file?file_id=' + id : unnamed
+        return id ? '/get_file?file_id=' + id + '&purpose=avatar' : unnamed
     }
     const dispatch = useDispatch()
 
@@ -45,23 +45,23 @@ const Companion = ({companion, setActive}) => {
             dispatch({type: 'setTalksDisabled'})
             setActive(true)
         } else {
-            dispatch({type: 'setTalksActive'})
+            setTimeout(() => dispatch({type: 'setTalksActive'}), 300)
             setActive(false)
         }
     }
     return (
         <div className={classes.companion} style={companion?.other_members.length ? {display: 'flex'} : {display: 'none'} }>
-            <div className={classes.companionInfo}>
+            <div className={classes.companionInfo} onClick={checkProfile}>
             <div className={classes.avatar}><img alt='' src={companion?.other_members.length === 1? getAvatar(companion.other_members[0].avatar_id) : unnamed}/></div>
                 <div><h2 style={{marginLeft: companion?.other_members?.length ? '' : '15px'}}>{companion?.other_members?.length? companion?.other_members.length === 1? companion?.other_members[0].name :'Название группового разговора': 'Выберите диалог'}</h2>
                 <p>{onlineStatus()}</p></div>
             </div>
             <div className={classes.companionButtons}>
-                <button style={{paddingBottom: '3px'}} className={classes.talkButton} onClick={toggleCompanionMenu}><img height={30} src={threeDots}/></button>
+                {/* <button style={{paddingBottom: '3px'}} className={classes.talkButton} onClick={toggleCompanionMenu}><img height={30} src={threeDots}/></button>
                 <div style={{display: active ? 'flex': 'none'}} className={classes.dropDownMenu} onClick={e => e.stopPropagation()}>
                     <button className={classes.companionButtonsItem} onClick={checkProfile}>Profile</button>
                     <button className={classes.companionButtonsItem} onClick={blockPerson}>Block</button>
-                </div>
+                </div> */}
                 <button className={classes.talkButton} onClick={rightMenuHandler}>Talks →</button>
             </div>
             

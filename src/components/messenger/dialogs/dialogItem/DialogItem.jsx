@@ -10,7 +10,7 @@ const DialogItem = ({id, index, name, lastTalk, onclick, current, unreadCount, o
     }
     const getAvatar = () => {
         if(otherMembers?.length === 1){
-            if(otherMembers[0].avatar_id) return '/get_file?file_id=' + otherMembers[0].avatar_id
+            if(otherMembers[0].avatar_id) return '/get_file?file_id=' + otherMembers[0].avatar_id + '&purpose=avatar'
             else return unnamed
         } else return unnamed
         

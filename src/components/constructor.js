@@ -16,7 +16,7 @@ export function Member(avatarID, name, userStatus) {
     this.user_status = userStatus
 }
 
-export function Message(id, sender, value, date, type) {
+export function Message(id, sender, value, date, type='text') {
     if (!new.target) {
         return new Message(id, sender, value, date, type); 
     }
@@ -25,7 +25,7 @@ export function Message(id, sender, value, date, type) {
     this.date = date 
     this.id = id
     this.center = false
-    this.type = 'text'
+    this.type = type
 }
 
 export function Talk(id, title, date) {

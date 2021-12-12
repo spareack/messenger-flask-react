@@ -43,13 +43,13 @@ const ProfileSettings = () => {
         })
         .then(res => {if(res.data.status === 0){
             console.log(photo)
-            window.location.reload()
+            // window.location.reload()
         }})
         .catch(error => console.log(error))
     }
 
     const getAvatar = (id) => {
-        return id ? '/get_file?file_id=' + id : unnamed
+        return id ? '/get_file?file_id=' + id + '&purpose=avatar' : unnamed
     }
 
     const onSelectFile = (e) => {

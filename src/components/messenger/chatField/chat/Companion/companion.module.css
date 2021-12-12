@@ -28,7 +28,17 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    padding-right: 10px;
+    border: none;
+    /* border-radius: 15px; */
+    cursor: pointer;
+    height: 95%;
+    /* margin-left: 10px; */
 }
+
+/* .companionInfo:hover {   <-- абсолютная ХУЕТА АБСОЛЮТНАЯ
+    background-color: #333; <-- абсолютная ХУЕТА АБСОЛЮТНАЯ
+}                           <-- абсолютная ХУЕТА АБСОЛЮТНАЯ */ 
 .companion p, .companion h2 {
     text-align: start;
     margin: 0;

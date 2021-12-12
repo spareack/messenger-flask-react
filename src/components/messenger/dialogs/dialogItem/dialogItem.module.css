@@ -14,7 +14,7 @@
     padding-left: 0;
     background-color: none ;
     color: #FFFFF0;
-    transition: 0.1s all ease-in-out; 
+    transition: 0.15s all ease-in-out; 
 }
 
 .dialogItem:nth-child(1) {
@@ -22,8 +22,8 @@
 }
 
 .dialogItem:hover {
-    background-color: #a3a3a3;
-    color: #000;
+    background-color: #333b;
+    /* color: #000; */
 }
 
 .currentItem {

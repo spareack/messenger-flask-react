@@ -12,8 +12,6 @@
     padding:0;
 }
 
-
-
 .msgListItem {
     display: flex;
     justify-content: space-between;
@@ -46,6 +44,51 @@
     margin-left: 10px;
 }
 
+.msgListItemAttach {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: relative;
+    color: #FFFFF0;
+    background: none;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    max-width: 340px;
+    /* padding: 6px 12px; */
+    margin-bottom: .575em;
+    
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    border-radius: 10px;
+}
+
+.msgListItemAttach span {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    font-size: 11px;
+    text-transform: uppercase; 
+    color: #999;
+}
+
+.msgListItemVideo {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    color: #FFFFF0;
+    background: none;
+    font-size: 16px;
+    height: 400px;
+    width: 340px;
+    font-family: 'Roboto', sans-serif;
+    margin-bottom: .575em;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    border-radius: 10px;
+}
+
+
+
 .time {
     font-size: 11px;
     text-transform: uppercase; 
@@ -59,4 +102,9 @@
     width: max-content;
     margin-left: 0.4375rem;
     margin-right: -0.25rem;
+}
+
+.imageAttach {
+    max-width: 100%;
+    border-radius: 15px;
 }

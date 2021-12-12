@@ -92,12 +92,13 @@ function Messenger({ setLoggedOut }) {
     if(res !== null){
       const _dialog = dialogs.map( (dialog) => {
         if (dialog.id === res.dialog_id) {
-          return { ...dialog, unread_count: res.dialog_id !== currentDialog ? res.unread_count : 0, last_message: res.value}
+          return { ...dialog, unread_count: res.dialog_id !== currentDialog ? res.unread_count : 0, last_message: res.type === 'text' ? res.value : res.type}
         }
         else return dialog
       })
       dispatch({ type: 'setUserDialogs', payload: _dialog })
-      if(currentDialog === res.dialog_id)dispatch({type: 'setMessages', payload: [ new Message(res.message_id, res.sender, res.value, res.date), ...messages] })
+      console.log(res)
+      if(currentDialog === res.dialog_id)dispatch({type: 'setMessages', payload: [new Message(res.message_id, res.sender, res.value, res.date, res.type), ...messages] })
       if(currentDialog !== res.dialog_id || document.visibilityState === 'hidden')meowSound()
       socket.emit('read_messages', {dialog_id :user.currentDialog})
     }
