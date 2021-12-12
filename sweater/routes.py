@@ -554,7 +554,7 @@ def send_message():
         try:
             global rooms_list
             data = request.get_json()
-            sender_id = data["sender_id"]
+            sender_id = int(current_user.get_id())
             talk_id = data["talk_id"]
             dialog_id = data["dialog_id"]
             message_type = data["message_type"]
