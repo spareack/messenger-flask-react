@@ -141,6 +141,7 @@
 }
 
 .sendButton {
+    margin-left: 10px;
     font-size: 1.2em;
     background-color: #333;
     color: #FFFFF1; 
