@@ -281,7 +281,8 @@ def login():
                                     if message.type == "text":
                                         last_message_value = message.value
                                     else:
-                                        last_message_value = message.type
+                                        media = db.session.query(Media).filter_by(id=message.value).first_or_404()
+                                        last_message_value = media.name
 
                             response_list.append({"id": dialog.id,
                                                   "other_members": members_list,
@@ -342,7 +343,8 @@ def is_authorized():
                             if message.type == "text":
                                 last_message_value = message.value
                             else:
-                                last_message_value = message.type
+                                media = db.session.query(Media).filter_by(id=message.value).first_or_404()
+                                last_message_value = media.name
 
                     unread_dialogs_list = json.loads(user.unread_dialogs)
                     unread_count = unread_dialogs_list[str(dialog.id)] if str(dialog.id) in unread_dialogs_list else 0
@@ -648,52 +650,6 @@ def send_message():
 
         except Exception as e:
             return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
-
-
-# @app.route('/get_dialogs', methods=['GET'])
-# def get_dialog():
-#     if request.method == "GET":
-#
-#         try:
-#             user_id = request.args.get("user_id")
-#
-#             user = User.query.filter_by(id=user_id).first_or_404()
-#             dialogs_ids = json.loads(user.dialogs)
-#             dialogs = db.session.query(Dialog).filter(
-#                 Dialog.id.in_(dialogs_ids)).order_by(Dialog.date_update.desc()).all()
-#
-#             response_list = []
-#
-#             for dialog in dialogs:
-#                 members_list = []
-#                 members = json.loads(dialog.members)
-#                 members.remove(user_id)
-#                 for member_id in members:
-#                     member = db.session.query(User).filter_by(id=member_id).first_or_404()
-#                     members_list.append(member.name)
-#
-#                 talks_ids = json.loads(dialog.talks)
-#                 last_message_value = None
-#                 if len(talks_ids) > 0:
-#
-#                     talk = db.session.query(Talk).filter(Talk.id.in_(talks_ids)).order_by(
-#                         Talk.date_update.desc()).first_or_404()
-#
-#                     messages_ids = json.loads(talk.messages)
-#                     if len(messages_ids) > 0:
-#                         message = db.session.query(Message).filter(Message.id.in_(messages_ids)).order_by(
-#                             Message.date_create.desc()).first_or_404()
-#                         if message.type == "text":
-#                             last_message_value = message.value
-#                         else:
-#                             last_message_value = message.type
-#
-#                 response_list.append({"id": dialog.id, "members": members_list, "last_message": last_message_value})
-#
-#             return jsonify({"status": 0, "dialogs": response_list})
-#
-#         except Exception as e:
-#             return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
 @app.route('/get_talks', methods=['GET'])
