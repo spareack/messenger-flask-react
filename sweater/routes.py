@@ -627,12 +627,13 @@ def send_message():
                     user.unread_dialogs = json.dumps(unread_dialogs_list)
                     db.session.commit()
 
+                    type_message = 'text'
+                    if message.type == 'media':
+                        media = db.session.query(Media).filter_by(id=message.value).first_or_404()
+                        type_message = media.name
+
                     if str(user.id) in rooms_list:
                         """ and user.id != sender_id """
-                        type_message = 'text'
-                        if message_type == 'media':
-                            media = db.session.query(Media).filter_by(id=dialog_id).first_or_404()
-                            type_message = media.name
 
                         emit('socket_info', {'info': 'new Messages in dialog',
                                              'dialog_id': dialog.id,
