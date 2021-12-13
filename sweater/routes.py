@@ -548,32 +548,55 @@ def create_talk():
             return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
+@app.route('/upload_file', methods=['POST'])
+def upload_file():
+    if request.method == "POST":
+        try:
+            file = request.files["value"]
+            image_extensions = {'txt', 'png', 'jpg', 'jpeg'}
+            audio_extensions = {'mp3'}
+            video_extensions = {'mpeg', 'avi', 'mpeg4', 'mp4'}
+
+            if file and '.' in file.filename:
+                filename = secure_filename(file.filename)
+                split_name = filename.rsplit('.', 1)
+
+                if split_name[1] in image_extensions:
+                    media = Media(name='image', type=split_name[1], data=file.read(), date_create=str(datetime.datetime.utcnow() + datetime.timedelta(hours=3)))
+                    db.session.add(media)
+                    db.session.commit()
+                    return jsonify({"status": 0, "info": "successful image!", "file_id": media.id})
+
+                elif split_name[1] in audio_extensions:
+                    media = Media(name='audio', type=split_name[1], data=file.read(), date_create=str(datetime.datetime.utcnow() + datetime.timedelta(hours=3)))
+                    db.session.add(media)
+                    db.session.commit()
+                    return jsonify({"status": 0, "info": "successful audio!", "file_id": media.id})
+
+                elif split_name[1] in video_extensions:
+                    media = Media(name='video', type=split_name[1], data=file.read(), date_create=str(datetime.datetime.utcnow() + datetime.timedelta(hours=3)))
+                    db.session.add(media)
+                    db.session.commit()
+                    return jsonify({"status": 0, "info": "successful video!", "file_id": media.id})
+
+            else:
+                raise ValueError('Invalid file struct :-(')
+
+        except Exception as e:
+            return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
+
+
 @app.route('/send_message', methods=['POST'])
 def send_message():
     if request.method == "POST":
         try:
             global rooms_list
-            # print(type(func.utcnow()))
             data = request.get_json()
             sender_id = data["sender_id"]
             talk_id = data["talk_id"]
             dialog_id = data["dialog_id"]
             message_type = data["message_type"]
-            value = None
-
-            if message_type == "media":
-                file = request.files["value"]
-                allowed_extension = {'txt', 'png', 'jpg', 'jpeg'}
-                if file and '.' in file.filename:
-                    filename = secure_filename(file.filename)
-                    split_name = filename.rsplit('.', 1)
-                    if split_name[1] in allowed_extension:
-                        media = Media(name=split_name[0], type=split_name[1], data=file.read(), date_create=str(datetime.datetime.utcnow() + datetime.timedelta(hours=3)))
-                        db.session.add(media)
-                        db.session.commit()
-                        value = media.id
-            else:
-                value = data["value"]
+            value = data['value']
 
             message = Message(sender=sender_id, type=message_type, value=value, date_create=str(datetime.datetime.utcnow() + datetime.timedelta(hours=3)))
             db.session.add(message)
@@ -604,11 +627,16 @@ def send_message():
 
                     if str(user.id) in rooms_list:
                         """ and user.id != sender_id """
+                        type_message = 'text'
+                        if message_type == 'media':
+                            media = db.session.query(Media).filter_by(id=dialog_id).first_or_404()
+                            type_message = media.name
+
                         emit('socket_info', {'info': 'new Messages in dialog',
                                              'dialog_id': dialog.id,
                                              'message_id': message.id,
                                              'sender': sender_id,
-                                             'type': message_type,
+                                             'type': type_message,
                                              'date': str(datetime.datetime.fromisoformat(message.date_create).time().strftime("%H:%M")),
                                              'value': value,
                                              'unread_count': unread_dialogs_list[str(dialog.id)] if user.id != sender_id else 0},
@@ -707,16 +735,15 @@ def get_messages():
 
             response_list = []
             for message in messages:
-                if message.type == "text":
-                    value = message.value
-                else:
-                    media = db.session.query(Media).filter_by(id=message.value).first()
-                    value = send_file(io.BytesIO(media.data), attachment_filename=(media.name + "." + media.type))
+                type_message = 'text'
+                if message.type == 'media':
+                    media = db.session.query(Media).filter_by(id=message.value).first_or_404()
+                    type_message = media.name
 
                 response_list.append({"id": message.id,
                                       "sender": message.sender,
-                                      "type": message.type,
-                                      "value": value,
+                                      "type": type_message,
+                                      "value": message.value,
                                       "date": str(datetime.datetime.fromisoformat(message.date_create).time().strftime("%H:%M"))})
 
             return jsonify({"status": 0, "messages": response_list})
@@ -730,9 +757,11 @@ def get_file():
     if request.method == "GET":
         try:
             file_id = request.args.get("file_id")
+            file_purpose = request.args.get("purpose")
+
             media = db.session.query(Media).filter_by(id=file_id).first_or_404()
 
-            if media.type == 'jpg' or media.type == 'png':
+            if file_purpose == 'avatar' and media.name == 'image':
 
                 original_image = Image.open(io.BytesIO(media.data))
                 # w, h = original_image.size
