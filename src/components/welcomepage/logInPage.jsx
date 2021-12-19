@@ -1,9 +1,11 @@
 import React, {useState} from 'react'
-import './loginpage.css'
-import {useLocation} from 'react-router-dom'
+import {useLocation, Link} from 'react-router-dom'
+
 import axios from 'axios'
 import {socket} from '../../socket'
 import {useDispatch} from 'react-redux'
+
+import './loginpage.css'
 
 const LogIn = ({setLoggedIn}) => {
     const [logPassword, setForm] = useState({
@@ -63,6 +65,7 @@ const LogIn = ({setLoggedIn}) => {
                 <p className='flashMessage'>{forgotSmth}</p>
                 <div className='buttons'>
                     <button className="LoginPageButton" onClick={(e) => (login(e))}>Log In</button>
+                    <Link to={'/recovery'} className="LoginPageButton">Forgot password?</Link>
                     <button className="LoginPageButton" onClick={() => (passwordRecovery())}>Forgot password?</button>
                 </div>
             </form>

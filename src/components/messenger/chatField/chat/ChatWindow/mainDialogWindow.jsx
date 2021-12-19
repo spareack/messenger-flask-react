@@ -1,16 +1,21 @@
 import React, {useState, useEffect, useRef} from 'react'
-import classes from './MainWindow.module.css'
 import MessageList from '../MessageList/messageList'
 import Companion from '../Companion/Companion'
-import {useSelector, useDispatch} from 'react-redux'
+
 import axios from 'axios'
+import {useSelector, useDispatch} from 'react-redux'
+
+import {sendMessage, getMessages} from '../../../../../chatAPI'
+
 import attach from './attach.svg'
+import classes from './MainWindow.module.css'
  
-const MainWindow = ({companion, sendMessage,active, setActiveTalkMenu, getMessages}) => {
+const MainWindow = ({companion, active, setActiveTalkMenu}) => {
     const dispatch = useDispatch()
+
     const textareaRef = useRef(null)
     const [messageText, setMessageText] = useState('')
-    const [media, setMedia] = useState(null)
+
     const user = useSelector(state => state.user)
     const currentDialog = useSelector(state=> state.user.currentDialog)
     const lastTalk = useSelector(state => state.talks.lastTalk)
@@ -19,7 +24,7 @@ const MainWindow = ({companion, sendMessage,active, setActiveTalkMenu, getMessag
     const sendMessageLocal = (e) => {
         e.preventDefault()
         setMessageText('');
-        if(messageText !== '')sendMessage(messageText)
+        if(messageText !== '')sendMessage(messageText, user.id, lastTalk, currentDialog)
     }
 
     const onEnterPress = (e) => {
@@ -54,16 +59,9 @@ const MainWindow = ({companion, sendMessage,active, setActiveTalkMenu, getMessag
         })
     }
 
-    const fileHandler = (e) => {
-        e.stopPropagation()
-        console.log('file loader clicked!')
-    }
-
     const onSelectFile = async (e) => {
-        setMedia(e.target.files[0])
         e.stopPropagation()
         let response = await mediaHandler(e.target.files[0])
-        console.log(response)
         axios({
             method: 'post',
             url: "/send_message",
@@ -76,6 +74,11 @@ const MainWindow = ({companion, sendMessage,active, setActiveTalkMenu, getMessag
               }
         }).then(res => console.log(res))
         .catch(error => console.log(error))      
+    }
+
+    const fileHandler = (e) => {
+        e.stopPropagation()
+        console.log('file loader clicked!')
     }
 
 

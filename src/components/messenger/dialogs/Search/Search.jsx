@@ -1,16 +1,21 @@
 import React, {useState} from 'react'
-import classes from './Search.module.css'
+
 import axios from 'axios'
-import unnamed from './unnamed.jpg'
 import { useDispatch, useSelector } from 'react-redux';
 import { changeSearchInput } from '../../../store/searchReducer';
 
-const Search = ({createDialog, settings}) => {
+import {Member, Dialog} from '../../../constructor'
+
+import classes from './Search.module.css'
+import unnamed from './unnamed.jpg'
+
+const Search = ({settings}) => {
     const [names, setNames] = useState([])
 
     const user = useSelector(state => state.user)
     const searchInput = useSelector(state => state.search.value)
     const activeInput = useSelector(state => state.search.activeInput)
+    const dialogs = useSelector(state => state.user.dialogs)
     const dispatch = useDispatch()
 
     const search = (e) => {
@@ -42,7 +47,7 @@ const Search = ({createDialog, settings}) => {
         })
         .then(res => {
             console.log(name, res.data.id)
-            if(res.data.status === 0)createDialog(name, res.data.id)
+            if(res.data.status === 0)dispatch({ type: 'setUserDialogs', payload: [...dialogs, new Dialog(res.data.id, null, [new Member(null, name, 0)])] })
             else if(res.data.status === 1) alert('диалог занят')
             else if(res.data.status === 666) alert('Ошибка')
         })

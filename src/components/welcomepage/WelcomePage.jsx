@@ -2,6 +2,7 @@ import React, {useState, /*useEffect*/} from 'react'
 import { Route, Link, Redirect, /*useLocation*/ } from 'react-router-dom'
 import RegPage from './RegPage'
 import LogIn from './logInPage'
+import PasswordRecoveryPage from './passwordRecoveryPage'
 import "./loginpage.css"
 import Particles from 'react-particles-js'
 import params from '../particlesParams'
@@ -17,6 +18,7 @@ const WelcomePage = ({setUser, setUserInfo}) => {
                         params={params.particles}/>
                 <Route key={'/registration'} exact={true} path={'/registration'} component={() => (<RegPage setFlash={setFlashMsg}/>)} />
                 <Route key={'/login'} exact={true} path={'/login'} component={() => (<LogIn setLoggedIn={setUser} setFlash={setFlashMsg} flash={flashMsg}/>)}/>
+                <Route key={'/recovery'} exact={true} component={PasswordRecoveryPage}/>
                 <div className='loginPageAvatar'>
                     <div className='loginLogo'><img src={logo} height='180' alt='logo'/></div>
                     <div className='loginPageText'>

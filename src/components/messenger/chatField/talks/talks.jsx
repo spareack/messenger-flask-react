@@ -5,11 +5,14 @@ import {useDispatch, useSelector} from 'react-redux'
 import unnamed from './unnamed.jpg'
 import arrowBack from './arrowBack.svg'
 import { Talk } from '../../../constructor'
+import { createTalk } from '../../../../chatAPI'
 
-const Talks = ({ current, setTalk, createTalk, currentDialog, active, setActive}) => {
+const Talks = ({active, setActive}) => {
     const dispatch = useDispatch()
     const talks = useSelector(state => state.talks.talks)
+    const current = useSelector(state => state.talks.currentTalk)
     const talksIsActive = useSelector(state=> state.companion.talksIsActive)
+    const currentDialog = useSelector(state=>state.user.currentDialog)
     const companion = useSelector(state => state.user.dialogs.find(dialog => dialog.id === state.user.currentDialog)?.other_members[0])
     
     const talkCreator = async () => {
@@ -32,9 +35,8 @@ const Talks = ({ current, setTalk, createTalk, currentDialog, active, setActive}
                                                 key={talk.id}
                                                 id={talk.id}
                                                 name={talk.title}
-                                                item={talk}
                                                 current={current === talk.id}
-                                                onclick={setTalk} />) 
+                                                />) 
             : <div className={classes.noTalkItem}>Ещё не заведено ни одного разговора</div>}
             </div>
         </div>

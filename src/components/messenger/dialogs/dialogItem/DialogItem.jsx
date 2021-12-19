@@ -3,10 +3,10 @@ import classes from './dialogItem.module.css'
 import unnamed from './unnamed.jpg'
 import {useSelector} from 'react-redux'
 
-const DialogItem = ({id, index, name, lastTalk, onclick, current, unreadCount, online, otherMembers}) => {
+const DialogItem = ({id, index, name, lastTalk, changeDialog, current, unreadCount, online, otherMembers}) => {
     const currentDialog = useSelector(state => state.user.currentDialog)
     const sendID = () => {
-        onclick(id)
+        changeDialog(id)
     }
     const getAvatar = () => {
         if(otherMembers?.length === 1){
