@@ -276,7 +276,10 @@ def confirm_token(token):
 def convert_visit_date(date):
     months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-    visit_date = datetime.datetime.fromisoformat(str(date))
+    try:
+        visit_date = datetime.datetime.fromisoformat(str(date))
+    except:
+        return 'last seen recently'
 
     month_str = months[visit_date.month - 1]
 
