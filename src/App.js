@@ -16,7 +16,6 @@ function App() {
       method: 'get',
       url: '/is_authorized',
     }).then(res => {
-        console.log(res.data)
         if(res.data.status === 0){
             setUserLoggedIn(res.data.is_auth)
             dispatch({type: 'setUser', payload: {
@@ -25,7 +24,6 @@ function App() {
               dialogs: res.data.dialogs ? res.data.dialogs : [],
               photoURL: res.data.avatar_id
             }})
-            // socket.emit("authorize", {id: res.data.id})
         }
     }).catch(error => console.log(error))
    }, [dispatch]);
