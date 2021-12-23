@@ -3,7 +3,9 @@ import ProfileSettings from './profileSettings/ProfileSettings'
 import NotificationSettings from './notificationSettings/NotificationSettings'
 import PrivateSettings from './privateSettings/PrivateSettings'
 import UISettings from './UISettings/UISettings'
+
 import classes from './Settings.module.css'
+
 import arrowBack from './arrowBack.svg'
 import general from './general.svg'
 import logout from './logout.svg'
@@ -28,7 +30,12 @@ const Settings = ({setSettingsWindow, setLoggedOut}) => {
     }
     return (
         <div className={classes.settings}>
-            <div className={classes.backButtonPlace}><button className={classes.backButton} onClick={() => (backButtonBehaivor())}><img src={arrowBack} alt=''/></button> Back </div>
+            <div className={classes.backButtonPlace}>
+                <button className={classes.backButton} 
+                        onClick={() => (backButtonBehaivor())}>
+                    <img src={arrowBack} alt=''/>
+                </button> Back 
+            </div>
 
             {buttons
             ? <div className={classes.buttons}>

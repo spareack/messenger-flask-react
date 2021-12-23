@@ -1,9 +1,10 @@
 import React, {useState, useRef, useEffect} from 'react'
 import MessageListItem from '../MessageListItem/MessageListItem'
-import classes from './MessageList.module.css'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { Separator } from '../../../../constructor'
 
+import classes from './MessageList.module.css'
 
 const MessageList = ({active, getMessages}) => {
     const dispatch = useDispatch()
@@ -12,28 +13,32 @@ const MessageList = ({active, getMessages}) => {
 
     const user = useSelector(state => state.user)
     const messages = useSelector(state => state.messages.messages)
-    const talks = useSelector(state => state.talks)
+    const talks = useSelector(state => state.talks.talks)
+    const currentTalk = useSelector(state => state.talks.currentTalk)
 
     const scrollToggler = () => {
         setActiveScroll((scrollIsActive) => (!scrollIsActive))
     }
     
     const messageFetching = async (condition) => {
-        if(condition){
-            const currentTalkIndex = talks.talks.findIndex((element) => {if(element.id === talks.currentTalk) return true})
-            if(currentTalkIndex){
-                const fetchCurrentTalk = talks.talks[currentTalkIndex-1].id
+        if (condition) {
+            const currentTalkIndex = talks.findIndex( element => {return element.id === currentTalk})
+            if (currentTalkIndex !== 0) {
+                const fetchCurrentTalk = talks[currentTalkIndex-1].id
                 dispatch({type: 'setCurrentTalk', payload: fetchCurrentTalk})
                 let _messages = await getMessages(fetchCurrentTalk)
-                let separator = new Separator(talks.talks[currentTalkIndex-1].title)
+                let separator = new Separator(talks[currentTalkIndex-1].title)
                 dispatch({type: 'setMessages', payload: [...messages, separator, ..._messages]})
             }
         }
     }
 
+
     useEffect(() => {
         list.current.scrollTo({top: 0, behavior: 'instant'})
     }, [user.currentDialog])
+
+
     return (
         <div style={{paddingInline: active? '15px' : '15%'}} 
             ref={list} 

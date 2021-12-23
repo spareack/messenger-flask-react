@@ -3,9 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { Provider } from 'react-redux'
-// import {createStore} from 'redux'
 import {store} from './components/store/store'
-// import reportWebVitals from './reportWebVitals';
+
 
 ReactDOM.render(
   <Provider store={store}>
@@ -13,4 +12,4 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
-// reportWebVitals();
+

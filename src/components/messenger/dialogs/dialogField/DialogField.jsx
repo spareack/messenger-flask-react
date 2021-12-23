@@ -21,6 +21,7 @@ function byField(field) {
 const DialogsField = ({setLoggedOut}) => {
     
     const dispatch = useDispatch()
+    
     const user = useSelector(state => state.user)
     const currentDialog = useSelector(state=> state.user.currentDialog)
     const dialogs = useSelector(state => state.user.dialogs)

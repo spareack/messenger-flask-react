@@ -86,11 +86,22 @@ const MainWindow = ({companion, active, setActiveTalkMenu}) => {
         <div className={classes.dialogWindow}>
             <Companion companion={companion} setActive={setActiveTalkMenu}/>
             <MessageList active={active} getMessages={getMessages}/>
-            <form style={{marginInline: active? '15px' : '15%', visibility: user.currentDialog === -1 ? 'hidden' : 'visible'}} className={classes.txtArea}>
-                <div className={classes.wInputContainer} onClick={e => e.stopPropagation()}>
-                    <textarea id='input' ref={textareaRef} className={classes.wrapper} placeholder="Type a message" value={messageText} onKeyDown={onEnterPress} onChange={(e) => (setMessageText(e.target.value))}></textarea>
-                    <button onClick={toggleAttachMenu} className={classes.attachButton}><img className={classes.inputAttachment} src={attach} alt=''/></button>
-                    <div style={{display: attachIsActive ? 'flex' : 'none'}} className={classes.dropDownMenu} >
+            <form   style={{marginInline: active? '15px' : '15%', visibility: user.currentDialog === -1 ? 'hidden' : 'visible'}} 
+                    className={classes.txtArea}>
+                <div    className={classes.wInputContainer} 
+                        onClick={e => e.stopPropagation()}>
+                    <textarea   id='input' 
+                                ref={textareaRef} 
+                                className={classes.wrapper} 
+                                placeholder="Type a message" 
+                                value={messageText} 
+                                onKeyDown={onEnterPress} 
+                                onChange={(e) => (setMessageText(e.target.value))}>
+                    </textarea>
+                    <button onClick={toggleAttachMenu} className={classes.attachButton}>
+                        <img className={classes.inputAttachment} src={attach} alt=''/>
+                    </button>
+                    <div style={{display: attachIsActive ? 'flex' : 'none'}} className={classes.dropDownMenu}>
                         <input type="file" id="inputFile" onChange={onSelectFile}/>
                         <label className={classes.dropDownMenuItem} htmlFor="inputFile">Photo or video</label>
                         <button onClick={fileHandler} className={classes.dropDownMenuItem}>File</button>

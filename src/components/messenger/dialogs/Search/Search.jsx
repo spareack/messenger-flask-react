@@ -19,24 +19,25 @@ const Search = ({settings}) => {
     const dispatch = useDispatch()
 
     const search = (e) => {
-        if(e.target.value.length !== 0)axios({
-            method: 'get',
-            url: '/search_user',
-            params: {
-                value: e.target.value
-            }
-        })
-        .then(res => {
-            console.log(res.data)
-            setNames(res.data.users)
-        })
-        .catch(error => console.log(error))
-        else setNames([])
+        if(e.target.value.length !== 0){
+            axios({
+                method: 'get',
+                url: '/search_user',
+                params: {
+                    value: e.target.value
+                }
+            })
+            .then(res => {
+                console.log(res.data)
+                setNames(res.data.users)
+            })
+            .catch(error => console.log(error))
+        } else setNames([])
+
         dispatch(changeSearchInput(e.target.value))
     }
 
     const searchUser = (name, id) => {
-        console.log(id, user.id)
         axios({
             method: 'post',
             url: "/create_dialog",
@@ -60,12 +61,25 @@ const Search = ({settings}) => {
 
     return (
         <div className={classes.searchBox}>
-            <input onClick={(e) => (e.stopPropagation())} style={{opacity: settings ? 0 : 1}} className={classes.searchInput} onFocus={() => (dispatch({type: 'SHOW_NAMES'}))} placeholder="Search" value={searchInput} onChange={search}></input>
+            <input  onClick={(e) => (e.stopPropagation())} 
+                    style={{opacity: settings ? 0 : 1}} 
+                    className={classes.searchInput} 
+                    onFocus={() => (dispatch({type: 'SHOW_NAMES'}))} 
+                    placeholder="Search" 
+                    value={searchInput} 
+                    onChange={search}/>
             <div className={classes.dropDownList} style={{display: searchInput.length && activeInput ? 'flex' : 'none'}}>
                 <ul>
-                    {names.length ? names.map( (name, index) => (
-                        <SearchItem key={name.id} srcPath={getAvatar(name.avatar_id)} name={name.name} id={name.id} searchUser={searchUser} isOnline={name.user_status}/>
-                    )) : <li className={classes.searchItem}>Пользователь не найден</li>}
+                    {names.length 
+                    ? names.map((name, index) => (
+                        <SearchItem key={name.id} 
+                                    srcPath={getAvatar(name.avatar_id)} 
+                                    name={name.name} 
+                                    id={name.id} 
+                                    searchUser={searchUser} 
+                                    isOnline={name.user_status}/>
+                    )) 
+                    : <li className={classes.searchItem}>Пользователь не найден</li>}
                 </ul>
             </div>
         </div>
@@ -77,7 +91,14 @@ export default Search
 const SearchItem = ({srcPath, name, id, searchUser, isOnline}) => {
     return (
     <li className={classes.searchItem} onClick={() => {searchUser(name, id)}}>
-        <div className={classes.searchImage}><img height='30' width='30' style={{borderRadius: '75%'}} src={srcPath} alt=''/><span style={{display: isOnline ? 'flex': 'none'}} className={classes.isOnline}>•</span></div><p>{name}</p>
+        <div className={classes.searchImage}>
+            <img    height='30' 
+                    width='30' 
+                    style={{borderRadius: '75%'}} 
+                    src={srcPath} alt=''/>
+            <span style={{display: isOnline ? 'flex': 'none'}} className={classes.isOnline}>•</span>
+        </div>
+        <p>{name}</p>
     </li>
     )
 }

@@ -1,9 +1,11 @@
 .uisettings {
     display: flex;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
     flex-direction: column;
     width: 100% ;
+    padding-inline: 15px;
+    color: #FFFFF1;
 }
 
 input[type=number] {
@@ -58,3 +60,33 @@ input[type=range] {
     align-items: center;
     color: #fffff1;
   }
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .container p {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    padding: 0;
+    text-align: left;
+  }
+
+  select {
+    cursor: pointer;
+    appearance: none;
+    color: #4D4D4D;
+    font-size: 100%;
+    outline: 0;
+    height: 40px;
+    padding: 5px 10px;
+    border-radius: .25rem;
+    background-color: transparent;
+    border: 1px solid rgba(27,31,35,0.2);
+    background-color: #FFFFF1;
+    color: #212121;
+ }

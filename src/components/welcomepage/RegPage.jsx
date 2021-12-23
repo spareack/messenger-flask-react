@@ -15,7 +15,9 @@ const RegPage = ({setFlash}) => {
         nameIsOccupied: false
     })
     const [warning, setWarning] = useState('')
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    
     const history = useHistory()
 
     const checkName = (event) => {
@@ -41,13 +43,14 @@ const RegPage = ({setFlash}) => {
         axios({
             method: 'post',
             url: '/register_new_user',
-            onUploadProgress: () => {
-                //history.push({pathname: '/login', state: {flash: 'Confirm your mail and Log in'}})
-            },
+            // onUploadProgress: () => {
+            //     history.push({pathname: '/login', state: {flash: 'Confirm your mail and Log in'}})
+            // },
             data: {
                 userName: logPassword.name,
                 email: logPassword.login,
-                password: logPassword.password
+                password: logPassword.password,
+                age: logPassword.age
               },
             headers: {
                 'Content-Type': 'application/json'
@@ -63,8 +66,7 @@ const RegPage = ({setFlash}) => {
                 setFlash('Confirm your mail and Log in')
             }   
             setFlash(data.info)
-            console.log(data)
-        }).catch(error => alert(error))
+        }).catch(error => console.log(error))
 }   
     return (
         <form className="authForm regForm" method='POST'>
@@ -76,7 +78,7 @@ const RegPage = ({setFlash}) => {
                 <input className="form-input" placeholder='Your Password' type='password' value={logPassword.password} onChange={(e) => setForm({...logPassword, password: e.target.value})} required={true}></input>
                 <input className="form-input" placeholder='Repeat password' type='password' value={logPassword.password2} onChange={(e) => setForm({...logPassword, password2: e.target.value})} required={true}></input>
                 <p style={{color: '#fffff0', marginBottom: '0'}}>
-                {nameValid.nameIsOccupied ? 'This name is already taken' : "Password contains at least 8 characters "}
+                    {nameValid.nameIsOccupied ? 'This name is already taken' : "Password contains at least 8 characters "}
                 </p>
                 {(logPassword.password !== logPassword.password2 || (logPassword.password === '' && logPassword.password2 === '')) 
                     ? <p style={{color: 'red', marginBottom: '0'}}>Password mismatch!</p> 
@@ -88,7 +90,8 @@ const RegPage = ({setFlash}) => {
                             padding: '15px'}} 
                             type='submit'
                             onClick={send}
-                            disabled={(logPassword.password !== logPassword.password2 || (logPassword.password === '' && logPassword.password2 === '') || 
+                            disabled={
+                                (logPassword.password !== logPassword.password2 || (logPassword.password === '' && logPassword.password2 === '') || 
                             (logPassword.name === '') || logPassword.age < 12) || 
                             !re.test(String(logPassword.login).toLowerCase()) ||
                             logPassword.password.length < 8 || nameValid.nameIsOccupied || logPassword.name.length > 19}>Register now</Link>

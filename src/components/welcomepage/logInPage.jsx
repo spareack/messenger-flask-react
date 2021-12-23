@@ -59,14 +59,17 @@ const LogIn = ({setLoggedIn}) => {
         <div className='authFormDiv'>
             <form className="authForm">
                 <h2> LogIn </h2>
-                <p style={{margin: 0, padding: 0, color: '#fffff1'}}>{location.state?.flash ? location.state.flash : ''}</p>
-                <input className='form-input' placeholder='Email' value={logPassword.login} onChange={(e) => setForm({...logPassword, login: e.target.value })}></input>
-                <input className="form-input" placeholder='Password' type='password' value={logPassword.password} onChange={(e) => setForm({...logPassword, password: e.target.value})}></input>
-                <p className='flashMessage'>{forgotSmth}</p>
+                <p style={{margin: 0, padding: 0, color: '#fffff1'}}>
+                    {location.state?.flash ? location.state.flash : ''}
+                </p>
+                <input className='form-input' placeholder='Email' value={logPassword.login} onChange={(e) => setForm({...logPassword, login: e.target.value })}/>
+                <input className="form-input" placeholder='Password' type='password' value={logPassword.password} onChange={(e) => setForm({...logPassword, password: e.target.value})}/>
+                <p className='flashMessage'>
+                    {forgotSmth}
+                </p>
                 <div className='buttons'>
                     <button className="LoginPageButton" onClick={(e) => (login(e))}>Log In</button>
                     <Link to={'/recovery'} className="LoginPageButton">Forgot password?</Link>
-                    <button className="LoginPageButton" onClick={() => (passwordRecovery())}>Forgot password?</button>
                 </div>
             </form>
         </div>

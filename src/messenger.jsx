@@ -25,6 +25,7 @@ function Messenger({ setLoggedOut }) {
   const talks  = useSelector(state => state.talks.talks)
   const currentDialog = useSelector(state => state.user.currentDialog)
   
+  const sound = useSelector(state => state.UI.sound)
   
   /* Убираем меню поиска, меню собеседника и меню прикрепления медиа файлов по клику по другой области */
   const blurInput = () => {
@@ -55,6 +56,17 @@ function Messenger({ setLoggedOut }) {
     socket.on("new_talk", res => {
       setNewTalk(res)
     })
+    // window.addEventListener('onbeforeunload', (e) => {
+    //   e.preventDefault()
+    //   socket.emit('manual_disconnect', {user_id: user.id})
+    //   return('aaa')
+    // });
+    // window.addEventListener('onunload', () => {
+    //   socket.emit('manual_disconnect', {user_id: user.id})
+    // })
+    // return () => {
+    //   socket.removeAllListeners()
+    // }
   }, []) 
 
   /* Добавление диалога в режиме real time */
@@ -103,7 +115,7 @@ function Messenger({ setLoggedOut }) {
       dispatch({type: 'setUserDialogs', payload: _dialog})
       console.log(res)
       if(currentDialog === res.dialog_id)dispatch({type: 'setMessages', payload: [new Message(res.message_id, res.sender, res.value, res.date, res.type), ...messages] })
-      if(currentDialog !== res.dialog_id || document.visibilityState === 'hidden')meowSound()
+      if((currentDialog !== res.dialog_id || document.visibilityState === 'hidden') && sound)meowSound()
       socket.emit('read_messages', {dialog_id :user.currentDialog})
     }
   }, [res, dispatch])
