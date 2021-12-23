@@ -66,16 +66,18 @@ def handle_connection(data):
 # @cross_origin()
 def read_unread(data):
     dialog_id = str(data['dialog_id'])
-
     user_id = int(current_user.get_id())
-    user = db.session.query(User).filter_by(id=user_id).first_or_404()
 
-    unread_dialogs_list = json.loads(user.unread_dialogs)
-    if dialog_id in unread_dialogs_list:
-        unread_dialogs_list.pop(dialog_id)
+    if user_id is not None:
+        user_id = int(current_user.get_id())
+        user = db.session.query(User).filter_by(id=user_id).first_or_404()
 
-    user.unread_dialogs = json.dumps(unread_dialogs_list)
-    db.session.commit()
+        unread_dialogs_list = json.loads(user.unread_dialogs)
+        if dialog_id in unread_dialogs_list:
+            unread_dialogs_list.pop(dialog_id)
+
+        user.unread_dialogs = json.dumps(unread_dialogs_list)
+        db.session.commit()
 
 
 @socketio.on('connect')
@@ -113,6 +115,44 @@ def connect_socket():
     except Exception as e:
         print('connect error', str(e) + traceback.format_exc())
         return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
+
+
+@socketio.on('manual_disconnect')
+# @cross_origin()
+def manual_disconnect(data):
+    print('est signal!', 'peredan id', data['user_id'])
+    return 'est signal!', 'peredan id', data['user_id']
+
+    # try:
+    #
+    #     user_id = str(data['user_id'])
+    #     leave_room(user_id)
+    #
+    #     if user_id is not None:
+    #         user = db.session.query(User).filter_by(id=user_id).first_or_404()
+    #         user.date_visited = str(datetime.datetime.utcnow() + datetime.timedelta(hours=3))
+    #         user.user_status = 0
+    #         db.session.commit()
+    #
+    #         dialog_ids = json.loads(user.dialogs)
+    #         for dialog_id in dialog_ids:
+    #             dialog = db.session.query(Dialog).filter_by(id=dialog_id).first_or_404()
+    #             dialog_members = json.loads(dialog.members)
+    #
+    #             for member_id in dialog_members:
+    #                 if str(member_id) != user_id and str(member_id) in rooms_list:
+    #                     emit('socket_status', {'info': 'status_info',
+    #                                            'dialog_id': int(dialog_id),
+    #                                            'user_id': int(user_id),
+    #                                            'user_status': 0,
+    #                                            'date_visit': user.date_visited},
+    #                          to=str(member_id), namespace='/')
+    #
+    #         print("disconnect(", user_id)
+    #
+    # except Exception as e:
+    #     print('connect error', str(e) + traceback.format_exc())
+    #     return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
 @socketio.on('disconnect')
@@ -233,6 +273,28 @@ def confirm_token(token):
             return str(e) + traceback.format_exc()
 
 
+def convert_visit_date(date):
+    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+    try:
+        visit_date = datetime.datetime.fromisoformat(str(date))
+    except:
+        return 'last seen recently'
+
+    month_str = months[visit_date.month - 1]
+
+    if visit_date.year != datetime.datetime.now().year:
+        response = 'last seen ' + str(visit_date.day) + ' ' + month_str + ' ' + str(visit_date.year)
+
+    elif visit_date.day != datetime.datetime.now().day:
+        response = 'last seen ' + str(visit_date.day) + ' ' + month_str + ' ' + str(visit_date.hour) + ':' + str(visit_date.minute)
+
+    else:
+        response = 'last seen at ' + str(visit_date.hour) + ':' + str(visit_date.minute)
+
+    return response
+
+
 @app.route('/authorize', methods=['POST'])
 def login():
     if request.method == 'POST':
@@ -264,8 +326,9 @@ def login():
                                 member = db.session.query(User).filter_by(id=member_id).first_or_404()
                                 members_list.append({"name": member.name,
                                                      "user_status": member.user_status,
-                                                     'date_visit': member.date_visited,
-                                                     "avatar_id": member.avatar_id})
+                                                     'date_visit': convert_visit_date(member.date_visited),
+                                                     "avatar_id": member.avatar_id,
+                                                     'email': member.email})
 
                             talks_ids = json.loads(dialog.talks)
                             last_message_value = None
@@ -326,8 +389,9 @@ def is_authorized():
 
                         members_list.append({"name": member.name,
                                              "user_status": member.user_status,
-                                             'date_visit': member.date_visited,
-                                             "avatar_id": member.avatar_id})
+                                             'date_visit': convert_visit_date(member.date_visited),
+                                             "avatar_id": member.avatar_id,
+                                             'email': member.email})
 
                     talks_ids = json.loads(dialog.talks)
                     last_message_value = None
