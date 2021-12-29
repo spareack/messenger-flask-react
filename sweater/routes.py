@@ -186,7 +186,7 @@ def disconnect_socket():
             print("disconnect(", user_id)
 
     except Exception as e:
-        print('connect error', str(e) + traceback.format_exc())
+        print('disconnect error', str(e) + traceback.format_exc())
         return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
 
@@ -274,25 +274,25 @@ def confirm_token(token):
 
 
 def convert_visit_date(date):
-    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-
     try:
+        months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
         visit_date = datetime.datetime.fromisoformat(str(date))
-    except:
+        month_str = months[visit_date.month - 1]
+
+        if visit_date.year != datetime.datetime.now().year:
+            response = 'last seen ' + str(visit_date.day) + ' ' + month_str + ' ' + str(visit_date.year)
+
+        elif visit_date.day != datetime.datetime.now().day:
+            response = 'last seen ' + str(visit_date.day) + ' ' + month_str + ' ' + str(visit_date.hour) + ':' + str(visit_date.minute)
+
+        else:
+            response = 'last seen at ' + str(visit_date.hour) + ':' + str(visit_date.minute)
+
+        return response
+
+    except Exception as e:
         return 'last seen recently'
-
-    month_str = months[visit_date.month - 1]
-
-    if visit_date.year != datetime.datetime.now().year:
-        response = 'last seen ' + str(visit_date.day) + ' ' + month_str + ' ' + str(visit_date.year)
-
-    elif visit_date.day != datetime.datetime.now().day:
-        response = 'last seen ' + str(visit_date.day) + ' ' + month_str + ' ' + str(visit_date.hour) + ':' + str(visit_date.minute)
-
-    else:
-        response = 'last seen at ' + str(visit_date.hour) + ':' + str(visit_date.minute)
-
-    return response
 
 
 @app.route('/authorize', methods=['POST'])
@@ -479,6 +479,11 @@ def get_icon(filename):
     return send_from_directory(os.path.join('../', 'build'), filename)
 
 
+@app.route('/favicon.ico')
+def get_main_icon():
+    return send_from_directory(os.path.join('../', 'build'), 'favicon.ico')
+
+
 @app.route('/search_user', methods=['GET'])
 def search_user():
     if request.method == "GET":
@@ -505,6 +510,7 @@ def search_user():
                              "user_status": user.user_status} for user in users)
 
             return jsonify({"status": 0, "users": response})
+
         except Exception as e:
             return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
 
@@ -856,6 +862,21 @@ def upload_avatar():
 #         return jsonify({"status": 0, "info": "successful"})
 #     else:
 #         return jsonify({"status": 1, "info": "invalid file"})
+
+
+@app.route('/reset_password', methods=['POST'])
+def reset_password():
+    if request.method == "POST":
+        data = request.get_json()
+        email = data["email"]
+
+        token = token_key.dumps(email)
+        msg = Mesage('Password Recovery - Talk Messenger', sender="talk", recipients=[email])
+        link = url_for('confirm_token', token=str(token), _external=True)
+        msg.body = 'Click this link to verify your account on Talk Messenger: ' + link
+        mail.send(msg)
+
+        user = db.session.query(User).filter_by(id=user_id).first_or_404()
 
 
 @app.errorhandler(404)
