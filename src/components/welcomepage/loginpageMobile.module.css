@@ -1,0 +1,94 @@
+.header {
+    width: 100%;
+    height: 60px;
+    background-color: #2a2a2a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.loginPage {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    color: #FFFFF1;
+    background-color: #111;
+}
+
+.authFormM {
+    display: flex;
+    border: none;
+    border-radius: 0;
+    width: 100%;
+    height: max-content;
+    padding: 10px;
+    /* padding-left: 10px; */
+    box-shadow: none;
+    /* margin-top: ; */
+}
+
+.authFormM h1 {
+    padding: 0;
+    margin: 0;
+}
+
+.authFormDivM {
+    border-radius: 0;
+}
+
+.LoginPageButtonM {
+    width: 240px;
+    text-align: center;
+    font-style: normal;
+    font-weight: 400;
+    box-shadow: none;
+}
+
+.LoginPageButtonM:hover {
+    box-shadow: none;
+}
+.registrationBlock {
+    background-color: #2a2a2a;
+    height: max-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    padding-inline: 15px;
+    padding-block: 10px;
+}
+
+.recoveryPage {
+    background-color: #2a2a2a;
+    height: min-content;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    width: 100%;
+    padding-inline: 15px;
+    padding-block: 10px;
+}
+
+.buttonsM {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttonsM .LoginPageButtonM {
+    width: 240px;
+    text-align: center;
+    font-style: normal;
+    font-weight: 400;
+    box-shadow: none;
+}
+
+.buttonsM .LoginPageButtonM:hover {
+    box-shadow: none;
+    transform: none;
+}

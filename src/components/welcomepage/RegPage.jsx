@@ -1,6 +1,11 @@
 import React, {useState} from 'react'
-import axios from 'axios'
 import {Link, useHistory} from 'react-router-dom'
+import { isMobile, mobileModel } from 'react-device-detect'
+
+import axios from 'axios'
+
+import classes from './loginpage.module.css'
+import mobile from './loginpageMobile.module.css'
 
 const RegPage = ({setFlash}) => {
     const [logPassword, setForm] = useState({
@@ -68,33 +73,40 @@ const RegPage = ({setFlash}) => {
             setFlash(data.info)
         }).catch(error => console.log(error))
 }   
+
     return (
-        <form className="authForm regForm" method='POST'>
+        <form className={
+            isMobile 
+            ? classes.authForm + ' ' + classes.regForm + ' ' + mobile.authFormM 
+            : classes.authForm + ' ' + classes.regForm} method='POST'>
             <h2> Registration </h2>
                 {warning}
-                <input className='form-input' placeholder='Your nickname' value={logPassword.name} onChange={checkName} required style={{color: nameValid.nameIsOccupied || logPassword.name.length > 19 ? 'red' : '#5E6472'}}></input>
-                <input className="form-input" placeholder='Your age' value={logPassword.age} onChange={(e) => setForm({...logPassword, age: e.target.value})} required style={{color: logPassword.age < 12 || logPassword.age > 110 ? '#cc0000' : "#5E6472"}}></input>
-                <input className="form-input" placeholder='Your Email' value={logPassword.login} onChange={(e) => (setForm({...logPassword, login: e.target.value}))} required={true} style={{color: re.test(String(logPassword.login).toLowerCase()) && logPassword.login !== '' ? '#5E6472' : 'red'}}></input>
-                <input className="form-input" placeholder='Your Password' type='password' value={logPassword.password} onChange={(e) => setForm({...logPassword, password: e.target.value})} required={true}></input>
-                <input className="form-input" placeholder='Repeat password' type='password' value={logPassword.password2} onChange={(e) => setForm({...logPassword, password2: e.target.value})} required={true}></input>
+                <input className={classes.formInput} placeholder='Your nickname' value={logPassword.name} onChange={checkName} required style={{color: nameValid.nameIsOccupied || logPassword.name.length > 19 ? 'red' : '#5E6472'}}></input>
+                <input className={classes.formInput} placeholder='Your age' value={logPassword.age} onChange={(e) => setForm({...logPassword, age: e.target.value})} required style={{color: logPassword.age < 12 || logPassword.age > 110 ? '#cc0000' : "#5E6472"}}></input>
+                <input className={classes.formInput} placeholder='Your Email' value={logPassword.login} onChange={(e) => (setForm({...logPassword, login: e.target.value}))} required={true} style={{color: re.test(String(logPassword.login).toLowerCase()) && logPassword.login !== '' ? '#5E6472' : 'red'}}></input>
+                <input className={classes.formInput} placeholder='Your Password' type='password' value={logPassword.password} onChange={(e) => setForm({...logPassword, password: e.target.value})} required={true}></input>
+                <input className={classes.formInput} placeholder='Repeat password' type='password' value={logPassword.password2} onChange={(e) => setForm({...logPassword, password2: e.target.value})} required={true}></input>
                 <p style={{color: '#fffff0', marginBottom: '0'}}>
                     {nameValid.nameIsOccupied ? 'This name is already taken' : "Password contains at least 8 characters "}
                 </p>
                 {(logPassword.password !== logPassword.password2 || (logPassword.password === '' && logPassword.password2 === '')) 
                     ? <p style={{color: 'red', marginBottom: '0'}}>Password mismatch!</p> 
                     : <p style={{color: 'green', marginBottom: '0'}}>Password match</p>}
-                <div className="buttons">
-                    <Link to={'/login'} className="LoginPageButton" 
+                <div className={classes.buttons}>
+                    <Link to={'/login'} className={classes.LoginPageButton} 
                     style={{margin: '2%',                                  
                             width: '100%', 
                             padding: '15px'}} 
                             type='submit'
                             onClick={send}
                             disabled={
-                                (logPassword.password !== logPassword.password2 || (logPassword.password === '' && logPassword.password2 === '') || 
-                            (logPassword.name === '') || logPassword.age < 12) || 
-                            !re.test(String(logPassword.login).toLowerCase()) ||
-                            logPassword.password.length < 8 || nameValid.nameIsOccupied || logPassword.name.length > 19}>Register now</Link>
+                                (logPassword.password !== logPassword.password2 || (logPassword.password === '' && logPassword.password2 === '') 
+                                || (logPassword.name === '') 
+                                || logPassword.age < 12) 
+                                || !re.test(String(logPassword.login).toLowerCase()) 
+                                || logPassword.password.length < 8 
+                                || nameValid.nameIsOccupied 
+                                || logPassword.name.length > 19}>Register now</Link>
                 </div>
         </form>
     )

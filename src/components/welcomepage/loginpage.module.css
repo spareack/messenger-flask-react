@@ -69,7 +69,9 @@
     background-color: #2a2a2a;
 }
 
-input[class="form-input"]{
+
+
+.formInput {
     width: 240px;
     height: 50px;
     margin-top: 2%;
@@ -84,7 +86,7 @@ input[class="form-input"]{
     transition: 0.2s linear;
 }
 
-input[class="form-input"]:focus {
+.formInput:focus {
     transform: translateX(-2px);
     border-radius: 5px;
 }

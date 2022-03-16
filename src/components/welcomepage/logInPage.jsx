@@ -1,11 +1,13 @@
 import React, {useState} from 'react'
 import {useLocation, Link} from 'react-router-dom'
+import {isMobile} from 'react-device-detect'
 
 import axios from 'axios'
 import {socket} from '../../socket'
 import {useDispatch} from 'react-redux'
 
-import './loginpage.css'
+import classes from './loginpage.module.css'
+import mobile from './loginpageMobile.module.css'
 
 const LogIn = ({setLoggedIn}) => {
     const [logPassword, setForm] = useState({
@@ -55,21 +57,41 @@ const LogIn = ({setLoggedIn}) => {
         console.log(logPassword.password)
     }
 
-    return (
-        <div className='authFormDiv'>
-            <form className="authForm">
+    if(isMobile) return (
+        <div className={classes.authFormDiv + ' ' + mobile.authFormDivM}>
+            <form className={classes.authForm + ' ' + mobile.authFormM}>
+            <h2> LogIn </h2>
+                <p style={{margin: 0, padding: 0, color: '#fffff1'}}>
+                    {location.state?.flash ? location.state.flash : ''}
+                </p>
+                <input className={classes.formInput} placeholder='Email' value={logPassword.login} onChange={(e) => setForm({...logPassword, login: e.target.value })}/>
+                <input className={classes.formInput} placeholder='Password' type='password' value={logPassword.password} onChange={(e) => setForm({...logPassword, password: e.target.value})}/>
+                <p className={classes.flashMessage}>
+                    {forgotSmth}
+                </p>
+                {/* <div className={classes.buttons}> */}
+                    <button className={classes.LoginPageButton + ' ' + mobile.LoginPageButtonM} onClick={(e) => (login(e))}>Log In</button>
+                    <Link to={'/m.recovery'} className={classes.LoginPageButton + ' ' + mobile.LoginPageButtonM}>Forgot password?</Link>
+                {/* </div> */}
+
+            </form>
+        </div>
+    )
+    else return (
+        <div className={classes.authFormDiv}>
+            <form className={classes.authForm}>
                 <h2> LogIn </h2>
                 <p style={{margin: 0, padding: 0, color: '#fffff1'}}>
                     {location.state?.flash ? location.state.flash : ''}
                 </p>
-                <input className='form-input' placeholder='Email' value={logPassword.login} onChange={(e) => setForm({...logPassword, login: e.target.value })}/>
-                <input className="form-input" placeholder='Password' type='password' value={logPassword.password} onChange={(e) => setForm({...logPassword, password: e.target.value})}/>
-                <p className='flashMessage'>
+                <input className={classes.formInput} placeholder='Email' value={logPassword.login} onChange={(e) => setForm({...logPassword, login: e.target.value })}/>
+                <input className={classes.formInput} placeholder='Password' type='password' value={logPassword.password} onChange={(e) => setForm({...logPassword, password: e.target.value})}/>
+                <p className={classes.flashMessage}>
                     {forgotSmth}
                 </p>
-                <div className='buttons'>
-                    <button className="LoginPageButton" onClick={(e) => (login(e))}>Log In</button>
-                    <Link to={'/recovery'} className="LoginPageButton">Forgot password?</Link>
+                <div className={classes.buttons}>
+                    <button className={classes.LoginPageButton} onClick={(e) => (login(e))}>Log In</button>
+                    <Link to={'/recovery'} className={classes.LoginPageButton}>Forgot password?</Link>
                 </div>
             </form>
         </div>

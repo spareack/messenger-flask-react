@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
+import { isMobile } from 'react-device-detect'
 import DialogsField from './components/messenger/dialogs/dialogField/DialogField'
 import WorkSpace from './components/messenger/chatField/chat/workSpace/workSpace'
+import Navbar from './components/mobile/NavBar/Navbar'
 
 import { socket } from './socket'
 import { useDispatch, useSelector } from 'react-redux'
@@ -14,6 +16,7 @@ import './App.css'
 import meow from './imagesAndSounds/meow.mp3'
 
 function Messenger({ setLoggedOut }) {
+  const [activeNavbar, setActiveNav] = useState(true)
 
   const dispatch = useDispatch() //диспетчер
   const [meowSound] = useSound(meow, {volume: 0.03}) //звук мяу
@@ -120,6 +123,13 @@ function Messenger({ setLoggedOut }) {
     }
   }, [res, dispatch])
 
+  if(isMobile) return (
+    <div className="App" onClick={() => (blurInput())}>
+      <DialogsField setLoggedOut={setLoggedOut}/>
+      <WorkSpace companion={dialogs.find(Dialog => (Dialog.id === currentDialog))}/>
+      <Navbar active={activeNavbar}/>
+    </div>
+  )
   return (
     <div className="App" onClick={() => (blurInput())}>
       <DialogsField setLoggedOut={setLoggedOut}/>
