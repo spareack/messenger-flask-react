@@ -126,8 +126,8 @@ function Messenger({ setLoggedOut }) {
   if(isMobile) return (
     <div className="App" onClick={() => (blurInput())}>
       <DialogsField setLoggedOut={setLoggedOut}/>
-      <WorkSpace companion={dialogs.find(Dialog => (Dialog.id === currentDialog))}/>
-      <Navbar active={activeNavbar}/>
+      {/* <WorkSpace companion={dialogs.find(Dialog => (Dialog.id === currentDialog))}/> */}
+      {/* <Navbar active={activeNavbar}/> */}
     </div>
   )
   return (

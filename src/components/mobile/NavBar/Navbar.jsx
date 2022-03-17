@@ -1,7 +1,7 @@
 import React from 'react'
 import classes from './Navbar.module.css'
 
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import chat from './chatbubbles.svg'
 import friends from './person.svg'

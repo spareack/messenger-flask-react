@@ -1,8 +1,9 @@
 import React, {useState} from 'react'
+import { isMobile } from 'react-device-detect';
 
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux';
-import { changeSearchInput } from '../../../store/searchReducer';
+import { changeNames, changeSearchInput } from '../../../store/searchReducer';
 
 import {Member, Dialog} from '../../../constructor'
 
@@ -30,6 +31,7 @@ const Search = ({settings}) => {
             .then(res => {
                 console.log(res.data)
                 setNames(res.data.users)
+                dispatch(changeNames(res.data.users))
             })
             .catch(error => console.log(error))
         } else setNames([])
@@ -37,7 +39,7 @@ const Search = ({settings}) => {
         dispatch(changeSearchInput(e.target.value))
     }
 
-    const searchUser = (name, id) => {
+    const addUser = (name, id) => {
         axios({
             method: 'post',
             url: "/create_dialog",
@@ -70,16 +72,16 @@ const Search = ({settings}) => {
                     onChange={search}/>
             <div className={classes.dropDownList} style={{display: searchInput.length && activeInput ? 'flex' : 'none'}}>
                 <ul>
-                    {names.length 
-                    ? names.map((name, index) => (
+                    {names.length && !isMobile
+                    ? names.map((name) => (
                         <SearchItem key={name.id} 
                                     srcPath={getAvatar(name.avatar_id)} 
                                     name={name.name} 
                                     id={name.id} 
-                                    searchUser={searchUser} 
+                                    searchUser={addUser} 
                                     isOnline={name.user_status}/>
                     )) 
-                    : <li className={classes.searchItem}>Пользователь не найден</li>}
+                    : <li style={{display: isMobile ? 'none': 'block'}} className={classes.searchItem}>Пользователь не найден</li>}
                 </ul>
             </div>
         </div>
