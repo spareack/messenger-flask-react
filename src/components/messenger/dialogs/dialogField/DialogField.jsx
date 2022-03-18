@@ -30,9 +30,9 @@ export const MESSENGER = 'Messenger'
 export const LOGOUT = 'Log out'
 
 const DialogsField = ({ setLoggedOut }) => {
-    
+        
     const dispatch = useDispatch()
-    
+
     const user = useSelector(state => state.user)
     const currentDialog = useSelector(state => state.user.currentDialog)
     const dialogs = useSelector(state => state.user.dialogs)
@@ -152,15 +152,15 @@ const DialogsField = ({ setLoggedOut }) => {
         <div className={mobile.Dialogs}>
             <div className={mobile.navbar}>
                 {mobileMenu !== MESSENGER
-                ?<select onChange={e => changeWindow(e)}>
+                ?<select className={mobile.topSelect} onChange={e => changeWindow(e)}>
                     <option value={CHATS}>Chats</option>
                     <option value={SETTINGS}>Settins</option>
                     <option value={LOGOUT}>Log Out</option>
                 </select>
-                : <button onClick={() => {setMobileMenu(CHATS); dispatch({type: 'setCurrentDialog', action: -1})}} className={classes.dropDownMenuButton}>Back</button>}
+                : ''}
                 {((currentDialog) => {
-                    if(currentDialog !== -1) return (
-                        <Companion companion={dialogs.find(Dialog => currentDialog == Dialog.id)}/>
+                    if (currentDialog !== -1) return (
+                        <Companion companion={dialogs.find(Dialog => currentDialog == Dialog.id)} setMobileMenu={setMobileMenu}/>
                     )
                 })(currentDialog)}
             </div>

@@ -70,3 +70,11 @@
 .searchImage {
     position: relative;
 }
+
+.searchBoxM {
+    width: 90%;
+    height: 50px;
+    /* padding: 5px; */
+    font-size: 1.4em;
+    border-radius: 5px;
+}

@@ -9,11 +9,11 @@ import friends from './person.svg'
 
 const Navbar = ({active}) => {
     
-  return (
-    <div className={active ? classes.navbar : classes.none}>
-        <img src={friends} alt='dialogs'/>
-        <img src={chat} alt='chat'/>
-    </div>
+    return (
+        <div className={active ? classes.navbar : classes.none}>
+            <img src={friends} alt='dialogs'/>
+            <img src={chat} alt='chat'/>
+        </div>
   )
 }
 

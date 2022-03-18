@@ -7,7 +7,11 @@ import mobile from './mobileCompanion.module.css'
 import unnamed from './unnamed.jpg'
 import settings from './companionSettings.svg'
 
-const Companion = ({companion, setActive}) => {
+import { CHATS } from '../../../dialogs/dialogField/DialogField'
+
+import arrowBack from './arrowBack.svg'
+
+const Companion = ({companion, setActive, setMobileMenu}) => {
     const online = useSelector(state => state.user.dialogs.find((dialog) => (dialog.id === state.user.currentDialog))?.other_members[0].user_status)
     const active = useSelector(state => state.companion.active)
     const talksIsActive = useSelector(state => state.companion.talksIsActive)
@@ -35,20 +39,23 @@ const Companion = ({companion, setActive}) => {
     }
 
     const checkProfile = () => {
-        if(talksIsActive){
-            dispatch({type: 'setTalksDisabled'})
-            setActive(true)
-        } else {
-            setTimeout(() => dispatch({type: 'setTalksActive'}), 300)
-            setActive(false)
+        if (!isMobile) {
+            if (talksIsActive) {
+                dispatch({type: 'setTalksDisabled'})
+                setActive(true)
+            } else {
+                setTimeout(() => dispatch({type: 'setTalksActive'}), 300)
+                setActive(false)
+            }
         }
     }
     return (
         <div className={isMobile ? classes.companion + ' ' + mobile.companionM : classes.companion} style={companion?.other_members.length ? {display: 'flex'} : {display: 'none'} }>
             <div className={classes.companionInfo} onClick={checkProfile}>
-            <div className={classes.avatar}>
-                <img alt='' src={companion?.other_members.length === 1? getAvatar(companion.other_members[0].avatar_id) : unnamed}/>
-            </div>
+                {isMobile ? <button className={mobile.companionButton} onClick={(e) => {e.stopPropagation(); setMobileMenu(CHATS); dispatch({type: 'setCurrentDialog', action: -1})}}><img src={arrowBack} alt='back button' height={35}/></button> : ''}
+                <div className={classes.avatar}>
+                    <img alt='' src={companion?.other_members.length === 1? getAvatar(companion.other_members[0].avatar_id) : unnamed}/>
+                </div>
                 <div>
                     <h2 style={{marginLeft: companion?.other_members?.length ? '' : '15px'}}>
                         {companion?.other_members?.length? companion?.other_members.length === 1? companion?.other_members[0].name :'Название группового разговора': 'Выберите диалог'}

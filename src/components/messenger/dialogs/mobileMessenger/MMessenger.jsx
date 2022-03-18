@@ -57,7 +57,7 @@ const MMessenger = ({currentWindow=CHATS, changeDialog, addUser, setMobileMenu})
         case MESSENGER:
             return (
                 <div className={mobile.MMessenger}>
-                    <WorkSpace companion={dialogs.find(Dialog => (Dialog.id === currentDialog))}/>
+                    <WorkSpace companion={dialogs.find(Dialog => (Dialog.id === currentDialog))} setMobileMenu={setMobileMenu}/>
                 </div>
             )
         default:

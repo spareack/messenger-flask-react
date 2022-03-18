@@ -62,15 +62,15 @@ const Search = ({settings}) => {
     }
 
     return (
-        <div className={classes.searchBox}>
+        <div className={isMobile ? classes.searchBox + ' ' + classes.searchBoxM: classes.searchBox}>
             <input  onClick={(e) => (e.stopPropagation())} 
                     style={{opacity: settings ? 0 : 1}} 
-                    className={classes.searchInput} 
+                    className={isMobile ? classes.searchInput + ' ' + classes.searchInputM : classes.searchInput} 
                     onFocus={() => (dispatch({type: 'SHOW_NAMES'}))} 
                     placeholder="Search" 
                     value={searchInput} 
                     onChange={search}/>
-            <div className={classes.dropDownList} style={{display: searchInput.length && activeInput ? 'flex' : 'none'}}>
+            <div className={classes.dropDownList} style={{display: searchInput.length && activeInput && !isMobile ? 'flex' : 'none'}}>
                 <ul>
                     {names.length && !isMobile
                     ? names.map((name) => (

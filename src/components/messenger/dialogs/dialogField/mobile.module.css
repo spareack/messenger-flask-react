@@ -28,3 +28,12 @@
     overflow-y: auto;
     overflow-x: hidden;
 }
+
+.topSelect {
+    margin-left: 13px;
+    padding-inline: 20px;
+    background-color: #444444;
+    color: #fffff1;
+    font-size: 1.1em;
+    border-radius: 5px;
+}
