@@ -4,6 +4,7 @@ import { isMobile } from 'react-device-detect'
 import DialogItem from '../dialogItem/DialogItem'
 import Search from '../Search/Search'
 import Settings from '../Settings/Settings'
+import MMesenger from '../mobileMessenger/MMessenger'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setTalks, setCurrentTalk, setLastTalk } from '../../../store/talksReducer';
@@ -16,15 +17,17 @@ import classes from './dialogsField.module.css'
 import mobile from './mobile.module.css'
 import settingsIMG from './settings.svg'
 import unnamed from './unnamed.jpg'
+import Companion from '../../chatField/chat/Companion/Companion'
 
 // функция сортировки массива объектов по полю, с числовым значением
 function byField(field) {
     return (a, b) => +a[field] > +b[field] ? -1 : 1;
 }
 
-const CHATS = 'chats'
-const SETTINGS = 'settings'
-const LOGOUT = 'Log out'
+export const CHATS = 'Chats'
+export const SETTINGS = 'Settings'
+export const MESSENGER = 'Messenger'
+export const LOGOUT = 'Log out'
 
 const DialogsField = ({ setLoggedOut }) => {
     
@@ -108,6 +111,7 @@ const DialogsField = ({ setLoggedOut }) => {
             dispatch(setCurrentTalk(newTalk.id))
             dispatch(setLastTalk(newTalk.id))
         }  
+        if(isMobile)setMobileMenu(MESSENGER)
     }
 
     const getAvatar = (id) => {
@@ -115,6 +119,7 @@ const DialogsField = ({ setLoggedOut }) => {
     }
 
     const changeWindow = (e) => {
+        console.log(e.target.value)
         setMobileMenu(e.target.value)
         if(e.target.value == LOGOUT){
             axios.get('/un_authorize')
@@ -146,43 +151,23 @@ const DialogsField = ({ setLoggedOut }) => {
     if(isMobile) return (
         <div className={mobile.Dialogs}>
             <div className={mobile.navbar}>
-                <select onChange={e => changeWindow(e)}>
+                {mobileMenu !== MESSENGER
+                ?<select onChange={e => changeWindow(e)}>
                     <option value={CHATS}>Chats</option>
                     <option value={SETTINGS}>Settins</option>
                     <option value={LOGOUT}>Log Out</option>
                 </select>
+                : <button onClick={() => {setMobileMenu(CHATS); dispatch({type: 'setCurrentDialog', action: -1})}} className={classes.dropDownMenuButton}>Back</button>}
+                {((currentDialog) => {
+                    if(currentDialog !== -1) return (
+                        <Companion companion={dialogs.find(Dialog => currentDialog == Dialog.id)}/>
+                    )
+                })(currentDialog)}
             </div>
             
-            <Search settings={settings}/>
+            {mobileMenu !== MESSENGER ?<Search settings={settings}/>: <div style={{display: 'none'}}></div>}
             <div className={mobile.DialogList}>
-                {searchInput == '' 
-                ? dialogs.map((post, index)=> (
-                    <DialogItem 
-                        key={post?.id} 
-                        id={post?.id}
-                        index={index}
-                        name={post?.other_members?.length === 1 ? post?.other_members[0].name : 'Групповой диалог'}
-                        lastTalk={post?.last_message ? post?.last_message : 'There is no messages'}
-                        changeDialog={changeDialog}
-                        current={currentDialog === post.id}
-                        unreadCount = {post.unread_count}
-                        online={post?.other_members.length === 1 ? post?.other_members[0].user_status : undefined}
-                        otherMembers={post?.other_members}/>
-                ))
-                : names.map((post, index)=> (
-                    <DialogItem 
-                        key={post?.id} 
-                        id={post?.id}
-                        index={index}
-                        name={post.name}
-                        lastTalk={'There is no messages'}
-                        changeDialog={addUser}
-                        current={false}
-                        unreadCount = {0}
-                        online={post.user_status}
-                        otherMembers={post?.other_members}/>
-                ))
-                }
+                <MMesenger currentWindow={mobileMenu} changeDialog={changeDialog} addUser={addUser} setMobileMenu={setMobileMenu}/>
             </div>
         </div>
     )
@@ -202,7 +187,7 @@ const DialogsField = ({ setLoggedOut }) => {
                         <h2>{user.name}</h2>
                     </div>
                 </div>
-                <Search settings={settings}/>
+                {mobileMenu === CHATS? <Search settings={settings}/> : <div style={{display:'none'}}></div>}
             </div>
 
             <div className={classes.DialogList} style={{height: settings ? '90%' : '80%'}}>

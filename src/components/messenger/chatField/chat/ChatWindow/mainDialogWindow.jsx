@@ -1,9 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react'
+import {useSelector, useDispatch} from 'react-redux'
+import { isMobile } from 'react-device-detect'
+
 import MessageList from '../MessageList/messageList'
 import Companion from '../Companion/Companion'
 
 import axios from 'axios'
-import {useSelector, useDispatch} from 'react-redux'
 
 import {sendMessage, getMessages} from '../../../../../chatAPI'
 
@@ -28,7 +30,7 @@ const MainWindow = ({companion, active, setActiveTalkMenu}) => {
     }
 
     const onEnterPress = (e) => {
-        if(e.code === 'Enter'){
+        if(e.code === 'Enter' && !isMobile){
             sendMessageLocal(e)
         }
     }
@@ -84,7 +86,7 @@ const MainWindow = ({companion, active, setActiveTalkMenu}) => {
 
     return (
         <div className={classes.dialogWindow}>
-            <Companion companion={companion} setActive={setActiveTalkMenu}/>
+            {isMobile ? <div style={{display:'none'}}></div> :<Companion companion={companion} setActive={setActiveTalkMenu}/>}
             <MessageList active={active} getMessages={getMessages}/>
             <form   style={{marginInline: active? '15px' : '15%', visibility: user.currentDialog === -1 ? 'hidden' : 'visible'}} 
                     className={classes.txtArea}>

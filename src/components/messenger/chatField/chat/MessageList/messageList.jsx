@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Separator } from '../../../../constructor'
 
 import classes from './MessageList.module.css'
+import mobile from './mobile.module.css'
+import { isMobile } from 'react-device-detect'
 
 const MessageList = ({active, getMessages}) => {
     const dispatch = useDispatch()
@@ -38,9 +40,16 @@ const MessageList = ({active, getMessages}) => {
         list.current.scrollTo({top: 0, behavior: 'instant'})
     }, [user.currentDialog])
 
+    // const classHandler = () => {
+    //     let result = classes.MessageList
+    //     if(isMobile)result += ' ' + mobile.messageListM
+    //     if(!scrollIsActive)result += ' ' + classes.MessageListNoScroll
+    //     console.log(result, classes.MessageList + ' ' + classes.MessageListNoScroll + ' ' + mobile.messageListM)
+    //     return result
+    // }
 
     return (
-        <div style={{paddingInline: active? '15px' : '15%'}} 
+        <div style={{paddingInline: active || isMobile? '15px' : '15%'}} 
             ref={list} 
             className={!scrollIsActive ? classes.MessageList + ' ' + classes.MessageListNoScroll : classes.MessageList} 
             onScroll={() => messageFetching(Math.abs(list.current.scrollHeight + list.current.scrollTop - list.current.clientHeight) < 10)} 
@@ -48,7 +57,7 @@ const MessageList = ({active, getMessages}) => {
             onMouseOut={scrollToggler}>
 
             {messages 
-            ? messages.map((msgItem, index) =>
+            ? messages.map(msgItem =>
                 <MessageListItem from={user.id == msgItem.sender} type={msgItem.type} center={msgItem.center ? msgItem.center : null} value={msgItem.value} time={msgItem.date} key={msgItem.id}/>
             )
             :<MessageListItem from={true} text={'Напишите этому человеку!'} time={'А это не важно'}/>}

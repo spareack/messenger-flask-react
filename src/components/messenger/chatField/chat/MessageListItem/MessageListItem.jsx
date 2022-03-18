@@ -1,25 +1,35 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Fade } from 'react-reveal'
+import { isMobile} from 'react-device-detect'
+
 import { Player, BigPlayButton } from 'video-react'
 import "../../../../../../node_modules/video-react/dist/video-react.css"; 
 
 import classes from './MessageListItem.module.css'
+import mobile from './mobile.module.css'
 
 const MessageListItem = ({from, type, center, value, name, time}) => {
     const styles = useSelector(state => state.UI)
 
     const classHandler = (senderIsUser, center) => {
+        let result = ''
         if(center){
-            return classes.center
+            result += classes.center
         } else {
             if(senderIsUser){
-                return classes.right
+                result += ' ' + classes.right
             } else {
-                return classes.left
+                result += ' ' + classes.left
             }
         }
+        if(isMobile) {
+            result += ' ' + mobile.msgListItemM
+        }
+        return result
     }
+
+    
     const messageContent = (type, value) => {
         switch(type){
             case 'text':
@@ -33,7 +43,7 @@ const MessageListItem = ({from, type, center, value, name, time}) => {
                 )
             case 'image':
                 return (
-                    <div className={classes.msgListItemAttach + ' ' + classHandler(from, center)} >
+                    <div className={isMobile ? classes.msgListItemAttach + ' ' + classHandler(from, center) + ' ' + mobile.imageAttachM: classes.msgListItemAttach + ' ' + classHandler(from, center)} >
                         <img className={classes.imageAttach} src={'/get_file?file_id='+ value + "&purpose=chat"} alt=''/>
                         <span /*className={classes.time}*/>{time}</span>
                     </div>
