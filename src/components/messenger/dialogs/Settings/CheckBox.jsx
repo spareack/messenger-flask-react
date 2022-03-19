@@ -2,17 +2,21 @@ import React from 'react'
 import classes from './checkbox.module.css'
 
 const CheckBox = ({value, setValue, children}) => {
+
+    const checkBoxHandler = (e) => {
+        setValue(e.target.checked)
+    }
     return (
         <div className={classes.settingContainer}>
             <div className={classes.checkBoxContainer}>
                 <div className={classes.slider}>
-                    <input  id='emailCheck' type={'checkbox'} 
+                    <input id={'check' + children} type={'checkbox'} 
                             value={value} 
-                            onChange={(e) => (setValue(e.target.checked))}/> 
-                    <label htmlFor='emailCheck'></label>
+                            onChange={checkBoxHandler}/> 
+                    <label htmlFor={'check' + children}></label>
                 </div>
             </div>
-            {children}
+            <p>{children}</p>
         </div>
     )
 }

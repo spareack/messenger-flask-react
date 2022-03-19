@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import DialogItem from '../dialogItem/DialogItem'
 import WorkSpace from '../../chatField/chat/workSpace/workSpace'
+import Settings from '../Settings/Settings'
 
 import {CHATS, SETTINGS, LOGOUT, MESSENGER} from '../dialogField/DialogField'
 
@@ -52,7 +53,9 @@ const MMessenger = ({currentWindow=CHATS, changeDialog, addUser, setMobileMenu})
             )
         case SETTINGS: 
             return (
-                <div className={mobile.MMessenger}>Settings</div>
+                <div className={mobile.MMessenger}>
+                    <Settings />
+                </div>
             )
         case MESSENGER:
             return (

@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import { isMobile } from 'react-device-detect'
 import ProfileSettings from './profileSettings/ProfileSettings'
 import NotificationSettings from './notificationSettings/NotificationSettings'
 import PrivateSettings from './privateSettings/PrivateSettings'
@@ -30,33 +31,35 @@ const Settings = ({setSettingsWindow, setLoggedOut}) => {
     }
     return (
         <div className={classes.settings}>
-            <div className={classes.backButtonPlace}>
+            {!isMobile 
+            ? <div className={classes.backButtonPlace}>
                 <button className={classes.backButton} 
                         onClick={() => (backButtonBehaivor())}>
                     <img src={arrowBack} alt=''/>
                 </button> Back 
             </div>
+            : ''}
 
             {buttons
             ? <div className={classes.buttons}>
                 <button className={classes.settingButton} onClick={() => {setButtons(false); setSetting(UI)}}>
-                    <img height="24" width='24' src={general} style={{marginRight: 10 + 'px'}} alt=''/>
+                    <img src={general} alt=''/>
                     <p>General Settings</p>
                 </button>
                 <button className={classes.settingButton} onClick={() => {setButtons(false); setSetting(PROFILE)}}>
-                    <img height="24" width='24' src={profile} style={{marginRight: 10 + 'px'}} alt=''/>
+                    <img src={profile} alt=''/>
                     <p>Profile Settings</p>
                 </button>
                 <button className={classes.settingButton} onClick={() => {setButtons(false); setSetting(NOTIFICATIONS)}}>
-                    <img height="24" width='24' src={notifications} style={{marginRight: 10 + 'px'}} alt=''/>
+                    <img src={notifications} alt=''/>
                     <p>Notifications</p>
                 </button>
                 <button className={classes.settingButton} onClick={() => {setButtons(false); setSetting(PRIVATE)}}>
-                    <img height="24" width='24' src={privacy} style={{marginRight: 10 + 'px'}} alt=''/>
+                    <img src={privacy} alt=''/>
                     <p>Privacy</p>
                 </button>
                 <a href="/un_authorize" className={classes.settingButton} onClick={() => setLoggedOut(false)}>
-                    <img height="24" width='24' src={logout} style={{marginRight: 10 + 'px'}} alt=''/>
+                    <img src={logout} alt=''/>
                     <p>Log Out</p>
                 </a>
             </div>
@@ -77,7 +80,11 @@ const Settings = ({setSettingsWindow, setLoggedOut}) => {
                 }             
             })(settings)
         }
-            
+        {isMobile && !buttons
+        ?<div className={classes.mobileButton}>
+            <button onClick={() => {setButtons(true)}} className={classes.settingButton}>Back</button>
+        </div>
+        :''}
         </div>
     )
 }

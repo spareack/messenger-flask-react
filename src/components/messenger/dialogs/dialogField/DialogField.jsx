@@ -78,9 +78,14 @@ const DialogsField = ({ setLoggedOut }) => {
     получаются сообщения, и если их меньше, чем нужно для появления полосы прокрутки, то подгружаются следующие 
     до тех пор, пока они не закончатся или пока полоса не появится
     примерно их 20 штук, но мониторы разные, поэтому стоит сделать 40
-    в случае отсутствия разговоров создаётся разговор 'First Talk'*/
+    в случае отсутствия разговоров создаётся разговор 'First Talk'
+    также в начале messages сделать на [], чтоб не показывались сообщения из прошлого диалога,
+    пока не подгрузились новые*/
 
     const changeDialog = async (id) => {
+        if(isMobile)setMobileMenu(MESSENGER)
+        dispatch({type: 'setMessages', payload: []})
+
         dispatch({type:'setCurrentDialog', payload: id})
         let res = await getTalks(id)
         if(res.talks?.length) {
@@ -111,7 +116,6 @@ const DialogsField = ({ setLoggedOut }) => {
             dispatch(setCurrentTalk(newTalk.id))
             dispatch(setLastTalk(newTalk.id))
         }  
-        if(isMobile)setMobileMenu(MESSENGER)
     }
 
     const getAvatar = (id) => {
@@ -160,12 +164,12 @@ const DialogsField = ({ setLoggedOut }) => {
                 : ''}
                 {((currentDialog) => {
                     if (currentDialog !== -1) return (
-                        <Companion companion={dialogs.find(Dialog => currentDialog == Dialog.id)} setMobileMenu={setMobileMenu}/>
+                        <Companion companion={dialogs.find(Dialog => currentDialog === Dialog.id)} setMobileMenu={setMobileMenu}/>
                     )
                 })(currentDialog)}
             </div>
             
-            {mobileMenu !== MESSENGER ?<Search settings={settings}/>: <div style={{display: 'none'}}></div>}
+            {mobileMenu !== MESSENGER ?<Search settings={settings}/>: ''}
             <div className={mobile.DialogList}>
                 <MMesenger currentWindow={mobileMenu} changeDialog={changeDialog} addUser={addUser} setMobileMenu={setMobileMenu}/>
             </div>

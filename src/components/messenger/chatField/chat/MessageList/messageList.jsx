@@ -40,16 +40,22 @@ const MessageList = ({active, getMessages}) => {
         list.current.scrollTo({top: 0, behavior: 'instant'})
     }, [user.currentDialog])
 
-    // const classHandler = () => {
-    //     let result = classes.MessageList
-    //     if(isMobile)result += ' ' + mobile.messageListM
-    //     if(!scrollIsActive)result += ' ' + classes.MessageListNoScroll
-    //     console.log(result, classes.MessageList + ' ' + classes.MessageListNoScroll + ' ' + mobile.messageListM)
-    //     return result
-    // }
+/*    const classHandler = () => {
+        let result = classes.MessageList
+        if(isMobile)result += ' ' + mobile.messageListM
+        if(!scrollIsActive)result += ' ' + classes.MessageListNoScroll
+        console.log(result, classes.MessageList + ' ' + classes.MessageListNoScroll + ' ' + mobile.messageListM)
+        return result
+    }*/
+
+    const mainStyleHandler = () => {
+        if (active) return {paddingInline: '15px'}
+        else if (!isMobile) return {paddingInline: '15%'}
+        else return {paddingInline: '0'}    
+    }
 
     return (
-        <div style={{paddingInline: active || isMobile? '15px' : '15%'}} 
+        <div style={mainStyleHandler()} 
             ref={list} 
             className={!scrollIsActive ? classes.MessageList + ' ' + classes.MessageListNoScroll : classes.MessageList} 
             onScroll={() => messageFetching(Math.abs(list.current.scrollHeight + list.current.scrollTop - list.current.clientHeight) < 10)} 

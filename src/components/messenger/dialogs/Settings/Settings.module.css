@@ -82,3 +82,13 @@
     background-color: #bbb;
     color: #333;
 }
+
+.settingButton img {
+    margin-right: 10px;
+    height: 24px;
+    width: 24px;
+}
+
+.mobileButton button{
+    width: 100%;
+}

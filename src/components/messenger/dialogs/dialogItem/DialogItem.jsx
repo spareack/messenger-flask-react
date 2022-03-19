@@ -1,7 +1,9 @@
 import React, {useEffect} from 'react'
-import classes from './dialogItem.module.css'
+import { isMobile } from 'react-device-detect'
 import {useSelector} from 'react-redux'
 
+import classes from './dialogItem.module.css'
+import mobile from './mobileDialogItem.module.css'
 import unnamed from './unnamed.jpg'
 
 const DialogItem = ({id, index, name, lastTalk, changeDialog, current, unreadCount, online, otherMembers}) => {
@@ -20,8 +22,19 @@ const DialogItem = ({id, index, name, lastTalk, changeDialog, current, unreadCou
         
     }
 
+    const mainClassesHandler = (current, isMobile) => {
+        let result = classes.dialogItem
+        if (current) {
+            result += ' ' + classes.currentItem 
+        }
+        if (isMobile) {
+            result += ' ' + mobile.dialogItemM
+        }
+        return result
+    }
+
     return (
-        <div className={current ? classes.dialogItem + ' ' + classes.currentItem : classes.dialogItem} onClick={sendID}>
+        <div className={mainClassesHandler(current, isMobile)} onClick={sendID}>
             <div className={classes.left}>
                 <div className={classes.avatar}>
                     <img src={getAvatar()} alt=''/>

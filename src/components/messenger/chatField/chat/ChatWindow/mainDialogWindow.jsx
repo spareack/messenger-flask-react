@@ -86,7 +86,7 @@ const MainWindow = ({companion, active, setActiveTalkMenu}) => {
 
     return (
         <div className={classes.dialogWindow}>
-            {isMobile ? <div style={{display:'none'}}></div> :<Companion companion={companion} setActive={setActiveTalkMenu}/>}
+            {isMobile ? '' :<Companion companion={companion} setActive={setActiveTalkMenu}/>}
             <MessageList active={active} getMessages={getMessages}/>
             <form   style={{marginInline: active? '15px' : '15%', visibility: user.currentDialog === -1 ? 'hidden' : 'visible'}} 
                     className={classes.txtArea}>
