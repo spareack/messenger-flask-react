@@ -614,7 +614,7 @@ def create_talk():
                                       "date": talk.date_create},
                          to=str(member_id), namespace='/')
 
-            return jsonify({"status": 0, "id": talk.id})
+            return jsonify({"status": 0, "id": talk.id, "date": talk.date_create})
 
         except Exception as e:
             return jsonify({"status": 666, "info": str(e) + traceback.format_exc()})
