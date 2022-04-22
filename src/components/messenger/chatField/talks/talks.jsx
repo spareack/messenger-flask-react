@@ -20,7 +20,7 @@ const Talks = ({active, setActive}) => {
     
     const talkCreator = async () => {
         let res = await createTalk('New Talk!', currentDialog)
-        dispatch({type: 'setTalks', payload: [...talks, new Talk(res.id, "New Talk!", '27.09.2021')]})
+        dispatch({type: 'setTalks', payload: [...talks, new Talk(res.id, "New Talk!", res.date)]})
         dispatch({type: 'setCurrentTalk', payload: res.id})
         dispatch({type: 'setLastTalk', payload: res.id})
     }
@@ -32,16 +32,16 @@ const Talks = ({active, setActive}) => {
     
     if(talksIsActive) return (
         <div className={classes.talks} style={active ? {width: '35%'} : {width: '0%', border: 'none'}}>
-            <button onClick={talkCreator} className={classes.talksHead}>Search</button>
+            <button className={classes.talksHead}>Search</button> {/*onClick={talkCreator}*/}
             <div className={classes.talksItems}>
             <div className={classes.noTalkItem}>Coming soon!</div>
                 {talks 
                 ? talks.map((talk) => <TalkItem   
-                                                key={talk.id}
-                                                id={talk.id}
-                                                name={talk.title}
-                                                current={current === talk.id}
-                                                />) 
+                                            key={talk.id}
+                                            id={talk.id}
+                                            name={talk.title}
+                                            current={current === talk.id}
+                                            />) 
                 : <div className={classes.noTalkItem}>Ещё не заведено ни одного разговора</div>}
             </div>
         </div>

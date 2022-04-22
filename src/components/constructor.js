@@ -35,6 +35,11 @@ export function Talk(id, title, date) {
     this.id = id
     this.title = title
     this.date = date
+    // this.isCurrentDay = (date) => {
+    //     const now = new Date()
+    //     const formatedDate = new Date(date)
+    //     return (now.valueOf() - formatedDate.valueOf() < 24 * 60 * 60 * 1000)
+    // }
 }
 
 export function Separator(value) {
@@ -49,12 +54,49 @@ export function Separator(value) {
     this.id = Math.random()* 10000
 }
 
+export function isYesterday(date, returnToday) {
+    date = new Date(date)	
+    let now = new Date()
+    if(returnToday) return formatData(now)
+    if(date.valueOf() > now.valueOf()) return formatData(date)
+    if(Math.abs(date.getFullYear() - now.getFullYear()) == 1){
+        if(now.getDate == 1 && now.getMonth() == 0 && date.getDate() == 31 && date.getMonth() == 11) {
+            return 'Yesterday'
+        } else return formatData(date)
+    } else if(Math.abs(date.getFullYear() - now.getFullYear()) > 1) return formatData(date)
+    let nowDay = now.getDate()
+    let nowMonth = now.getMonth()
+    let dateDay = date.getDate()
+    let dateMonth = date.getMonth()
+    if(Math.abs(nowDay - dateDay) == 1) return 'Yesterday'
+    else {
+        if([30,29].includes(dateDay - nowDay) && Math.abs(nowMonth - dateMonth) == 1)
+            return 'Yesterday'
+        else return formatData(date)
+    }
+
+    function formatData(date) {
+        const Month = 'January, February, March, April, May, June, July, August, September, October, November, December'.split(', ')
+        const now = new Date()
+        if(date.getFullYear() != now.getFullYear())
+            return [date.getDate(), Month[date.getMonth()], date.getFullYear()].join(' ')
+        else return [date.getDate(), Month[date.getMonth()]].join(' ')
+
+    }
+}
+
+export function isCurrentDay(date){
+    const now = new Date()
+    const formatedDate = new Date(date)
+    return (now.valueOf() - formatedDate.valueOf() < 24 * 60 * 60 * 1000)
+}
+
 // { Message Configuration
 //     date: "15:56" (str)                  | время отправления 
 //     id: 168 (Number)                     | уникальный id сообщения
 //     sender: 4 (Number)                   | id отправителя
 //     type: "text" (str)                   | тип сообщения
-//     value: "ghkl" (str (text,int,url))   | само сообщение (картинка или текст)
+//     value: "ghkl" (str (text,url))   | само сообщение (картинка или текст)
 //     center: 1 (bool)                     | Сепаратор это или нет
 // }
 

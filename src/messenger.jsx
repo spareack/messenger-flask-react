@@ -10,7 +10,7 @@ import { changeSearchInput } from './components/store/searchReducer'
 import useSound from 'use-sound'
 
 import { afkManager } from './afkManager'
-import { Talk, Message, Dialog, Member, Separator } from './components/constructor'
+import { Talk, Message, Dialog, Member, Separator, isYesterday, isCurrentDay } from './components/constructor'
 
 import './App.css'
 import meow from './imagesAndSounds/meow.mp3'
@@ -26,6 +26,7 @@ function Messenger({ setLoggedOut }) {
     const messages = useSelector(state => state.messages.messages)
     const dialogs = useSelector(state => state.user.dialogs)
     const talks  = useSelector(state => state.talks.talks)
+    const lastTalk = useSelector(state => state.talks.lastTalk)
     const currentDialog = useSelector(state => state.user.currentDialog)
     const sound = useSelector(state => state.UI.sound)
     
@@ -105,7 +106,10 @@ function Messenger({ setLoggedOut }) {
                 else return dialog
             })
             dispatch({type: 'setUserDialogs', payload: _dialog})
-            if (currentDialog === res.dialog_id) dispatch({type: 'setMessages', payload: [new Message(res.message_id, res.sender, res.value, res.date, res.type), ...messages] })
+            if (currentDialog === res.dialog_id) {
+                if(isCurrentDay(talks.filter(item => item.id === lastTalk)[0].date))dispatch({type: 'setMessages', payload: [new Message(res.message_id, res.sender, res.value, res.date, res.type), ...messages] })
+                else dispatch({type: 'setMessages', payload: [new Message(res.message_id, res.sender, res.value, res.date, res.type), new Separator(isYesterday(undefined, true)), ...messages] })
+            }
             if ( (currentDialog !== res.dialog_id || document.visibilityState === 'hidden') && sound) meowSound()
             socket.emit('read_messages', {dialog_id :user.currentDialog})
         }

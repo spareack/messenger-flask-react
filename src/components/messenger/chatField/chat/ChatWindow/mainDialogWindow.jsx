@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react'
+import { flushSync } from 'react-dom'
 import {useSelector, useDispatch} from 'react-redux'
 import { isMobile } from 'react-device-detect'
 
@@ -7,7 +8,8 @@ import Companion from '../Companion/Companion'
 
 import axios from 'axios'
 
-import {sendMessage, getMessages} from '../../../../../chatAPI'
+import {sendMessage, getMessages, createTalk} from '../../../../../chatAPI'
+import { isCurrentDay, isYesterday, Separator, Talk } from '../../../../constructor'
 
 import attach from './attach.svg'
 import classes from './MainWindow.module.css'
@@ -19,14 +21,28 @@ const MainWindow = ({companion, active, setActiveTalkMenu}) => {
     const [messageText, setMessageText] = useState('')
 
     const user = useSelector(state => state.user)
+    const messages = useSelector(state => state.messages.messages)
     const currentDialog = useSelector(state=> state.user.currentDialog)
+    const talks = useSelector(state => state.talks.talks)
     const lastTalk = useSelector(state => state.talks.lastTalk)
     const attachIsActive = useSelector(state => state.attachMenu.active)
 
-    const sendMessageLocal = (e) => {
+    const sendMessageLocal = async (e) => {
         e.preventDefault()
         setMessageText('');
-        if(messageText !== '')sendMessage(messageText, user.id, lastTalk, currentDialog)
+        if(messageText !== '')
+        {
+            if(isCurrentDay(talks.filter(item => item.id === lastTalk)[0].date))sendMessage(messageText, user.id, lastTalk, currentDialog)
+            else {
+                const res = await createTalk(isYesterday(undefined, true), currentDialog)
+                dispatch({type: 'setTalks', payload: [...talks, new Talk(res.id, isYesterday(undefined, true), res.date)]})
+                dispatch({type: 'setCurrentTalk', payload: res.id})
+                dispatch({type: 'setLastTalk', payload: res.id})
+                dispatch({type: 'setMessages', payload: [Separator(isYesterday('123', true)), ...messages]})
+                await sendMessage(messageText, user.id, res.id, currentDialog)
+                return
+            }
+        }
     }
 
     const onEnterPress = (e) => {
