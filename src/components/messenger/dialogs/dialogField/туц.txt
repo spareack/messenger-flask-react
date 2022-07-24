@@ -1,8 +1,0 @@
-<div style={{height: settings ? '10%' : '20%'}} className={classes.searchBox}>
-                <div className={classes.dialogFieldSBox}>
-                    <div onClick={(e) => {e.stopPropagation()}}><button className={classes.dropDownMenuButton}><img src={settingsIMG} alt=''/></button></div>
-                    <div className={classes.userInfo} onClick={() => (dispatch({type: 'DISABLE_MENU'}))}><img src={unnamed} alt='' className={classes.userAvatar}/><h2>{user.name}</h2></div>
-                    <a href="/un_authorize" className={classes.logOutBtn + ' ' + classes.menuButton} onClick={() => setLoggedOut(false)}>Log Out <img src={logout} alt=''/></a>
-                </div>
-                <Search createDialog={createDialog} settings={settings}/>
-            </div>
